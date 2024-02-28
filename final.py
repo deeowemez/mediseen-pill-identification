@@ -2,6 +2,7 @@
 
 #import device_patches       # Device specific patches for Jetson Nano (needs to be before importing cv2)
 
+#import libraries
 import cv2
 import os
 import sys, getopt
@@ -16,9 +17,11 @@ if (sys.platform == 'linux' and not os.environ.get('DISPLAY')):
     show_camera = False
 
 def now():
+    #displays current time
     return round(time.time() * 1000)
 
 def get_webcams():
+    # searches for available webcams through port 1 - 4
     port_ids = []
     for port in range(5):
         print("Looking for a camera in port %s:" %port)
@@ -35,6 +38,7 @@ def get_webcams():
     return port_ids
 
 def sigint_handler(sig, frame):
+    # exits program with keyboard interrupt (ctrl + c)
     print('Interrupted')
     if (runner):
         runner.stop()
@@ -43,6 +47,7 @@ def sigint_handler(sig, frame):
 signal.signal(signal.SIGINT, sigint_handler)
 
 def help():
+    # script for running model and what camera port to use
     print('python classify.py <path_to_model.eim> <Camera port ID, only required when more than 1 camera is present>')
 
 def main(argv):
@@ -60,6 +65,7 @@ def main(argv):
     # Specify the path to your model file
     model = "/home/pi/capstone/new/modelfile.eim"
 
+    # Combines the directory path and model name 
     dir_path = os.path.dirname(os.path.realpath(__file__))
     modelfile = os.path.join(dir_path, model)
 
@@ -67,9 +73,12 @@ def main(argv):
 
     with ImageImpulseRunner(modelfile) as runner:
         try:
+            # Initializes the model 
             model_info = runner.init()
             print('Loaded runner for "' + model_info['project']['owner'] + ' / ' + model_info['project']['name'] + '"')
+            # Extracts labels used for prediction
             labels = model_info['model_parameters']['labels']
+            # Determines webcam to be used
             if len(args) >= 2:
                 videoCaptureDeviceId = int(args[1])
             else:
@@ -80,7 +89,9 @@ def main(argv):
                     raise Exception("Multiple cameras found. Add the camera port ID as a second argument to use this script")
                 videoCaptureDeviceId = int(port_ids[0])
 
+            # Opens a camera stream using the chosen port ID
             camera = cv2.VideoCapture(videoCaptureDeviceId)
+            # Read a frame from the camera
             ret = camera.read()[0]
             if ret:
                 backendName = camera.getBackendName()
@@ -93,13 +104,16 @@ def main(argv):
 
             next_frame = 0  # limit to ~10 fps here
 
+            # Loops through frames and classifications using the runner
             for res, img in runner.classifier(videoCaptureDeviceId):
                 if (next_frame > now()):
                     time.sleep((next_frame - now()) / 1000)
 
-                # print('classification runner response', res)
+                print('classification runner response', res)
 
+                
                 if "classification" in res["result"].keys():
+                    # Print classification scores and labels
                     print('Result (%d ms.) ' % (res['timing']['dsp'] + res['timing']['classification']), end='')
                     for label in labels:
                         score = res['result']['classification'][label]
@@ -107,16 +121,19 @@ def main(argv):
                     print('', flush=True)
 
                 elif "bounding_boxes" in res["result"].keys():
+                    # Print box coordinates and draws on image
                     print('Found %d bounding boxes (%d ms.)' % (len(res["result"]["bounding_boxes"]), res['timing']['dsp'] + res['timing']['classification']))
                     for bb in res["result"]["bounding_boxes"]:
                         print('\t%s (%.2f): x=%d y=%d w=%d h=%d' % (bb['label'], bb['value'], bb['x'], bb['y'], bb['width'], bb['height']))
                         img = cv2.rectangle(img, (bb['x'], bb['y']), (bb['x'] + bb['width'], bb['y'] + bb['height']), (255, 0, 0), 1)
 
                 if (show_camera):
+                    # Displays image with boxes
                     cv2.imshow('edgeimpulse', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
                     if cv2.waitKey(1) == ord('q'):
                         break
-
+                
+                # Updates next frame
                 next_frame = now() + 100
         finally:
             if (runner):
