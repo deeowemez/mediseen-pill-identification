@@ -11,7 +11,7 @@ import time
 from edge_impulse_linux.image import ImageImpulseRunner
 
 runner = None
-# for camera preview, set to true
+# Camera preview
 show_camera = True
 if (sys.platform == 'linux' and not os.environ.get('DISPLAY')):
     show_camera = False
