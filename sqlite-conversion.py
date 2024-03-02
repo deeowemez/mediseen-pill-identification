@@ -1,3 +1,5 @@
+# https://www.youtube.com/watch?v=UZIhVmkrAEs
+
 import sqlite3
 import pandas as pd
 
@@ -8,11 +10,11 @@ df = pd.read_csv('pill_info.csv')
 df.columns = df.columns.str.strip()
 
 # Create/connect to a SQLite database
-connection = sqlite3.connect('pill_info.db')
+conn = sqlite3.connect('pill_info.db')
 
-# Load datafile to SQLite
-# fail;replace;append
-df.to_sql('pill_info', connection, if_exists='replace')
+# Create the table with the primary key constraint
+df.to_sql('pill_info_table', conn, if_exists='replace', index=False,
+          dtype={'medicine id': 'INTEGER PRIMARY KEY'})
 
 # Close connection
-connection.close()
+conn.close()
