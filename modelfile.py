@@ -112,6 +112,9 @@ def main(argv):
 
                 print('classification runner response', res)
 
+
+                for bb in res['result']['bounding_boxes']:
+                    print(bb['label'])
                 
                 if "classification" in res["result"].keys():
                     # Print classification scores and labels
