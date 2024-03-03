@@ -1,3 +1,6 @@
+# Shebang line
+#!/usr/bin/env python
+
 # import libraries
 import modelfile
 import tts_db

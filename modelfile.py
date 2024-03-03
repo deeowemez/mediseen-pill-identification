@@ -10,6 +10,7 @@ import signal
 import time
 from edge_impulse_linux.image import ImageImpulseRunner
 
+# Initialize runner variable for ImageImpulseRunner class
 runner = None
 # Camera preview
 show_camera = True
@@ -17,7 +18,7 @@ if (sys.platform == 'linux' and not os.environ.get('DISPLAY')):
     show_camera = False
 
 def now():
-    #displays current time
+    #displays current time milliseconds
     return round(time.time() * 1000)
 
 def get_webcams():
@@ -63,7 +64,7 @@ def main(argv):
             sys.exit()
 
     # Specify the path to your model file
-    model = "/home/pi/capstone/new/modelfile.eim"
+    model = "/home/pi/capstone/modelfile.eim"
 
     # Combines the directory path and model name 
     dir_path = os.path.dirname(os.path.realpath(__file__))
