@@ -18,3 +18,9 @@ import pyttsx3
 # Database connection information
 pill_database = "pill_info.db"
 pill_table = "pill_info_table"
+
+runner = None
+# Camera preview
+show_camera = True
+if (sys.platform == 'linux' and not os.environ.get('DISPLAY')):
+    show_camera = False

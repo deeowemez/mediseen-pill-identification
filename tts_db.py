@@ -52,6 +52,5 @@ def speak_pill_info(user_input):
   else:
     speak("Pill information not found.")
 
-# Example usage (uncomment if running this script directly)
 # classification = "Aspirin"  # Replace with actual classification result
 speak_pill_info(user_input)
