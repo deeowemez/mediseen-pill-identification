@@ -1,7 +1,7 @@
 import sqlite3
 import pyttsx3
 
-user_input = input("Enter a number: ")
+#user_input = input("Enter a number: ")
 
 # Database connection information
 pill_database = "pill_info.db"
@@ -53,4 +53,4 @@ def speak_pill_info(user_input):
     speak("Pill information not found.")
 
 # classification = "Aspirin"  # Replace with actual classification result
-speak_pill_info(user_input)
+# speak_pill_info(user_input)

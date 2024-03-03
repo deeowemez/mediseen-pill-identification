@@ -24,3 +24,8 @@ runner = None
 show_camera = True
 if (sys.platform == 'linux' and not os.environ.get('DISPLAY')):
     show_camera = False
+    
+signal.signal(signal.SIGINT, modelfile.sigint_handler)
+
+modelfile.main(sys.argv[1:])
+

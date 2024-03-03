@@ -51,6 +51,16 @@ def help():
     # script for running model and what camera port to use
     print('python classify.py <path_to_model.eim> <Camera port ID, only required when more than 1 camera is present>')
 
+def max(res):
+    # isolate classification with highest confidence
+    bbox_dict = {bb['label']: float(bb['value']) for bb in res['result']['bounding_boxes']}  
+    bbox_list = list(bbox_dict.values())
+    for value in bbox_list: 
+        max_value = 0
+        if max_value is None or value > max_value: max_value = value
+    max_label = [label for label, value in bbox_dict.items()][0]
+    return max_label
+
 def main(argv):
     try:
         opts, args = getopt.getopt(argv, "h", ["--help"])
@@ -64,7 +74,7 @@ def main(argv):
             sys.exit()
 
     # Specify the path to your model file
-    model = "/home/pi/capstone/modelfile.eim"
+    model = "/home/pi/capstone/pill-identification/modelfile.eim"
 
     # Combines the directory path and model name 
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -116,20 +126,21 @@ def main(argv):
                 for bb in res['result']['bounding_boxes']:
                     print(bb['label'])
                 
-                if "classification" in res["result"].keys():
-                    # Print classification scores and labels
-                    print('Result (%d ms.) ' % (res['timing']['dsp'] + res['timing']['classification']), end='')
-                    for label in labels:
-                        score = res['result']['classification'][label]
-                        print('%s: %.2f\t' % (label, score), end='')
-                    print('', flush=True)
+                # if "classification" in res["result"].keys():
+                #     # Print classification scores and labels
+                #     print('Result (%d ms.) ' % (res['timing']['dsp'] + res['timing']['classification']), end='')
+                #     for label in labels:
+                #         score = res['result']['classification'][label]
+                #         print('%s: %.2f\t' % (label, score), end='')
+                #     print('', flush=True)
 
-                elif "bounding_boxes" in res["result"].keys():
+                if "bounding_boxes" in res["result"].keys():
                     # Print box coordinates and draws on image
                     print('Found %d bounding boxes (%d ms.)' % (len(res["result"]["bounding_boxes"]), res['timing']['dsp'] + res['timing']['classification']))
                     for bb in res["result"]["bounding_boxes"]:
                         print('\t%s (%.2f): x=%d y=%d w=%d h=%d' % (bb['label'], bb['value'], bb['x'], bb['y'], bb['width'], bb['height']))
                         img = cv2.rectangle(img, (bb['x'], bb['y']), (bb['x'] + bb['width'], bb['y'] + bb['height']), (255, 0, 0), 1)
+                    print(max(res))
 
                 if (show_camera):
                     # Displays image with boxes
