@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-#import device_patches       # Device specific patches for Jetson Nano (needs to be before importing cv2)
-
 #import libraries
 import cv2
 import os
@@ -24,18 +22,17 @@ def now():
 def get_webcams():
     # searches for available webcams through port 1 - 4
     port_ids = []
-    for port in range(5):
-        print("Looking for a camera in port %s:" %port)
-        camera = cv2.VideoCapture(port)
-        if camera.isOpened():
-            ret = camera.read()[0]
-            if ret:
-                backendName =camera.getBackendName()
-                w = camera.get(3)
-                h = camera.get(4)
-                print("Camera %s (%s x %s) found in port %s " %(backendName,h,w, port))
-                port_ids.append(port)
-            camera.release()
+    port = 0
+    camera = cv2.VideoCapture(port)
+    if camera.isOpened():
+        ret = camera.read()[0]
+        if ret:
+            backendName =camera.getBackendName()
+            w = camera.get(3)
+            h = camera.get(4)
+            print("Camera %s (%s x %s) found in port %s " %(backendName,h,w, port))
+            port_ids.append(port)
+        camera.release()
     return port_ids
 
 def sigint_handler(sig, frame):
@@ -61,7 +58,14 @@ def max(res):
     max_label = [label for label, value in bbox_dict.items()][0]
     return max_label
 
-def main(argv):
+def get_bbox(res):
+    #pill_detected = False
+    if "bounding_boxes" in res["result"].keys():
+        if len(res["result"]["bounding_boxes"]) > 0:
+            return True
+        else: return False
+    
+def inference(argv):
     try:
         opts, args = getopt.getopt(argv, "h", ["--help"])
     except getopt.GetoptError:
@@ -73,7 +77,7 @@ def main(argv):
             help()
             sys.exit()
 
-    # Specify the path to your model file
+    # Path to model file
     model = "/home/pi/capstone/pill-identification/modelfile.eim"
 
     # Combines the directory path and model name 
@@ -89,6 +93,7 @@ def main(argv):
             print('Loaded runner for "' + model_info['project']['owner'] + ' / ' + model_info['project']['name'] + '"')
             # Extracts labels used for prediction
             labels = model_info['model_parameters']['labels']
+            #print('Labels: ', labels)
             # Determines webcam to be used
             if len(args) >= 2:
                 videoCaptureDeviceId = int(args[1])
@@ -120,41 +125,40 @@ def main(argv):
                 if (next_frame > now()):
                     time.sleep((next_frame - now()) / 1000)
 
+                pill_detected = get_bbox(res)
+
                 print('classification runner response', res)
 
-
-                for bb in res['result']['bounding_boxes']:
-                    print(bb['label'])
+                if pill_detected:
                 
-                # if "classification" in res["result"].keys():
-                #     # Print classification scores and labels
-                #     print('Result (%d ms.) ' % (res['timing']['dsp'] + res['timing']['classification']), end='')
-                #     for label in labels:
-                #         score = res['result']['classification'][label]
-                #         print('%s: %.2f\t' % (label, score), end='')
-                #     print('', flush=True)
+                    for bb in res['result']['bounding_boxes']:
+                        print(bb['label'])
+                    
 
-                if "bounding_boxes" in res["result"].keys():
-                    # Print box coordinates and draws on image
-                    print('Found %d bounding boxes (%d ms.)' % (len(res["result"]["bounding_boxes"]), res['timing']['dsp'] + res['timing']['classification']))
-                    for bb in res["result"]["bounding_boxes"]:
-                        print('\t%s (%.2f): x=%d y=%d w=%d h=%d' % (bb['label'], bb['value'], bb['x'], bb['y'], bb['width'], bb['height']))
-                        img = cv2.rectangle(img, (bb['x'], bb['y']), (bb['x'] + bb['width'], bb['y'] + bb['height']), (255, 0, 0), 1)
-                    print('Max Label: ', max(res))
+                    if "bounding_boxes" in res["result"].keys():
+                        # Print box coordinates and draws on image
+                        print('Found %d bounding boxes (%d ms.)' % (len(res["result"]["bounding_boxes"]), res['timing']['dsp'] + res['timing']['classification']))
+                        for bb in res["result"]["bounding_boxes"]:
+                            print('\t%s (%.2f): x=%d y=%d w=%d h=%d' % (bb['label'], bb['value'], bb['x'], bb['y'], bb['width'], bb['height']))
+                            img = cv2.rectangle(img, (bb['x'], bb['y']), (bb['x'] + bb['width'], bb['y'] + bb['height']), (255, 0, 0), 1)
+                        print('Max Label: ', max(res))
 
-                if (show_camera):
-                    # Displays image with boxes
-                    cv2.imshow('edgeimpulse', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
-                    if cv2.waitKey(1) == ord('q'):
-                        break
+                    if (show_camera):
+                        # Displays image with boxes
+                        cv2.imshow('edgeimpulse', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+                        if cv2.waitKey(1) == ord('q'):
+                            break
+                    
+                    # Updates next frame
+                    next_frame = now() + 100
                 
-                # Updates next frame
-                next_frame = now() + 100
+                else: print("Waiting for pill")
+            
         finally:
             if (runner):
                 runner.stop()
                 
-    return (max(res))
+    return (res)
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    inference(sys.argv[1:])

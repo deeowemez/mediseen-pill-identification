@@ -2,7 +2,7 @@
 #!/usr/bin/env python
 
 # import libraries
-import modelfile
+import model_draft
 import tts_db
 
 import cv2
@@ -25,7 +25,9 @@ show_camera = True
 if (sys.platform == 'linux' and not os.environ.get('DISPLAY')):
     show_camera = False
     
-signal.signal(signal.SIGINT, modelfile.sigint_handler)
+signal.signal(signal.SIGINT, model_draft.sigint_handler)
 
-modelfile.main(sys.argv[1:])
 
+res = model_draft.inference(sys.argv[1:])
+
+print('this is the max_label: ', max_label)
