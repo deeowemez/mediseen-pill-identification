@@ -8,6 +8,10 @@ import signal
 import time
 from edge_impulse_linux.image import ImageImpulseRunner
 
+bbox_counter = 0
+bbox_dict = {}
+max_label = ''
+
 # Initialize runner variable for ImageImpulseRunner class
 runner = None
 # Camera preview
@@ -48,24 +52,63 @@ def help():
     # script for running model and what camera port to use
     print('python classify.py <path_to_model.eim> <Camera port ID, only required when more than 1 camera is present>')
 
-def max(res):
+
+
+def add_to_bbox_dict(res):
+    # add to bounding box dictionary frame classifications
+    global bbox_dict
+    print('len_dict before ', len(bbox_dict))
+    add_to_dict = {bb['label']: float(bb['value']) for bb in res['result']['bounding_boxes']}  
+    
+    for label, value in add_to_dict.items():
+        if label in bbox_dict and value > bbox_dict[label]:
+            # Update the value only if it's higher than the existing value
+            bbox_dict[label] = value
+        elif label not in bbox_dict:
+            # If label doesn't exist, add it to the dictionary
+            bbox_dict[label] = value
+    
+    print('len_dict after: ', len(bbox_dict))
+    print('bbox_dict: ', bbox_dict)
+
+def max():
     # isolate classification with highest confidence
-    bbox_dict = {bb['label']: float(bb['value']) for bb in res['result']['bounding_boxes']}  
+    global bbox_dict
     bbox_list = list(bbox_dict.values())
     for value in bbox_list: 
         max_value = 0
         if max_value is None or value > max_value: max_value = value
-    max_label = [label for label, value in bbox_dict.items()][0]
+    if len(bbox_dict) > 0:
+        max_label = [label for label, value in bbox_dict.items()][0]
+    else: max_label = 'waiting for pill'
     return max_label
 
+def increment_reset_bbox(bbox_counter):
+    global bbox_dict
+    global max_label
+    bbox_counter += 1
+    if bbox_counter > 3:
+        max_label = max()
+        print('Max Label: ', max_label)
+        bbox_counter = 0
+        bbox_dict = {}
+    return bbox_counter
+
 def get_bbox(res):
-    #pill_detected = False
+    global bbox_counter
     if "bounding_boxes" in res["result"].keys():
         if len(res["result"]["bounding_boxes"]) > 0:
-            return True
-        else: return False
-    
+            print('bbox before', bbox_counter)
+            bbox_counter = increment_reset_bbox(bbox_counter)
+            add_to_bbox_dict(res)
+            print('bbox after', bbox_counter)
+            if bbox_counter > 3:
+                print('bbox reset', bbox_counter)
+                return True
+            else: return False
+
 def inference(argv):
+    global bbox_counter
     try:
         opts, args = getopt.getopt(argv, "h", ["--help"])
     except getopt.GetoptError:
@@ -119,46 +162,44 @@ def inference(argv):
                 raise Exception("Couldn't initialize selected camera.")
 
             next_frame = 0  # limit to ~10 fps here
-
+            
             # Loops through frames and classifications using the runner
             for res, img in runner.classifier(videoCaptureDeviceId):
                 if (next_frame > now()):
                     time.sleep((next_frame - now()) / 1000)
 
+                #print('classification runner response', res)
+                
+                for bb in res['result']['bounding_boxes']:
+                    print(bb['label'])
+                
+                if "bounding_boxes" in res["result"].keys():
+                    # Print box coordinates and draws on image
+                    print('Found %d bounding boxes (%d ms.)' % (len(res["result"]["bounding_boxes"]), res['timing']['dsp'] + res['timing']['classification']))
+                    for bb in res["result"]["bounding_boxes"]:
+                        print('\t%s (%.2f): x=%d y=%d w=%d h=%d' % (bb['label'], bb['value'], bb['x'], bb['y'], bb['width'], bb['height']))
+                        img = cv2.rectangle(img, (bb['x'], bb['y']), (bb['x'] + bb['width'], bb['y'] + bb['height']), (255, 0, 0), 1)
+                    #print('Max Label: ', max(res))
+                    
+                if (show_camera):
+                    # Displays image with boxes
+                    cv2.imshow('edgeimpulse', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+                    if cv2.waitKey(1) == ord('q'):
+                        break
+                
+                # Updates next frame
+                next_frame = now() + 100
+                
                 pill_detected = get_bbox(res)
-
-                print('classification runner response', res)
-
+                            
                 if pill_detected:
-                
-                    for bb in res['result']['bounding_boxes']:
-                        print(bb['label'])
-                    
-
-                    if "bounding_boxes" in res["result"].keys():
-                        # Print box coordinates and draws on image
-                        print('Found %d bounding boxes (%d ms.)' % (len(res["result"]["bounding_boxes"]), res['timing']['dsp'] + res['timing']['classification']))
-                        for bb in res["result"]["bounding_boxes"]:
-                            print('\t%s (%.2f): x=%d y=%d w=%d h=%d' % (bb['label'], bb['value'], bb['x'], bb['y'], bb['width'], bb['height']))
-                            img = cv2.rectangle(img, (bb['x'], bb['y']), (bb['x'] + bb['width'], bb['y'] + bb['height']), (255, 0, 0), 1)
-                        print('Max Label: ', max(res))
-
-                    if (show_camera):
-                        # Displays image with boxes
-                        cv2.imshow('edgeimpulse', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
-                        if cv2.waitKey(1) == ord('q'):
-                            break
-                    
-                    # Updates next frame
-                    next_frame = now() + 100
-                
-                else: print("Waiting for pill")
-            
+                    print('return: ', res)
+                    return (res)
+                #else: print("Waiting for pill")
+                        
         finally:
             if (runner):
                 runner.stop()
                 
-    return (res)
-
 if __name__ == "__main__":
     inference(sys.argv[1:])

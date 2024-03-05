@@ -27,7 +27,6 @@ if (sys.platform == 'linux' and not os.environ.get('DISPLAY')):
     
 signal.signal(signal.SIGINT, model_draft.sigint_handler)
 
-
 res = model_draft.inference(sys.argv[1:])
 
-print('this is the max_label: ', max_label)
+print('this is the max_label: ', res)
