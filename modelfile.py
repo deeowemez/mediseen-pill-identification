@@ -121,18 +121,16 @@ def main(argv):
                     time.sleep((next_frame - now()) / 1000)
 
                 print('classification runner response', res)
-
-
                 for bb in res['result']['bounding_boxes']:
                     print(bb['label'])
                 
-                # if "classification" in res["result"].keys():
-                #     # Print classification scores and labels
-                #     print('Result (%d ms.) ' % (res['timing']['dsp'] + res['timing']['classification']), end='')
-                #     for label in labels:
-                #         score = res['result']['classification'][label]
-                #         print('%s: %.2f\t' % (label, score), end='')
-                #     print('', flush=True)
+                if "classification" in res["result"].keys():
+                    # Print classification scores and labels
+                    print('Result (%d ms.) ' % (res['timing']['dsp'] + res['timing']['classification']), end='')
+                    for label in labels:
+                        score = res['result']['classification'][label]
+                        print('%s: %.2f\t' % (label, score), end='')
+                    print('', flush=True)
 
                 if "bounding_boxes" in res["result"].keys():
                     # Print box coordinates and draws on image

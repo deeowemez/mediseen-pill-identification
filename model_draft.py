@@ -52,8 +52,6 @@ def help():
     # script for running model and what camera port to use
     print('python classify.py <path_to_model.eim> <Camera port ID, only required when more than 1 camera is present>')
 
-
-
 def add_to_bbox_dict(res):
     # add to bounding box dictionary frame classifications
     global bbox_dict

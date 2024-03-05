@@ -30,5 +30,17 @@ To resolve this issue, you can try the following steps:
    After setting the environment variable, try running your Python script again.
 
 If the issue persists, you may need to check the `pyttsx3` documentation or community forums for further assistance, as there might be additional configuration or troubleshooting steps specific to the library and your environment.
-    
+
+https://docs.edgeimpulse.com/docs/tools/edge-impulse-python-sdk
+
+https://github.com/edgeimpulse/processing-blocks/tree/master/image
+
+
+https://docs.edgeimpulse.com/docs/tools/edge-impulse-for-linux/linux-python-sdk
+
+https://docs.edgeimpulse.com/docs/edge-impulse-studio/learning-blocks/object-detection
+
+alexie
+https://studio.edgeimpulse.com/public/357241/live
+
 """
