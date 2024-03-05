@@ -3,7 +3,7 @@
 
 # import libraries
 import model_draft
-import tts_db
+import pills_gtts
 
 import cv2
 import os
@@ -27,6 +27,8 @@ if (sys.platform == 'linux' and not os.environ.get('DISPLAY')):
     
 signal.signal(signal.SIGINT, model_draft.sigint_handler)
 
-res = model_draft.inference(sys.argv[1:])
+classification = model_draft.inference(sys.argv[1:])
 
-print('this is the max_label: ', res)
+print('this is the max_label: ', classification)
+
+pills_gtts.speak_pill_info(classification)

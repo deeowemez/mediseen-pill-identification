@@ -83,32 +83,36 @@ def max():
     else: max_label = 'waiting for pill'
     return max_label
 
-def increment_reset_bbox(bbox_counter):
+def increment_reset_bbox():
+    global bbox_counter
+    bbox_counter += 1
+    
+def runner_stop():
+    global bbox_counter
     global bbox_dict
     global max_label
-    bbox_counter += 1
-    if bbox_counter > 3:
-        max_label = max()
-        print('Max Label: ', max_label)
-        bbox_counter = 0
-        bbox_dict = {}
-    return bbox_counter
+    max_label = max()
+    print('Max Label: ', max_label)
+    bbox_counter = 0
+    bbox_dict = {}
 
 def get_bbox(res):
     global bbox_counter
     if "bounding_boxes" in res["result"].keys():
         if len(res["result"]["bounding_boxes"]) > 0:
             print('bbox before', bbox_counter)
-            bbox_counter = increment_reset_bbox(bbox_counter)
+            increment_reset_bbox()
             add_to_bbox_dict(res)
             print('bbox after', bbox_counter)
             if bbox_counter > 3:
+                runner_stop()
                 print('bbox reset', bbox_counter)
                 return True
             else: return False
 
 def inference(argv):
     global bbox_counter
+    global max_label
     try:
         opts, args = getopt.getopt(argv, "h", ["--help"])
     except getopt.GetoptError:
@@ -193,9 +197,7 @@ def inference(argv):
                 pill_detected = get_bbox(res)
                             
                 if pill_detected:
-                    print('return: ', res)
-                    return (res)
-                #else: print("Waiting for pill")
+                    return (max_label)
                         
         finally:
             if (runner):
