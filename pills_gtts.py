@@ -35,14 +35,14 @@ def get_pill_info(classification):
     conn.close()
     return pill_info
 
-def speak_pill_info(classification):
+def speak_pill_info(pill_info):
     """
     Retrieves information from the database and speaks it using text-to-speech.
 
     Args:
         classification: The name of the pill (identified by the main script).
     """
-    pill_info = get_pill_info(classification)
+    
     if pill_info:
         # Construct speech message from pill information
         message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams. {pill_info[2]}. {pill_info[3]}"  # Replace with actual data access

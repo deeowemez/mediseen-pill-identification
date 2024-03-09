@@ -108,7 +108,7 @@ def get_bbox(res):
                 return True
             else: return False
 
-def inference(argv):
+def classify(argv):
     global bbox_counter
     global max_label
     try:
@@ -192,6 +192,7 @@ def inference(argv):
                 # Updates next frame
                 next_frame = now() + 100
                 
+                # Detects if pill is present in pill slotk
                 pill_detected = get_bbox(res)
                             
                 if pill_detected:
@@ -202,4 +203,4 @@ def inference(argv):
                 runner.stop()
                 
 if __name__ == "__main__":
-    inference(sys.argv[1:])
+    classify(sys.argv[1:])
