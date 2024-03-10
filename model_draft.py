@@ -15,7 +15,7 @@ max_label = ''
 # Initialize runner variable for ImageImpulseRunner class
 runner = None
 # Camera preview
-show_camera = True
+show_camera = False
 if (sys.platform == 'linux' and not os.environ.get('DISPLAY')):
     show_camera = False
 

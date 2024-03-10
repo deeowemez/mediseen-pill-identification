@@ -7,7 +7,8 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel
+
 
 
 def show_frame_1():
@@ -17,14 +18,14 @@ def show_frame_1():
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path) 
     
-    window = Tk()
+    top_window = Toplevel()
 
-    window.geometry("800x480")
-    window.configure(bg = "#FFFFFF")
+    top_window.geometry("800x480")
+    top_window.configure(bg="#FFFFFF")
 
 
     canvas = Canvas(
-        window,
+        top_window,
         bg = "#FFFFFF",
         height = 480,
         width = 800,
@@ -66,8 +67,15 @@ def show_frame_1():
         fill="#9C9C9C",
         font=("InriaSans BoldItalic", 24 * -1)
     )
-    window.resizable(False, False)
-    window.mainloop()
+    
+    # Update the window and continue with the rest of the code
+    top_window.update()
+    
+    # You can add a button to close the top window if needed
+    close_button = Button(top_window, text="Close", command=top_window.destroy)
+    close_button.pack()
+
+    top_window.resizable(False, False)  # Uncomment if you want to make the window non-resizable
 
 def show_frame_2():
 
