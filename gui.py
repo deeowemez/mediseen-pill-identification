@@ -12,7 +12,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 def show_frame_1():
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\MD\AA SLU\BSEcE\4th Yr '23 2nd Sem\Capstone\pill-identification\output\frame1\build\assets\frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path) 
@@ -72,7 +72,7 @@ def show_frame_1():
 def show_frame_2():
 
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\MD\AA SLU\BSEcE\4th Yr '23 2nd Sem\Capstone\pill-identification\output\frame2\build\assets\frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0")
 
 
     def relative_to_assets(path: str) -> Path:
@@ -142,7 +142,7 @@ def show_frame_2():
 def show_frame_3():
 
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\MD\AA SLU\BSEcE\4th Yr '23 2nd Sem\Capstone\pill-identification\output\frame3\build\assets\frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
 
 
     def relative_to_assets(path: str) -> Path:
@@ -231,7 +231,7 @@ def show_frame_3():
 def show_frame_4():
 
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\MD\AA SLU\BSEcE\4th Yr '23 2nd Sem\Capstone\pill-identification\output\frame4\build\assets\frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
 
 
     def relative_to_assets(path: str) -> Path:

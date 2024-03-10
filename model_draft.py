@@ -192,9 +192,8 @@ def classify(argv):
                 # Updates next frame
                 next_frame = now() + 100
                 
-                # Detects if pill is present in pill slotk
+                # Detects if pill is present in pill slot
                 pill_detected = get_bbox(res)
-                            
                 if pill_detected:
                     return (max_label)
                         
