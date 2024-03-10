@@ -1,7 +1,7 @@
 import cv2
 import time
 
-def capture_and_crop_image(camera_index=0, image_path="captured_image.jpg", crop_size=(480, 480)):
+def capture_and_crop_image(camera_index=0, image_path="captured_image.jpg", crop_size=(400, 400)):
     # Open the webcam
     cap = cv2.VideoCapture(camera_index)
 
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     save_path = "image.jpg"
 
     # Specify the desired crop size
-    crop_size = (480, 480)
+    crop_size = (400, 400)
 
     # Capture the image and center-crop it
     capture_and_crop_image(webcam_index, save_path, crop_size)
