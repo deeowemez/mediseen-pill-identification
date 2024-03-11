@@ -85,6 +85,6 @@ def speak_pill_info(pill_info, language='en'):
     else:
         speak("Pill information not found.")
 
-
-# pinfo = get_pill_info('Sucranorm Metformin HCl 850mg (Unpacked)')        
-# speak_pill_info(pinfo)
+if __name__ == "__main__":
+    pinfo = get_pill_info('Jardiance FC Empagliflozin 10mg (Unpacked Side B)')     
+    speak_pill_info(pinfo)

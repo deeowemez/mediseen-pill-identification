@@ -1,40 +1,38 @@
 #!/usr/bin/env python
 
-# import libraries for running model
-import model_draft
-import cv2
-import os
-import sys, getopt
-import signal
+# Import libraries for running model
+import model
 import time
-from edge_impulse_linux.image import ImageImpulseRunner
 
-# import libraries for tts
+# Import libraries for tts
 import tts
-import sqlite3
-import pyttsx3
 
-# import libraries for gui
+# Import libraries for gui
 import gui
 
-# import libraries for accessing GPIO pins
+# Import libraries for accessing GPIO pins
 import buttons
 import RPi.GPIO as GPIO
 import threading
+
+# Import libraries for taking pictures
+import webcam
 
 # Database connection information
 pill_database = "pill_info.db"
 pill_table = "pill_info_table"
 
 # Listens for Keyboard Interrupts
-#signal.signal(signal.SIGINT, model_draft.sigint_handler)
+# signal.signal(signal.SIGINT, model_draft.sigint_handler)
 
 def button_thread():
     try:
         buttons.gpio_init()
-        while True:
-            # Do other button-related stuff here...
-            pass
+        #gui.show_frame_1()
+        # while True:
+
+        
+        time.sleep(1)
     except KeyboardInterrupt:
         GPIO.cleanup()
         print('Exiting button thread...')
@@ -46,22 +44,26 @@ def button_thread():
 button_thread = threading.Thread(target=button_thread, daemon=True)
 button_thread.start()
 
+# Keep the program running indefinitely
 try:
-    gui.show_frame_1()
+    while True:
+        if buttons.classify():
+            webcam.capture_and_crop_image()
+            
+            classification = model.classify()
 
-    classification = model_draft.classify(sys.argv[1:])
+            print('this is the max_label: ', classification)
 
-    print('this is the max_label: ', classification)
+            pill_info = tts.get_pill_info(classification)
 
-    pill_info = tts.get_pill_info(classification)
+            print(pill_info)
 
-    print(pill_info)
-
-    #tts.speak_pill_info(pill_info)
-
+            # Uncomment the line below if you want to speak pill information in the button thread
+            tts.speak_pill_info(pill_info)
+        time.sleep(1)
 except KeyboardInterrupt:
     GPIO.cleanup()
-    print('Exiting main script...')
+    print('Exiting...')
 except Exception as e:
-    print('An error occurred in the main script:', e)
+    print('An error occurred:', e)
     GPIO.cleanup()
