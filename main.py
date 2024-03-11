@@ -11,7 +11,7 @@ import tts
 import gui
 
 # Import libraries for accessing GPIO pins
-import buttons
+# import buttons
 import RPi.GPIO as GPIO
 import threading
 
@@ -22,32 +22,36 @@ import webcam
 pill_database = "pill_info.db"
 pill_table = "pill_info_table"
 
-# Listens for Keyboard Interrupts
-# signal.signal(signal.SIGINT, model_draft.sigint_handler)
+# Initialize buttons values
+button_classify = False
 
-def button_thread():
-    try:
-        buttons.gpio_init()
-        #gui.show_frame_1()
-        # while True:
+def gpio_init():
+    GPIO.setmode(GPIO.BCM)
 
+    buttons = [26,19,13,6]
+
+    # Set up GPIO pins as inputs
+    GPIO.setup(buttons, GPIO.IN)
+    
+    def button_pressed(channel):
+        print(f"Button is pressed on channel {channel}")
         
-        time.sleep(1)
-    except KeyboardInterrupt:
-        GPIO.cleanup()
-        print('Exiting button thread...')
-    except Exception as e:
-        print('An error occurred in the button thread:', e)
-        GPIO.cleanup()
+        if channel == 6:
+            global button_classify
+            button_classify = True
+
+    for button in buttons:
+        GPIO.add_event_detect(button, GPIO.FALLING, callback=button_pressed, bouncetime=200)
 
 # Create a thread for button detection
-button_thread = threading.Thread(target=button_thread, daemon=True)
+button_thread = threading.Thread(target=gpio_init, daemon=True)
 button_thread.start()
 
 # Keep the program running indefinitely
 try:
+    gui.show_frame_1()
     while True:
-        if buttons.classify():
+        if button_classify:
             webcam.capture_and_crop_image()
             
             classification = model.classify()
@@ -67,3 +71,4 @@ except KeyboardInterrupt:
 except Exception as e:
     print('An error occurred:', e)
     GPIO.cleanup()
+
