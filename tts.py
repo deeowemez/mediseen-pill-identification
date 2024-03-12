@@ -38,7 +38,7 @@ def get_pill_info(classification):
     return pill_info
 
 def speak(message):
-    tts = gTTS(text=message, lang='en', tld='co.uk', slow=False)
+    tts = gTTS(text=message, lang='en', tld='co.in', slow=False)
 
     # Save the speech as an audio file
     tts.save("output.mp3")
@@ -62,7 +62,7 @@ def speak_pill_info(pill_info, language='en'):
         message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams. {pill_info[2]}. {pill_info[3]}"  # Replace with actual data access
 
         # Use gTTS to convert text to speech
-        tts = gTTS(text=message, lang=language, tld='co.uk', slow=False)
+        tts = gTTS(text=message, lang=language, tld='us', slow=False)
 
         tts.write_to_fp(mp3_fo)
         

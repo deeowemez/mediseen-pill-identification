@@ -3,6 +3,7 @@
 # Import libraries for running model
 import model
 import time
+import pill_detection
 
 # Import libraries for tts
 import tts
@@ -49,9 +50,9 @@ button_thread.start()
 
 # Keep the program running indefinitely
 try:
-    gui.show_frame_1()
+    # gui.show_frame_1()
     while True:
-        if button_classify:
+        if pill_detection.detect_pill():
             webcam.capture_and_crop_image()
             
             classification = model.classify()

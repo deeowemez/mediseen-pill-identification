@@ -175,12 +175,15 @@ def classify(argv):
                 for bb in res['result']['bounding_boxes']:
                     print(bb['label'])
                 
+                img_resized = cv2.resize(img, (400, 400))
+                
                 if "bounding_boxes" in res["result"].keys():
                     # Print box coordinates and draws on image
                     print('Found %d bounding boxes (%d ms.)' % (len(res["result"]["bounding_boxes"]), res['timing']['dsp'] + res['timing']['classification']))
                     for bb in res["result"]["bounding_boxes"]:
                         print('\t%s (%.2f): x=%d y=%d w=%d h=%d' % (bb['label'], bb['value'], bb['x'], bb['y'], bb['width'], bb['height']))
-                        img = cv2.rectangle(img, (bb['x'], bb['y']), (bb['x'] + bb['width'], bb['y'] + bb['height']), (255, 0, 0), 1)
+                        # img = cv2.rectangle(img, (bb['x'], bb['y']), (bb['x'] + bb['width'], bb['y'] + bb['height']), (255, 0, 0), 1)
+                        img_resized = cv2.rectangle(img_resized, (bb['x'], bb['y']), (bb['x'] + bb['width'], bb['y'] + bb['height']), (255, 0, 0), 1)
                     #print('Max Label: ', max(res))
                     
                 if (show_camera):
