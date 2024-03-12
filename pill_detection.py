@@ -100,10 +100,10 @@ def get_bbox(res):
         if len(res["result"]["bounding_boxes"]) > 0:
             print('bbox before', bbox_counter)
             increment_reset_bbox()
-            # add_to_bbox_dict(res)
+            add_to_bbox_dict(res)
             print('bbox after', bbox_counter)
             if bbox_counter > 3:
-                # runner_stop()
+                runner_stop()
                 print('bbox reset', bbox_counter)
                 return True
             else: return False
@@ -169,6 +169,7 @@ def classify(argv):
             for res, img in runner.classifier(videoCaptureDeviceId):
                 if (next_frame > now()):
                     time.sleep((next_frame - now()) / 1000)
+
                 
                 # Updates next frame
                 next_frame = now() + 100
