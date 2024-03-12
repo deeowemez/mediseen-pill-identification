@@ -100,10 +100,10 @@ def get_bbox(res):
         if len(res["result"]["bounding_boxes"]) > 0:
             print('bbox before', bbox_counter)
             increment_reset_bbox()
-            add_to_bbox_dict(res)
+            # add_to_bbox_dict(res)
             print('bbox after', bbox_counter)
             if bbox_counter > 3:
-                runner_stop()
+                # runner_stop()
                 print('bbox reset', bbox_counter)
                 return True
             else: return False
