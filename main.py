@@ -7,6 +7,10 @@ import pill_detection
 
 # Import libraries for tts
 import tts
+import sounddevice as sd
+import numpy as np
+import librosa
+import alsaaudio
 
 # Import libraries for gui
 import gui
@@ -20,12 +24,13 @@ import threading
 import webcam
 
 # Database connection information
-pill_database = "pill_info.db"
+pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
 pill_table = "pill_info_table"
 
-# Initialize buttons values
-button_classify = False
+# Initialize ALSA mixer
+mixer = alsaaudio.Mixer()
 
+# Function for initialzing GPIO
 def gpio_init():
     GPIO.setmode(GPIO.BCM)
 
@@ -37,10 +42,12 @@ def gpio_init():
     def button_pressed(channel):
         print(f"Button is pressed on channel {channel}")
         
-        if channel == 6:
-            global button_classify
-            button_classify = True
+        if channel == 26:
+            tts.increase_volume()
 
+        if channel == 19:
+            tts.decrease_volume()
+    
     for button in buttons:
         GPIO.add_event_detect(button, GPIO.FALLING, callback=button_pressed, bouncetime=200)
 
@@ -52,19 +59,20 @@ button_thread.start()
 try:
     # gui.show_frame_1()
     while True:
-        if pill_detection.detect_pill():
-            webcam.capture_and_crop_image()
-            
-            classification = model.classify()
+        classification = model.classify()
 
-            print('this is the max_label: ', classification)
+        print('this is the max_label: ', classification)
 
-            pill_info = tts.get_pill_info(classification)
+        pill_info = tts.get_pill_info(classification)
 
-            print(pill_info)
+        print(pill_info)
 
-            # Uncomment the line below if you want to speak pill information in the button thread
-            tts.speak_pill_info(pill_info)
+        # Uncomment the line below if you want to speak pill information in the button thread
+        tts.speak_pill_info(pill_info)
+        
+        # audio_data, _ = librosa.load("output.mp3", sr=44100)
+        # tts.play_audio_with_volume(audio_data)
+        
         time.sleep(1)
 except KeyboardInterrupt:
     GPIO.cleanup()

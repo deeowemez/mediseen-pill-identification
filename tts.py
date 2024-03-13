@@ -1,13 +1,24 @@
 import sqlite3
 from gtts import gTTS
 import os
-from io import BytesIO
-import pygame
-
+# from pydub import AudioSegment
+# from pydub.playback import play
+import sounddevice as sd
+import numpy as np
+import librosa
+import alsaaudio
 
 # Database connection information
-pill_database = "pill_info.db"
+pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
 pill_table = "pill_info_table"
+
+tempo = 1.1
+
+# Initialize ALSA mixer
+mixer = alsaaudio.Mixer()
+
+# Initialize buttons values
+volume_factor = 50  # Starting volume (range: 0-100)
 
 def connect_to_database():
     """
@@ -38,13 +49,15 @@ def get_pill_info(classification):
     return pill_info
 
 def speak(message):
-    tts = gTTS(text=message, lang='en', tld='co.in', slow=False)
+    global tempo
+    tts = gTTS(text=message, lang='en', tld='us', slow=False)
 
     # Save the speech as an audio file
     tts.save("output.mp3")
 
     # Play the audio file 
-    os.system("mpg321 output.mp3")  
+    # os.system("mpg321 output.mp3")  
+    os.system("play output.mp3 tempo %s" % (tempo))
 
 def speak_pill_info(pill_info, language='en'):
     """
@@ -55,36 +68,46 @@ def speak_pill_info(pill_info, language='en'):
     """
     
     if pill_info:
-        # Create mp3 file object
-        mp3_fo = BytesIO()
-        
+        global tempo
         # Construct speech message from pill information
         message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams. {pill_info[2]}. {pill_info[3]}"  # Replace with actual data access
 
         # Use gTTS to convert text to speech
         tts = gTTS(text=message, lang=language, tld='us', slow=False)
-
-        tts.write_to_fp(mp3_fo)
-        
-        # # Rewind the MP3 object to the beginning
-        # mp3_fo.seek(0)
-
-        # # Initialize Pygame mixer
-        # pygame.mixer.init()
-
-        # # Load the MP3 data from the memory object
-        # pygame.mixer.music.load(mp3_fo)
-        # pygame.mixer.music.play()
         
         # Save the speech as an audio file
         tts.save("output.mp3")
 
         # Play the audio file (assuming you have a media player installed)
-        os.system("mpg321 output.mp3")  # Adjust the command based on your system
+        # os.system("mpg321 output.mp3")  # Adjust the command based on your system
+        
+        os.system("play output.mp3 tempo %s" % (tempo))
 
     else:
         speak("Pill information not found.")
 
+# Function to play audio with volume adjustment
+# def play_audio_with_volume(audio_data):
+#     global volume_factor
+#     sd.play(volume_factor / 100 * audio_data, samplerate=44100, blocking=True)
+
+# Function to increase volume using ALSA
+def increase_volume():
+    global volume_factor
+    volume_factor = min(volume_factor + 10, 100)  # Increase volume by 10 (max 100)
+    mixer.setvolume(volume_factor)
+    print('Volume: ', volume_factor)
+
+# Function to decrease volume using ALSA
+def decrease_volume():
+    global volume_factor
+    volume_factor = max(volume_factor - 10, 0)  # Decrease volume by 10 (min 0)
+    mixer.setvolume(volume_factor)
+    print('Volume: ', volume_factor)
+
 if __name__ == "__main__":
-    pinfo = get_pill_info('Jardiance FC Empagliflozin 10mg (Unpacked Side B)')     
-    speak_pill_info(pinfo)
+    # pinfo = get_pill_info('Glucophage Metformin HCl 1g (Packed)')     
+    # speak_pill_info(pinfo)
+    # Example usage: adjust volume by 10 dB
+    audio_data, _ = librosa.load("output.mp3", sr=44100)
+    play_audio_with_volume(audio_data)

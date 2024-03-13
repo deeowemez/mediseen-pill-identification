@@ -2,6 +2,11 @@ import cv2
 import time
 
 def capture_and_crop_image():
+    '''
+    
+    Take a picture from webcam 0 and resize to center 400 by 400 pixels 
+    
+    '''
     camera_index=0
     image_path="image.jpg" 
     crop_size=(400, 400)
@@ -14,8 +19,8 @@ def capture_and_crop_image():
         return
 
     # Wait for 5 seconds
-    print("Waiting for 2 seconds before capturing...")
-    time.sleep(2)
+    print("Waiting for 1 second before capturing...")
+    time.sleep(1)
 
     # Capture a single frame
     ret, frame = cap.read()

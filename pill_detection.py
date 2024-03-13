@@ -7,8 +7,7 @@ import time
 from edge_impulse_linux.image import ImageImpulseRunner
 
 bbox_counter = 0
-bbox_dict = {}
-max_label = ''
+bbox_cycles = 3
 
 # Initialize runner variable for ImageImpulseRunner class
 runner = None
@@ -32,53 +31,24 @@ def get_webcams():
             port_ids.append(port)
         camera.release()
     return port_ids
-
-# def add_to_bbox_dict(res):
-#     # add to bounding box dictionary frame classifications
-#     global bbox_dict
-#     print('len_dict before ', len(bbox_dict))
-#     add_to_dict = {bb['label']: float(bb['value']) for bb in res['result']['bounding_boxes']}  
-#     for label, value in add_to_dict.items():
-#         if label in bbox_dict and value > bbox_dict[label]:
-#             # Update the value only if it's higher than the existing value
-#             bbox_dict[label] = value
-#         elif label not in bbox_dict:
-#             # If label doesn't exist, add it to the dictionary
-#             bbox_dict[label] = value
-    
-#     print('len_dict after: ', len(bbox_dict))
-#     print('bbox_dict: ', bbox_dict)
-
-# def max():
-#     # isolate classification with highest confidence
-#     global bbox_dict
-#     bbox_list = list(bbox_dict.values())
-#     for value in bbox_list: 
-#         max_value = 0
-#         if max_value is None or value > max_value: max_value = value
-#     if len(bbox_dict) > 0:
-#         max_label = [label for label, value in bbox_dict.items()][0]
-#     else: max_label = 'waiting for pill'
-#     return max_label
-
-def increment_reset_bbox():
-    global bbox_counter
-    bbox_counter += 1
     
 def get_bbox(res):
+    ''' 
+    Get the number of currently detected bounding boxes
+    
+    declares True for pill detection if frames show > 0 bounding boxes for three consecutive times
+    '''
     global bbox_counter
-    global bbox_dict
+    global bbox_cycles
     if "bounding_boxes" in res["result"].keys():
         if len(res["result"]["bounding_boxes"]) > 0:
             print('bbox before', bbox_counter)
-            increment_reset_bbox()
-            # add_to_bbox_dict(res)
+            bbox_counter += 1
         if bbox_counter > 0 and len(res["result"]["bounding_boxes"]) == 0:
-            bbox_counter = 0 
-            bbox_dict = {}
+            bbox_counter = 0
             print('bbox reset', bbox_counter)
-            print('bbox dict reset', bbox_dict)
-        if bbox_counter > 2:
+        if bbox_counter > bbox_cycles:
+            bbox_counter = 0
             print('bbox reset', bbox_counter)
             return True
         else: return False
@@ -137,6 +107,7 @@ def detect_pill():
                 
 if __name__ == "__main__":
     try:
-        detect_pill()
+        while True:
+            detect_pill()
     except Exception as e:
         print(e)
