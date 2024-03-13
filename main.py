@@ -70,9 +70,6 @@ try:
         # Uncomment the line below if you want to speak pill information in the button thread
         tts.speak_pill_info(pill_info)
         
-        # audio_data, _ = librosa.load("output.mp3", sr=44100)
-        # tts.play_audio_with_volume(audio_data)
-        
         time.sleep(1)
 except KeyboardInterrupt:
     GPIO.cleanup()

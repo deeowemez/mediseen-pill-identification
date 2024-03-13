@@ -1,8 +1,6 @@
 import sqlite3
 from gtts import gTTS
 import os
-# from pydub import AudioSegment
-# from pydub.playback import play
 import sounddevice as sd
 import numpy as np
 import librosa
@@ -106,8 +104,8 @@ def decrease_volume():
     print('Volume: ', volume_factor)
 
 if __name__ == "__main__":
-    # pinfo = get_pill_info('Glucophage Metformin HCl 1g (Packed)')     
-    # speak_pill_info(pinfo)
+    pinfo = get_pill_info('Glucophage Metformin HCl 1g (Packed)')     
+    speak_pill_info(pinfo)
     # Example usage: adjust volume by 10 dB
-    audio_data, _ = librosa.load("output.mp3", sr=44100)
-    play_audio_with_volume(audio_data)
+    # audio_data, _ = librosa.load("output.mp3", sr=44100)
+    # play_audio_with_volume(audio_data)
