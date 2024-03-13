@@ -9,7 +9,9 @@ import alsaaudio
 # Database connection information
 pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
 pill_table = "pill_info_table"
+mp3_folder = "/home/pi/capstone/pill-identification/mp3"
 
+# Set tempo
 tempo = 1.1
 
 # Initialize ALSA mixer
@@ -18,71 +20,12 @@ mixer = alsaaudio.Mixer()
 # Initialize buttons values
 volume_factor = 50  # Starting volume (range: 0-100)
 
-def connect_to_database():
-    """
-    Establishes a connection to the SQLite database.
-
-    Returns:
-        sqlite3.Connection: The database connection object.
-    """
-    conn = sqlite3.connect(pill_database)
-    return conn
-
-def get_pill_info(classification):
-    """
-    Queries the database for information about a specific pill.
-
-    Args:
-        classification: The name of the pill (identified by the main script).
-
-    Returns:
-        tuple: A tuple containing pill information (name, description, etc.) if found, otherwise None.
-    """
-    conn = connect_to_database()
-    cursor = conn.cursor()
-    columns = ['medication_name', 'dosage', 'special_instructions', 'possible_side_effects']
-    cursor.execute(f"SELECT {','.join(columns)} FROM pill_info_table WHERE medication_name_dosage = ?", (classification,))
-    pill_info = cursor.fetchone()
-    conn.close()
-    return pill_info
-
-def speak(message):
+def speak_pill_info(classification):
     global tempo
-    tts = gTTS(text=message, lang='en', tld='us', slow=False)
-
-    # Save the speech as an audio file
-    tts.save("output.mp3")
-
-    # Play the audio file 
-    # os.system("mpg321 output.mp3")  
-    os.system("play output.mp3 tempo %s" % (tempo))
-
-def speak_pill_info(pill_info, language='en'):
-    """
-    Retrieves information from the database and speaks it using text-to-speech.
-
-    Args:
-        classification: The name of the pill (identified by the main script).
-    """
-    
-    if pill_info:
-        global tempo
-        # Construct speech message from pill information
-        message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams. {pill_info[2]}. {pill_info[3]}"  # Replace with actual data access
-
-        # Use gTTS to convert text to speech
-        tts = gTTS(text=message, lang=language, tld='us', slow=False)
-        
-        # Save the speech as an audio file
-        tts.save("output.mp3")
-
-        # Play the audio file (assuming you have a media player installed)
-        # os.system("mpg321 output.mp3")  # Adjust the command based on your system
-        
-        os.system("play output.mp3 tempo %s" % (tempo))
-
-    else:
-        speak("Pill information not found.")
+    mp3_classification = classification.replace(' ', '_').replace('(', '').replace(')', '').lower()
+    mp3_path = os.path.join(mp3_folder, f"{mp3_classification}.mp3")
+    print('mp3_path: ', mp3_path)
+    os.system("play %s tempo %s" % (mp3_path, tempo))
 
 # Function to play audio with volume adjustment
 # def play_audio_with_volume(audio_data):
@@ -104,8 +47,7 @@ def decrease_volume():
     print('Volume: ', volume_factor)
 
 if __name__ == "__main__":
-    pinfo = get_pill_info('Glucophage Metformin HCl 1g (Packed)')     
-    speak_pill_info(pinfo)
+    speak_pill_info('Glucophage XR Metformin HCl 750mg (Unpacked)')
     # Example usage: adjust volume by 10 dB
     # audio_data, _ = librosa.load("output.mp3", sr=44100)
     # play_audio_with_volume(audio_data)

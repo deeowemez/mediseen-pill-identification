@@ -56,7 +56,8 @@ def generate_mp3():
             tts = gTTS(text=message, lang='en', tld='us', slow=False)
             
             # Save the speech as an audio file
-            file_path = os.path.join(mp3_folder, f"{medicine}.mp3")
+            mp3_medicine = medicine.replace(' ', '_').replace('(', '').replace(')', '').lower()
+            file_path = os.path.join(mp3_folder, f"{mp3_medicine}.mp3")
             tts.save(file_path)
             print("{} mp3 file created.".format(medicine))
     # Close the cursor and the connection

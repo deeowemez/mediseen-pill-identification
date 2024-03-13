@@ -59,16 +59,13 @@ button_thread.start()
 try:
     # gui.show_frame_1()
     while True:
-        classification = model.classify()
+        # classification = model.classify()
+        classification = 'Glucophage XR Metformin HCl 750mg (Unpacked)'
 
         print('this is the max_label: ', classification)
 
-        pill_info = tts.get_pill_info(classification)
-
-        print(pill_info)
-
         # Uncomment the line below if you want to speak pill information in the button thread
-        tts.speak_pill_info(pill_info)
+        tts.speak_pill_info(classification)
         
         time.sleep(1)
 except KeyboardInterrupt:
