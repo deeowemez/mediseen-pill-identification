@@ -7,9 +7,14 @@ import os
 # import alsaaudio
 
 # Database connection information
-pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
+# pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
+# mp3_folder = "/home/pi/capstone/pill-identification/mp3"
+pill_database = r"E:\pill-identification\database\pill_info.db"
+mp3_folder = r"E:\pill-identification\mp3"
+
 pill_table = "pill_info_table"
-mp3_folder = "/home/pi/capstone/pill-identification/mp3"
+
+
 
 def connect_to_database():
     """
@@ -29,13 +34,13 @@ def get_pill_list():
         classification: The name of the pill (identified by the main script).
 
     Returns:
-        tuple: A tuple containing pill information (name, description, etc.) if found, otherwise None.
+        list: A list containing medication names and dosages if found, otherwise an empty list.
     """
     conn = connect_to_database()
     cursor = conn.cursor()
     cursor.execute("SELECT medication_name_dosage FROM pill_info_table")
-    medication_names_dosages = cursor.fetchone()
-    print('medication_names_dosage', medication_names_dosages)
+    medication_names_dosages = [row[0] for row in cursor.fetchall()]
+    # print('medication_names_dosage', medication_names_dosages)
     cursor.close()
     conn.close()
     return medication_names_dosages
