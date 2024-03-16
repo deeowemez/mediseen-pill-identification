@@ -9,15 +9,15 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
+def show_pill_information_frame():
+    OUTPUT_PATH = Path(__file__).parent
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\MD\AA SLU\BSEcE\4th Yr '23 2nd Sem\Capstone\pill-identification\output\frame3\build\assets\frame0")
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"E:\MD\AA SLU\BSEcE\4th Yr '23 2nd Sem\Capstone\Tkinter-Designer-master\output\frame2\build\assets\frame0")
+
+    def relative_to_assets(path: str) -> Path:
+        return ASSETS_PATH / Path(path)
 
 
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
-
-def show_frame():
     window = Tk()
 
     window.geometry("800x480")
@@ -38,43 +38,44 @@ def show_frame():
     image_image_1 = PhotoImage(
         file=relative_to_assets("image_1.png"))
     image_1 = canvas.create_image(
-        535.8487548828125,
-        464.5844939194576,
+        406.0,
+        238.0,
         image=image_image_1
     )
 
-    image_image_2 = PhotoImage(
-        file=relative_to_assets("image_2.png"))
-    image_2 = canvas.create_image(
-        343.0,
-        56.0,
-        image=image_image_2
-    )
-
     canvas.create_text(
-        4.0,
-        130.0,
+        37.0,
+        63.0,
         anchor="nw",
-        text="Insert the pill into the designated pill slot, ensuring proper alignment.",
+        text="Glucophage XR Metformin HCl \n(Unpacked)",
         fill="#000000",
-        font=("Inter Medium", 60 * -1)
-    )
-
-    image_image_3 = PhotoImage(
-        file=relative_to_assets("image_3.png"))
-    image_3 = canvas.create_image(
-        646.0,
-        382.0,
-        image=image_image_3
+        font=("Koulen Regular", 36 * -1)
     )
 
     canvas.create_text(
-        17.0,
-        11.0,
+        79.0,
+        238.0,
+        anchor="nw",
+        text="Dosage: \n\nSpecial Instruction: \n\nPossible side effects: \n\n",
+        fill="#000000",
+        font=("Koulen Regular", 24 * -1)
+    )
+
+    canvas.create_text(
+        29.0,
+        10.0,
         anchor="nw",
         text="23:01",
         fill="#DADADA",
-        font=("InriaSans Bold", 40 * -1)
+        font=("InriaSans Bold", 32 * -1)
     )
+
+    canvas.create_rectangle(
+        573.0,
+        221.0,
+        718.0,
+        404.0,
+        fill="#D9D9D9",
+        outline="")
     window.resizable(False, False)
     window.mainloop()

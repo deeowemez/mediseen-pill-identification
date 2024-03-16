@@ -9,16 +9,13 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
-
-def show_frame_3(pill_info):
-
+def show_instructions_frame():
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\MD\AA SLU\BSEcE\4th Yr '23 2nd Sem\Capstone\Tkinter-Designer-master\output\frame3\build\assets\frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\MD\AA SLU\BSEcE\4th Yr '23 2nd Sem\Capstone\pill-identification\output\frame2\build\assets\frame0")
 
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
-
 
 
     window = Tk()
@@ -41,59 +38,34 @@ def show_frame_3(pill_info):
     image_image_1 = PhotoImage(
         file=relative_to_assets("image_1.png"))
     image_1 = canvas.create_image(
-        455.9680175121721,
-        314.84588623046875,
+        415.0,
+        240.0,
         image=image_image_1
     )
 
     image_image_2 = PhotoImage(
         file=relative_to_assets("image_2.png"))
     image_2 = canvas.create_image(
-        613.0,
-        47.0,
+        714.0000215347418,
+        381.0,
         image=image_image_2
     )
 
     canvas.create_text(
-        167.0,
-        84.0,
+        107.0,
+        152.0,
         anchor="nw",
-        text=f"{pill_info[0]}",
+        text="Insert the pill into the\n  designated pill slot,\n    ensuring proper\n        alignment.",
         fill="#000000",
-        font=("Inter Medium", 36 * -1)
+        font=("Inter Medium", 60 * -1)
     )
 
     canvas.create_text(
-        293.0,
-        171.0,
-        anchor="nw",
-        text="Dosage:\n%s\n\nSpecial Instruction:\n%s\n\nPossible side effects:\n%s" % (pill_info[1], pill_info[2], pill_info[3]),
-        fill="#000000",
-        font=("Inter Regular", 24 * -1)
-    )
-
-    canvas.create_rectangle(
-        17.0,
-        171.0,
-        276.0,
-        406.0,
-        fill="#D9D9D9",
-        outline="")
-
-    image_image_3 = PhotoImage(
-        file=relative_to_assets("image_3.png"))
-    image_3 = canvas.create_image(
-        34.0,
-        188.0,
-        image=image_image_3
-    )
-
-    canvas.create_text(
-        17.0,
-        11.0,
+        46.0,
+        24.0,
         anchor="nw",
         text="23:01",
-        fill="#DADADA",
+        fill="#EDF5FA",
         font=("InriaSans Bold", 40 * -1)
     )
     window.resizable(False, False)

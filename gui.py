@@ -11,21 +11,23 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel
 
 
 
-def show_frame_1():
+def show_logo_frame():
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\MD\AA SLU\BSEcE\4th Yr '23 2nd Sem\Capstone\pill-identification\output\frame1\build\assets\frame0")
+
 
     def relative_to_assets(path: str) -> Path:
-        return ASSETS_PATH / Path(path) 
-    
-    top_window = Toplevel()
+        return ASSETS_PATH / Path(path)
 
-    top_window.geometry("800x480")
-    top_window.configure(bg="#FFFFFF")
+
+    window = Tk()
+
+    window.geometry("800x480")
+    window.configure(bg = "#FFFFFF")
 
 
     canvas = Canvas(
-        top_window,
+        window,
         bg = "#FFFFFF",
         height = 480,
         width = 800,
@@ -35,56 +37,34 @@ def show_frame_1():
     )
 
     canvas.place(x = 0, y = 0)
-    image_image_1 = PhotoImage(
-        file=relative_to_assets("image_1.png"))
-    image_1 = canvas.create_image(
-        400.0,
-        249.0,
-        image=image_image_1
-    )
-
-    image_image_2 = PhotoImage(
-        file=relative_to_assets("image_2.png"))
-    image_2 = canvas.create_image(
-        400.0,
-        242.0,
-        image=image_image_2
-    )
-
-    image_image_3 = PhotoImage(
-        file=relative_to_assets("image_3.png"))
-    image_3 = canvas.create_image(
-        400.0,
-        230.0,
-        image=image_image_3
-    )
-
     canvas.create_text(
         276.0,
-        374.0,
+        389.0,
         anchor="nw",
         text="press the screen to start",
         fill="#9C9C9C",
         font=("InriaSans BoldItalic", 24 * -1)
     )
-    
-    # Update the window and continue with the rest of the code
-    top_window.update()
-    
-    # You can add a button to close the top window if needed
-    close_button = Button(top_window, text="Close", command=top_window.destroy)
-    close_button.pack()
 
-    top_window.resizable(False, False)  # Uncomment if you want to make the window non-resizable
+    image_image_1 = PhotoImage(
+        file=relative_to_assets("image_1.png"))
+    image_1 = canvas.create_image(
+        400.0,
+        223.0,
+        image=image_image_1
+    )
+    window.resizable(False, False)
+    window.mainloop()
 
-def show_frame_2():
 
+def show_instructions_frame():
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\MD\AA SLU\BSEcE\4th Yr '23 2nd Sem\Capstone\pill-identification\output\frame2\build\assets\frame0")
 
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
+
 
     window = Tk()
 
@@ -106,56 +86,47 @@ def show_frame_2():
     image_image_1 = PhotoImage(
         file=relative_to_assets("image_1.png"))
     image_1 = canvas.create_image(
-        535.8487548828125,
-        464.5844939194576,
+        415.0,
+        240.0,
         image=image_image_1
     )
 
     image_image_2 = PhotoImage(
         file=relative_to_assets("image_2.png"))
     image_2 = canvas.create_image(
-        343.0,
-        56.0,
+        714.0000215347418,
+        381.0,
         image=image_image_2
     )
 
     canvas.create_text(
-        4.0,
-        130.0,
+        107.0,
+        152.0,
         anchor="nw",
-        text="Insert the pill into the designated pill slot, ensuring proper alignment.",
+        text="Insert the pill into the\n  designated pill slot,\n    ensuring proper\n        alignment.",
         fill="#000000",
         font=("Inter Medium", 60 * -1)
     )
 
-    image_image_3 = PhotoImage(
-        file=relative_to_assets("image_3.png"))
-    image_3 = canvas.create_image(
-        646.0,
-        382.0,
-        image=image_image_3
-    )
-
     canvas.create_text(
-        17.0,
-        11.0,
+        46.0,
+        24.0,
         anchor="nw",
         text="23:01",
-        fill="#DADADA",
+        fill="#EDF5FA",
         font=("InriaSans Bold", 40 * -1)
     )
     window.resizable(False, False)
     window.mainloop()
 
-def show_frame_3():
 
+def show_pill_information_frame():
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\MD\AA SLU\BSEcE\4th Yr '23 2nd Sem\Capstone\pill-identification\output\frame3\build\assets\frame0")
 
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
-
 
 
     window = Tk()
@@ -178,72 +149,57 @@ def show_frame_3():
     image_image_1 = PhotoImage(
         file=relative_to_assets("image_1.png"))
     image_1 = canvas.create_image(
-        455.9680175121721,
-        314.84588623046875,
+        406.0,
+        238.0,
         image=image_image_1
     )
 
-    image_image_2 = PhotoImage(
-        file=relative_to_assets("image_2.png"))
-    image_2 = canvas.create_image(
-        613.0,
-        47.0,
-        image=image_image_2
-    )
-
     canvas.create_text(
-        167.0,
-        84.0,
+        37.0,
+        63.0,
         anchor="nw",
-        text=f"{pill_info[0]}",
+        text="Glucophage XR Metformin HCl \n(Unpacked)",
         fill="#000000",
-        font=("Inter Medium", 36 * -1)
+        font=("Koulen Regular", 36 * -1)
     )
 
     canvas.create_text(
-        293.0,
-        171.0,
+        79.0,
+        238.0,
         anchor="nw",
-        text="Dosage:\n%s\n\nSpecial Instruction:\n%s\n\nPossible side effects:\n%s" % (pill_info[1], pill_info[2], pill_info[3]),
+        text="Dosage: \n\nSpecial Instruction: \n\nPossible side effects: \n\n",
         fill="#000000",
-        font=("Inter Regular", 24 * -1)
-    )
-
-    canvas.create_rectangle(
-        17.0,
-        171.0,
-        276.0,
-        406.0,
-        fill="#D9D9D9",
-        outline="")
-
-    image_image_3 = PhotoImage(
-        file=relative_to_assets("image_3.png"))
-    image_3 = canvas.create_image(
-        34.0,
-        188.0,
-        image=image_image_3
+        font=("Koulen Regular", 24 * -1)
     )
 
     canvas.create_text(
-        17.0,
-        11.0,
+        29.0,
+        10.0,
         anchor="nw",
         text="23:01",
         fill="#DADADA",
-        font=("InriaSans Bold", 40 * -1)
+        font=("InriaSans Bold", 32 * -1)
     )
+
+    canvas.create_rectangle(
+        573.0,
+        221.0,
+        718.0,
+        404.0,
+        fill="#D9D9D9",
+        outline="")
     window.resizable(False, False)
     window.mainloop()
 
-def show_frame_4():
 
+def show_error_frame():
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\MD\AA SLU\BSEcE\4th Yr '23 2nd Sem\Capstone\pill-identification\output\frame4\build\assets\frame0")
 
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
+
 
     window = Tk()
 
@@ -265,56 +221,23 @@ def show_frame_4():
     image_image_1 = PhotoImage(
         file=relative_to_assets("image_1.png"))
     image_1 = canvas.create_image(
-        411.6100484791996,
-        168.53253173828125,
+        400.0,
+        241.0,
         image=image_image_1
     )
 
-    image_image_2 = PhotoImage(
-        file=relative_to_assets("image_2.png"))
-    image_2 = canvas.create_image(
-        613.0,
-        47.0,
-        image=image_image_2
-    )
-
     canvas.create_text(
-        167.0,
-        84.0,
+        272.0,
+        203.0,
         anchor="nw",
-        text="name ng gamot",
-        fill="#000000",
-        font=("Inter Medium", 36 * -1)
+        text="ERROR!",
+        fill="#F30707",
+        font=("Inter Bold", 64 * -1)
     )
 
     canvas.create_text(
-        293.0,
-        171.0,
-        anchor="nw",
-        text="Dosage:\n\nSpecial Instruction:\n\nPossible side effects:",
-        fill="#000000",
-        font=("Inter Regular", 24 * -1)
-    )
-
-    canvas.create_rectangle(
-        17.0,
-        171.0,
-        276.0,
-        406.0,
-        fill="#D9D9D9",
-        outline="")
-
-    image_image_3 = PhotoImage(
-        file=relative_to_assets("image_3.png"))
-    image_3 = canvas.create_image(
-        34.0,
-        188.0,
-        image=image_image_3
-    )
-
-    canvas.create_text(
-        17.0,
-        11.0,
+        58.0,
+        16.0,
         anchor="nw",
         text="23:01",
         fill="#DADADA",
@@ -322,12 +245,28 @@ def show_frame_4():
     )
 
     canvas.create_text(
-        162.0,
-        426.0,
+        125.0,
+        241.0,
         anchor="nw",
-        text="press the screen to identify new pill",
-        fill="#9C9C9C",
-        font=("InriaSans BoldItalic", 24 * -1)
+        text="Pill cannot be identified.",
+        fill="#000000",
+        font=("Inter Medium", 48 * -1)
+    )
+
+    canvas.create_text(
+        211.0,
+        328.0,
+        anchor="nw",
+        text="Please try again",
+        fill="#EDF5FA",
+        font=("Inter Medium", 24 * -1)
     )
     window.resizable(False, False)
     window.mainloop()
+
+
+if __name__ == "__main__":
+    # show_logo_frame()
+    # show_instructions_frame()
+    # show_pill_information_frame()
+    # show_error_frame()
