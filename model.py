@@ -15,7 +15,8 @@ runner = None
 
 bbox_dict = {}
 max_label = ''
-image_taken = 0 
+image_taken = 0
+number_of_images = 1
 
 def add_to_bbox_dict(res):
     # add to bounding box dictionary frame classifications
@@ -47,7 +48,7 @@ def max():
     return max_label
 
 def classify():
-    number_of_images = 1
+    global number_of_images
     # Path to model file
     model = "/home/pi/capstone/pill-identification/modelfile.eim"
 
@@ -92,6 +93,7 @@ def classify():
                     
                     if image_taken > number_of_images:
                         #save a copy of the picture as debug.jpg
+                        number_of_images = 0
                         cv2.imwrite('debug.jpg', cv2.cvtColor(cropped, cv2.COLOR_RGB2BGR))
                         print(bbox_dict)
                         max()

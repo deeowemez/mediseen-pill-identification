@@ -13,7 +13,8 @@ import librosa
 import alsaaudio
 
 # Import libraries for gui
-import others.gui as gui
+import tkinter as tk
+import gui
 
 # Import libraries for accessing GPIO pins
 # import buttons
@@ -51,45 +52,46 @@ def gpio_init():
     for button in buttons:
         GPIO.add_event_detect(button, GPIO.FALLING, callback=button_pressed, bouncetime=200)
 
+# Function for initializing GUI
+def gui_init():
+    root = tk.Tk()
+    root.geometry("800x480")
+    gui.show_logo_frame(root)
+    root.mainloop()
+
 # Create a thread for button detection
 button_thread = threading.Thread(target=gpio_init, daemon=True)
 button_thread.start()
 
-
-# Function to switch GUI frames
-def switch_frame(new_frame_function):
-    global current_frame
-    if current_frame:
-        # Close the current frame
-        current_frame.destroy()
-        
-    current_frame = new_frame_function()
-
-# Create a thread for gui
-gui_thread = threading.Thread(target=switch_frame, daemon=True)
+# Create a thread for GUI
+gui_thread = threading.Thread(target=gui_init, daemon=True)
 gui_thread.start()
 
 # Keep the program running indefinitely
+
+global root
 try:
-    current_frame = None
     while True:
         # classification = model.classify()
-        
         classification = 'Glucophage XR Metformin HCl 750mg (Unpacked)'
 
         print('this is the max_label: ', classification)
         
-        # switch_frame(gui.show_pill_information_frame)
-        # time.sleep(3)  # Show the instructions frame for 5 seconds
-
-        # Uncomment the line below if you want to speak pill information in the button thread
-        #tts.speak_pill_info(classification)
+        time.sleep(1)  # Simulate some processing time
         
-        time.sleep(1)
+        # Switch frames
+        gui.switch_frame(root, gui.show_instructions_frame)  # Example of switching frames
+        
+        time.sleep(1)  # Simulate some processing time
+        
+        gui.switch_frame(root, gui.show_pill_information_frame)  # Example of switching frames
+        
+        time.sleep(1)  # Simulate some processing time
+        
+        # Perform other tasks or switch frames as needed
 except KeyboardInterrupt:
     GPIO.cleanup()
     print('Exiting...')
 except Exception as e:
     print('An error occurred:', e)
     GPIO.cleanup()
-
