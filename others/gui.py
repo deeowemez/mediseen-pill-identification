@@ -12,8 +12,8 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel
 
 def show_logo_frame():
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
-    # ASSETS_PATH = OUTPUT_PATH / Path(r"E:\pill-identification\output\frame1\build\assets\frame0")
+    # ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\pill-identification\output\frame1\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -60,8 +60,8 @@ def show_logo_frame():
 
 def show_instructions_frame():
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0")
-    # ASSETS_PATH = OUTPUT_PATH / Path(r"E:\pill-identification\output\frame2\build\assets\frame0")
+    # ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\pill-identification\output\frame2\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -125,8 +125,8 @@ def show_instructions_frame():
 
 def show_pill_information_frame():
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
-    # ASSETS_PATH = OUTPUT_PATH / Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
+    # ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -199,8 +199,8 @@ def show_pill_information_frame():
 
 def show_error_frame():
     OUTPUT_PATH = Path(__file__).parent
-    ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
-    # ASSETS_PATH = OUTPUT_PATH / Path(r"E:\pill-identification\output\frame4\build\assets\frame0")
+    # ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\pill-identification\output\frame4\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)

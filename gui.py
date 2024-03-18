@@ -1,10 +1,21 @@
 from tkinter import Tk, Canvas, PhotoImage
 from pathlib import Path
+import time
 
-def relative_to_assets(path: str) -> Path:
-    return Path(__file__).parent / "output/frame1/build/assets/frame0" / Path(path)
+# Dictionary to store references to the images
+image_references = {}
 
 def show_logo_frame(root):
+    global image_references
+    OUTPUT_PATH = Path(__file__).parent
+    print('output: ', OUTPUT_PATH)
+    # ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\pill-identification\output\frame1\build\assets\frame0")
+    print('ASSETS: ', ASSETS_PATH)
+
+    def relative_to_assets(path: str) -> Path:
+        return ASSETS_PATH / Path(path)
+    
     root.configure(bg="#FFFFFF")
 
     canvas = Canvas(
@@ -28,13 +39,25 @@ def show_logo_frame(root):
     )
 
     image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
-    canvas.create_image(
+    image_references["image_1"] = image_image_1
+    image_1 = canvas.create_image(
         400.0,
         223.0,
         image=image_image_1
     )
+    # root.resizable(False, False)
+
 
 def show_instructions_frame(root):
+    global image_references
+    OUTPUT_PATH = Path(__file__).parent
+    # ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\pill-identification\output\frame2\build\assets\frame0")
+
+    def relative_to_assets(path: str) -> Path:
+        return ASSETS_PATH / Path(path)
+    
+    
     root.configure(bg="#EDF5FA")
 
     canvas = Canvas(
@@ -49,14 +72,16 @@ def show_instructions_frame(root):
     canvas.place(x=0, y=0)
 
     image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
-    canvas.create_image(
+    image_references["image_1"] = image_image_1
+    image_1 = canvas.create_image(
         415.0,
         240.0,
         image=image_image_1
     )
 
     image_image_2 = PhotoImage(file=relative_to_assets("image_2.png"))
-    canvas.create_image(
+    image_references["image_2"] = image_image_2
+    image_2 = canvas.create_image(
         714.0,
         381.0,
         image=image_image_2
@@ -81,6 +106,14 @@ def show_instructions_frame(root):
     )
 
 def show_pill_information_frame(root):
+    global image_references
+    OUTPUT_PATH = Path(__file__).parent
+    # ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
+
+    def relative_to_assets(path: str) -> Path:
+        return ASSETS_PATH / Path(path)
+    
     root.configure(bg="#EDF5FA")
 
     canvas = Canvas(
@@ -95,6 +128,7 @@ def show_pill_information_frame(root):
     canvas.place(x=0, y=0)
 
     image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
+    image_references["image_1"] = image_image_1
     canvas.create_image(
         406.0,
         238.0,
@@ -138,6 +172,14 @@ def show_pill_information_frame(root):
     )
 
 def show_error_frame(root):
+    global image_references
+    OUTPUT_PATH = Path(__file__).parent
+    # ASSETS_PATH = OUTPUT_PATH / Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
+    ASSETS_PATH = OUTPUT_PATH / Path(r"E:\pill-identification\output\frame4\build\assets\frame0")
+
+    def relative_to_assets(path: str) -> Path:
+        return ASSETS_PATH / Path(path)
+    
     root.configure(bg="#EDF5FA")
 
     canvas = Canvas(
@@ -152,6 +194,7 @@ def show_error_frame(root):
     canvas.place(x=0, y=0)
 
     image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
+    image_references["image_1"] = image_image_1
     canvas.create_image(
         400.0,
         241.0,
@@ -194,6 +237,7 @@ def show_error_frame(root):
         font=("Inter Medium", 24)
     )
 
+# Define switch_frame function after the main block
 def switch_frame(root, new_frame_func):
     # Clear the current frame
     for widget in root.winfo_children():
@@ -202,11 +246,31 @@ def switch_frame(root, new_frame_func):
     # Show the new frame
     new_frame_func(root)
 
+
+# def check_condition_and_switch(root):
+#     # Sample condition: Check if time is even
+#     current_time = time.localtime().tm_sec
+#     if current_time % 2 == 0:
+#         switch_frame(root, show_logo_frame)
+#     else:
+#         switch_frame(root, show_error_frame)
+
+#     # Schedule the next check after 1000 milliseconds (1 second)
+#     root.after(1000, check_condition_and_switch, root)
+
 if __name__ == "__main__":
-    root = Tk.Tk()
+    root = Tk()
     root.geometry("800x480")
-    root.mainloop()
+
     show_logo_frame(root)
-    # show_instructions_frame()
-    # show_pill_information_frame()
-    # show_error_frame()
+    # show_instructions_frame(root)
+    # show_pill_information_frame(root)
+    # show_error_frame(root)
+    # # Start by showing the error frame
+    # switch_frame(root, show_logo_frame)
+
+    # # Schedule the function to check condition and switch frames
+    # root.after(1000, check_condition_and_switch, root)
+
+    # # Start the main loop
+    root.mainloop()
