@@ -8,8 +8,8 @@ image_references = {}
 
 def show_logo_frame(root):
     global image_references
-    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
-    # ASSETS_PATH =  Path(r"E:\pill-identification\output\frame1\build\assets\frame0")
+    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
+    ASSETS_PATH =  Path(r"E:\pill-identification\output\frame1\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -48,8 +48,8 @@ def show_logo_frame(root):
 
 def show_instructions_frame(root):
     global image_references
-    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0")
-    # ASSETS_PATH = Path(r"E:\pill-identification\output\frame2\build\assets\frame0")
+    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0")
+    ASSETS_PATH = Path(r"E:\pill-identification\output\frame2\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -104,8 +104,8 @@ def show_instructions_frame(root):
 
 def show_pill_information_frame(root):
     global image_references
-    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
-    # ASSETS_PATH = Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
+    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
+    ASSETS_PATH = Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -169,8 +169,8 @@ def show_pill_information_frame(root):
 
 def show_error_frame(root):
     global image_references
-    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
-    # ASSETS_PATH = Path(r"E:\pill-identification\output\frame4\build\assets\frame0")
+    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
+    ASSETS_PATH = Path(r"E:\pill-identification\output\frame4\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -233,7 +233,7 @@ def show_error_frame(root):
     )
 
 # Define switch_frame function after the main block
-def switch_frame(root, new_frame_func):
+def clear_frame(root, new_frame_func):
     # Clear the current frame
     for widget in root.winfo_children():
         widget.destroy()
@@ -243,13 +243,13 @@ def switch_frame(root, new_frame_func):
 
 # Function for initializing GUI
 def switch_frames(root, frame_function, delay):
-    root.after(delay, lambda: switch_frame(root, frame_function))
+    root.after(delay, lambda: clear_frame(root, frame_function))
 
 def check_and_show_pill_information(root, delay, classification):
     # classification = 'asldkfjalks'  # Replace with your actual classification logic
     print('clasdf:', classification)
     if classification:  # Assuming classification is True if pill is identified
-        root.after(delay, lambda: switch_frame(root, show_pill_information_frame))
+        root.after(delay, lambda: clear_frame(root, show_pill_information_frame, 1))
 
 
 if __name__ == "__main__":
