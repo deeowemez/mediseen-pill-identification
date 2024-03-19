@@ -20,7 +20,7 @@ def capture_and_crop_image():
 
     # Wait for 5 seconds
     print("Waiting for 1 second before capturing...")
-    time.sleep(1)
+    time.sleep(2)
 
     # Capture a single frame
     ret, frame = cap.read()
