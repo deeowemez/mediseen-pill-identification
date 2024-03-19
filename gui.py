@@ -8,8 +8,8 @@ image_references = {}
 
 def show_logo_frame(root):
     global image_references
-    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
-    ASSETS_PATH =  Path(r"E:\pill-identification\output\frame1\build\assets\frame0")
+    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
+    # ASSETS_PATH =  Path(r"E:\pill-identification\output\frame1\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -48,8 +48,8 @@ def show_logo_frame(root):
 
 def show_instructions_frame(root):
     global image_references
-    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0")
-    ASSETS_PATH = Path(r"E:\pill-identification\output\frame2\build\assets\frame0")
+    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0")
+    # ASSETS_PATH = Path(r"E:\pill-identification\output\frame2\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -104,8 +104,8 @@ def show_instructions_frame(root):
 
 def show_pill_information_frame(root):
     global image_references
-    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
-    ASSETS_PATH = Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
+    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
+    # ASSETS_PATH = Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -169,8 +169,8 @@ def show_pill_information_frame(root):
 
 def show_error_frame(root):
     global image_references
-    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
-    ASSETS_PATH = Path(r"E:\pill-identification\output\frame4\build\assets\frame0")
+    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
+    # ASSETS_PATH = Path(r"E:\pill-identification\output\frame4\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
