@@ -1,6 +1,7 @@
 from tkinter import Tk, Canvas, PhotoImage
 from pathlib import Path
 import time
+import tkinter as tk
 
 # Dictionary to store references to the images
 image_references = {}
@@ -246,8 +247,10 @@ def switch_frames(root, frame_function, delay):
 
 def check_and_show_pill_information(root, delay, classification):
     # classification = 'asldkfjalks'  # Replace with your actual classification logic
+    print('clasdf:', classification)
     if classification:  # Assuming classification is True if pill is identified
         root.after(delay, lambda: switch_frame(root, show_pill_information_frame))
+
 
 if __name__ == "__main__":
     root = Tk()

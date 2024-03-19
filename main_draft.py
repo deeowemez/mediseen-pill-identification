@@ -41,6 +41,7 @@ import time
 #         GPIO.add_event_detect(button, GPIO.FALLING, callback=button_pressed, bouncetime=200)
 
 classification = ''
+check_classification = False
 
 # # Import libraries for gui
 from tkinter import Tk
@@ -57,6 +58,7 @@ import threading
 
 def gui_init():
     global classification
+    global check_classification
     # Initialize the Tkinter root window
     root = tk.Tk()
     root.geometry("800x480")
@@ -65,30 +67,39 @@ def gui_init():
     root.after(0, lambda: gui.switch_frame(root, gui.show_logo_frame))
 
     # After 3 seconds, show the pill information frame
-    gui.switch_frames(root, gui.show_instructions_frame, 3000)
+    gui.switch_frames(root, gui.show_instructions_frame, 1500)
 
-
-    # After 6 seconds, show the instructions frame
-    gui.check_and_show_pill_information(root, 0, classification)
+    if classification:
+        gui.check_and_show_pill_information(root, 2000, classification)
+        check_classification = True
 
     # Start the Tkinter event loop
     root.mainloop()
 
-# Create a thread for button detection
-# button_thread = threading.Thread(target=gpio_init, daemon=True)
-# button_thread.start()
-
-# Create a thread for GUI
-gui_thread = threading.Thread(target=gui_init)
-gui_thread.start()
+# def check_and_show_pill_information(root, classification):
+#     if classification:
+#         gui.switch_frames(root, gui.show_pill_information_frame, 0)
 
 # Keep the program running indefinitely
 
 if __name__ == "__main__":
     # Keep the program running indefinitely
     try:
-        print('asdf')
+        # while True:     
+        # Create a thread for button detection
+        # button_thread = threading.Thread(target=gpio_init, daemon=True)
+        # button_thread.start()
 
+        # Create a thread for GUI
+        gui_thread = threading.Thread(target=gui_init)
+        gui_thread.start() 
+            
+        classification = model.classify()
+        print('classification_main: ', classification)
+        if check_classification:
+            print('inside check class')
+            # tts.speak_pill_info(classification)      
+        
         # # Start periodic check for classification
         # classification = 'Glucophage XR Metformin HCl 750mg (Unpacked)'
         # if classification:
