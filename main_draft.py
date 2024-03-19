@@ -58,11 +58,16 @@ import threading
 
 def check_classification(root):
     global classification
+    global check_classification
     if classification != '':
         # Do something with the classification, e.g., switch to the pill information frame
         gui.switch_frames(root, gui.show_pill_information_frame, 0)
+        # check_classification = True
     # Schedule this function to run again after a certain time
     root.after(1500, lambda: check_classification(root))  # Adjust the time interval as needed
+
+def show_ins_frame(root):
+    gui.switch_frames(root, gui.show_pill_information_frame, 0)
 
 def gui_init():
     global classification
@@ -75,6 +80,7 @@ def gui_init():
 
     # After 3 seconds, show the pill information frame
     gui.switch_frames(root, gui.show_instructions_frame, 1500)
+    # root.after(0, lambda: show_ins_frame(root))
 
     # Start checking for classification
     root.after(1500, lambda: check_classification(root))
@@ -101,24 +107,9 @@ if __name__ == "__main__":
             print('classification_main: ', classification)
             if check_classification:
                 print('inside check class')
-                # tts.speak_pill_info(classification)      
-            
-            # # Start periodic check for classification
-            # classification = 'Glucophage XR Metformin HCl 750mg (Unpacked)'
-            # if classification:
-            #     print('laskdjf')
-            #     root.after(3000, root.destroy)  # Close the window after 3000 milliseconds (3 seconds)
-            #     gui.show_logo_frame(root)
-            # else:
-            #     print('asdf')
-            #     root.after(3000, root.destroy)  # Close the window after 3000 milliseconds (3 seconds)
-            #     gui.show_instructions_frame(root)
-            #     # Schedule the next check after 1000 ms (1 second)
-            #     root.after(1000, check_classification)
-
-            # # Start the periodic classification check
-            # check_classification()
-            time.sleep(2)
+                # tts.speak_pill_info(classification)
+                # classification = ''
+            time.sleep(5)
 
     except KeyboardInterrupt:
         # GPIO.cleanup()
