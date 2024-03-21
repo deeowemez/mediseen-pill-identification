@@ -236,7 +236,7 @@ def clear_frame(root, new_frame_func):
     for widget in root.winfo_children():
         widget.destroy()
 
-    else: new_frame_func(root)
+    new_frame_func(root)
 
 # Function for initializing GUI
 def switch_frames(root, frame_function, delay):
@@ -247,6 +247,8 @@ def switch_pill_information_frame(root ,delay, pill_info):
         widget.destroy()
 
     show_pill_information_frame(root, pill_info)
+    
+    return True
     # root.after(delay, lambda: clear_frame(root, show_pill_information_frame, pill_info))
 
 

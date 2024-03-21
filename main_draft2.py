@@ -61,9 +61,14 @@ def classify(root):
         # Do something with the classification, e.g., switch to the pill information frame
         pill_info = db.get_pill_info_gui(classification)
         gui.switch_pill_information_frame(root, 0, pill_info)
+        root.update() 
+        # time.sleep(5000)
+        # root.after(1000, lambda: tts.speak_pill_info(classification))
+        # delayed_tts(classification)
         tts.speak_pill_info(classification)
+        classification = ''
     # Schedule this function to run again after a certain time
-    root.after(5000, lambda: classify(root))  # Adjust the time interval as needed
+    root.after(100, lambda: classify(root))  # Adjust the time interval as needed
 
 # Keep the program running indefinitely
 
