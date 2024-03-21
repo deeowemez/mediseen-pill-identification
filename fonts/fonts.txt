@@ -1,0 +1,3 @@
+sudo cp /home/pi/capstone/pill-identification/fonts/Inter-Medium.ttf /usr/share/fonts/truetype/
+sudo fc-cache -f -v
+fc-list | grep -i "Inter-Medium"

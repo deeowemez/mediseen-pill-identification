@@ -1,7 +1,12 @@
-from tkinter import Tk, Canvas, PhotoImage, Text
+from tkinter import Tk, Canvas, PhotoImage, Text, Frame
 from pathlib import Path
 import time
 import tkinter as tk
+from tkinter.font import Font
+
+def apply_font(widget, font_path, size):
+    custom_font = Font(family="Inter Medium", size=size)
+    widget.configure(font=custom_font)
 
 # Dictionary to store references to the images
 image_references = {}
@@ -27,14 +32,14 @@ def show_logo_frame(root):
     )
     canvas.place(x=0, y=0)
 
-    canvas.create_text(
-        276.0,
-        389.0,
-        anchor="nw",
-        text="press the screen to start",
-        fill="#9C9C9C",
-        font=("InriaSans BoldItalic", 24)
-    )
+    # canvas.create_text(
+    #     276.0,
+    #     389.0,
+    #     anchor="nw",
+    #     text="press the screen to start",
+    #     fill="#9C9C9C",
+    #     font=("InriaSans BoldItalic", 24)
+    # )
 
     image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
     image_references["image_1"] = image_image_1
@@ -82,15 +87,16 @@ def show_instructions_frame(root):
         381.0,
         image=image_image_2
     )
-
-    text_content = ("Insert the pill into the designated pill slot, "
-                    "ensuring proper alignment.")
-
-    text_widget = Text(root, wrap="word", width=30, height=5, font=("Inter Medium", 30), bd=0, bg="#EDF5FA")
-    text_widget.insert("1.0", text_content)
-    text_widget.configure(state="disabled")  # Disable text editing
-    text_widget.place(x=107, y=152, anchor="nw")
-
+    
+    canvas.create_text(
+        160.0,
+        160.0,
+        anchor="nw",
+        text="Insert the pill into the \n designated pill slot, \n   ensuring proper \n         alignment.",
+        fill="#000000",
+        font=("Inter Medium", 40)
+    )
+    
     canvas.create_text(
         46.0,
         24.0,
@@ -261,8 +267,8 @@ if __name__ == "__main__":
     root.geometry("800x480")
 
     # show_logo_frame(root)
-    # show_instructions_frame(root)
-    show_pill_information_frame(root, pill_info)
+    show_instructions_frame(root)
+    # show_pill_information_frame(root, pill_info)
     # show_error_frame(root)
     # # Start by showing the error frame
     # switch_frame(root, show_logo_frame)
