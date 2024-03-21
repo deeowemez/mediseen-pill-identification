@@ -1,4 +1,4 @@
-from tkinter import Tk, Canvas, PhotoImage
+from tkinter import Tk, Canvas, PhotoImage, Text
 from pathlib import Path
 import time
 import tkinter as tk
@@ -48,13 +48,12 @@ def show_logo_frame(root):
 
 def show_instructions_frame(root):
     global image_references
-    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0")
-    # ASSETS_PATH = Path(r"E:\pill-identification\output\frame2\build\assets\frame0")
+    ASSETS_PATH = "/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0"
+    # ASSETS_PATH = r"E:\pill-identification\output\frame2\build\assets\frame0"
 
-    def relative_to_assets(path: str) -> Path:
-        return ASSETS_PATH / Path(path)
-    
-    
+    def relative_to_assets(path: str) -> str:
+        return ASSETS_PATH + "/" + path
+
     root.configure(bg="#EDF5FA")
 
     canvas = Canvas(
@@ -84,14 +83,13 @@ def show_instructions_frame(root):
         image=image_image_2
     )
 
-    canvas.create_text(
-        107.0,
-        152.0,
-        anchor="nw",
-        text="Insert the pill into the\n  designated pill slot,\n    ensuring proper\n        alignment.",
-        fill="#000000",
-        font=("Inter Medium", 60)
-    )
+    text_content = ("Insert the pill into the designated pill slot, "
+                    "ensuring proper alignment.")
+
+    text_widget = Text(root, wrap="word", width=30, height=5, font=("Inter Medium", 30), bd=0, bg="#EDF5FA")
+    text_widget.insert("1.0", text_content)
+    text_widget.configure(state="disabled")  # Disable text editing
+    text_widget.place(x=107, y=152, anchor="nw")
 
     canvas.create_text(
         46.0,
@@ -102,7 +100,7 @@ def show_instructions_frame(root):
         font=("InriaSans Bold", 40)
     )
 
-def show_pill_information_frame(root):
+def show_pill_information_frame(root, pill_info):
     global image_references
     ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
     # ASSETS_PATH = Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
@@ -135,7 +133,7 @@ def show_pill_information_frame(root):
         37.0,
         63.0,
         anchor="nw",
-        text="Glucophage XR Metformin HCl \n(Unpacked)",
+        text=pill_info[0],
         fill="#000000",
         font=("Koulen Regular", 36)
     )
@@ -144,7 +142,7 @@ def show_pill_information_frame(root):
         79.0,
         238.0,
         anchor="nw",
-        text="Dosage: \n\nSpecial Instruction: \n\nPossible side effects: \n\n",
+        text="Dosage: \n{}\nSpecial Instruction: \n{}\nPossible side effects: \n{}\n".format(pill_info[1], pill_info[2], pill_info[3]),
         fill="#000000",
         font=("Koulen Regular", 24)
     )
@@ -238,27 +236,31 @@ def clear_frame(root, new_frame_func):
     for widget in root.winfo_children():
         widget.destroy()
 
-    # Show the new frame
-    new_frame_func(root)
+    else: new_frame_func(root)
 
 # Function for initializing GUI
 def switch_frames(root, frame_function, delay):
     root.after(delay, lambda: clear_frame(root, frame_function))
 
-def check_and_show_pill_information(root, delay, classification):
-    # classification = 'asldkfjalks'  # Replace with your actual classification logic
-    print('clasdf:', classification)
-    if classification:  # Assuming classification is True if pill is identified
-        root.after(delay, lambda: clear_frame(root, show_pill_information_frame, 1))
+def switch_pill_information_frame(root ,delay, pill_info):
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    show_pill_information_frame(root, pill_info)
+    # root.after(delay, lambda: clear_frame(root, show_pill_information_frame, pill_info))
 
 
 if __name__ == "__main__":
+    import db
+    
+    pill_info = db.get_pill_info_gui('Sucranorm Metformin HCl 850mg (Packed)')
+    print(pill_info[0])
     root = Tk()
     root.geometry("800x480")
 
-    show_logo_frame(root)
+    # show_logo_frame(root)
     # show_instructions_frame(root)
-    # show_pill_information_frame(root)
+    show_pill_information_frame(root, pill_info)
     # show_error_frame(root)
     # # Start by showing the error frame
     # switch_frame(root, show_logo_frame)
