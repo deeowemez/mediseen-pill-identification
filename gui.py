@@ -1,4 +1,4 @@
-from tkinter import Tk, Canvas, PhotoImage, Text, Frame
+from tkinter import Tk, Canvas, PhotoImage, Text, Scrollbar
 from pathlib import Path
 import time
 import tkinter as tk
@@ -107,6 +107,9 @@ def show_instructions_frame(root):
     )
     root.resizable(False, False)
 
+def wrap_text(text, width):
+    return '\n'.join(text[i:i+width] for i in range(0, len(text), width))
+
 def show_pill_information_frame(root, pill_info):
     global image_references
     ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
@@ -136,23 +139,37 @@ def show_pill_information_frame(root, pill_info):
         image=image_image_1
     )
 
-    canvas.create_text(
-        37.0,
-        63.0,
-        anchor="nw",
-        text=pill_info[0],
-        fill="#000000",
-        font=("Koulen", 36)
-    )
+    pill_info_name = wrap_text(pill_info[0], width=25)
 
     canvas.create_text(
-        79.0,
-        238.0,
+        110.0,
+        63.0,
         anchor="nw",
-        text="Dosage: {}\nSpecial Instruction: {}\nPossible side effects: {}\n".format(pill_info[1], pill_info[2], pill_info[3]),
+        text=pill_info_name,
         fill="#000000",
-        font=("Koulen", 24)
+        font=("Koulen", 15)
     )
+
+    text = "Dosage: {}\n\nSpecial Instruction: {}\n\nPossible side effects: {}\n\n".format(pill_info[1], pill_info[2], pill_info[3])
+
+    text_widget = Text(root, wrap="word", font=("Koulen", 22), width=30, )  
+    text_widget.insert("1.0", text)
+    text_widget.place(x=100, y=150)  # Positioning the text widget at (100, 150)
+
+
+
+
+    # canvas.create_text(
+    #     100.0,
+    #     150.0,
+    #     anchor="nw",
+    #     # text=pill_info_gui,
+    #     text="Dosage: {}\n\nSpecial Instruction: {}\n\nPossible side effects: {}\n\n".format(pill_info[1], pill_info[2], pill_info[3]),
+    #     fill="#000000",
+    #     font=("Koulen", 15),
+    #     width=400,
+    #     wrap="word"
+    # )
 
     canvas.create_text(
         29.0,
