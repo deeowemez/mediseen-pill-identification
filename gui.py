@@ -1,4 +1,5 @@
 from tkinter import Tk, Canvas, PhotoImage, Text, Scrollbar
+from PIL import Image, ImageTk
 from pathlib import Path
 import time
 import tkinter as tk
@@ -139,24 +140,13 @@ def show_pill_information_frame(root, pill_info):
         238.0,
         image=image_image_1
     )
-
-    # pill_info_name = wrap_text(pill_info[0], 40, 1)
-
-    # canvas.create_text(
-    #     110.0,
-    #     63.0,
-    #     anchor="nw",
-    #     text=pill_info_name,
-    #     fill="#000000",
-    #     font=("Koulen", 18)
-    # )
     
+    # Create label for classification's pill name
     label = tk.Label(root, text=pill_info[0], anchor="nw", justify="center", wraplength=400, font=("Koulen", 18), bg="white", fg="#000000")
     label.place(x=110, y=63)
-    # label.pack(padx=10, pady=10)
 
     # Create a widget for classification's pill information 
-    pill_info = "Dosage: {}mg\n\nSpecial Instruction: {}\n\nPossible side effects: {}\n\n".format(pill_info[1], pill_info[2], pill_info[3])
+    pill_info = "Dosage: {}mg\nSpecial Instruction: {}\nPossible side effects: {}\n".format(pill_info[1], pill_info[2], pill_info[3])
     pill_info_widget = Text(root, wrap="word", font=("Koulen", 15), width=40, height=6)  
     pill_info_widget.configure(state='normal')
     pill_info_widget.insert("1.0", pill_info)
@@ -164,13 +154,19 @@ def show_pill_information_frame(root, pill_info):
     pill_info_widget.place(x=100, y=155)  # Positioning the text widget at (100, 150)
 
     canvas.create_text(
-        29.0,
-        10.0,
+        60.0,
+        13.0,
         anchor="nw",
         text="23:01",
         fill="#DADADA",
-        font=("InriaSans Bold", 32)
+        font=("InriaSans", 24)
     )
+    
+    # Load the image using PIL
+    pil_image = Image.open("/home/pi/capstone/pill-identification/image.jpg")  # Replace "your_image_file.jpg" with the path to your image file
+
+    # Convert PIL image to Tkinter-compatible format
+    image = ImageTk.PhotoImage(pil_image)
 
     canvas.create_rectangle(
         573.0,
@@ -180,6 +176,21 @@ def show_pill_information_frame(root, pill_info):
         fill="#D9D9D9",
         outline=""
     )
+
+    pil_image = Image.open("/home/pi/capstone/pill-identification/debug.jpg")
+    width, height = pil_image.size
+    new_width = width // 2
+    new_height = height // 2
+    resized_image = pil_image.resize((new_width, new_height), Image.ANTIALIAS)
+    image = ImageTk.PhotoImage(resized_image)
+    
+    canvas.image = image  # Save a reference to prevent garbage collection
+    canvas.create_image(
+        (573.0 + 718.0) / 2, 
+        (221.0 + 404.0) / 2, 
+        image=image
+    )
+    
     root.resizable(False, False)
 
 def show_error_frame(root):
