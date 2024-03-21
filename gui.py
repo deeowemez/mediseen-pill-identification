@@ -1,4 +1,4 @@
-from tkinter import Tk, Canvas, PhotoImage, Text, Scrollbar
+from tkinter import Tk, Canvas, PhotoImage, Text, Scrollbar, Frame
 from PIL import Image, ImageTk
 from pathlib import Path
 import time
@@ -145,6 +145,10 @@ def show_pill_information_frame(root, pill_info):
     label = tk.Label(root, text=pill_info[0], anchor="nw", justify="center", wraplength=400, font=("Koulen", 18), bg="white", fg="#000000")
     label.place(x=110, y=63)
 
+    # Create a frame to contain the Text widget and Scrollbar
+    frame = Frame(root)
+    frame.place(x=100, y=155)
+
     # Create a widget for classification's pill information 
     pill_info = "Dosage: {}mg\nSpecial Instruction: {}\nPossible side effects: {}\n".format(pill_info[1], pill_info[2], pill_info[3])
     pill_info_widget = Text(root, wrap="word", font=("Koulen", 15), width=40, height=6)  
@@ -152,6 +156,10 @@ def show_pill_information_frame(root, pill_info):
     pill_info_widget.insert("1.0", pill_info)
     pill_info_widget.configure(state='disabled', highlightthickness=0)
     pill_info_widget.place(x=100, y=155)  # Positioning the text widget at (100, 150)
+    # Create a Scrollbar and attach it to the Text widget
+    scrollbar = Scrollbar(frame, orient="vertical", command=pill_info_widget.yview)
+    scrollbar.pack(side="right", fill="y")
+    pill_info_widget.config(yscrollcommand=scrollbar.set)
 
     canvas.create_text(
         60.0,

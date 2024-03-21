@@ -60,7 +60,7 @@ def classify(root):
     if classification != '':
         pill_info = db.get_pill_info_gui(classification)
         gui.switch_pill_information_frame(root, 0, pill_info)
-        root.update() 
+        root.update()
         tts.speak_pill_info(classification)
         classification = ''
     # Schedule this function to run again after a certain time
