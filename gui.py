@@ -107,12 +107,9 @@ def show_instructions_frame(root):
     )
     root.resizable(False, False)
 
-def wrap_text(text, width):
-    return '\n'.join(text[i:i+width] for i in range(0, len(text), width))
+# def wrap_text(text, width):
+#     return '\n'.join(text[i:i+width] for i in range(0, len(text), width))
 
-def prevent_edit(event):
-    if text_widget.cget("state") == "disabled":
-        return "break"  # Prevent any editing actions
 
 def show_pill_information_frame(root, pill_info):
     global image_references
@@ -143,36 +140,28 @@ def show_pill_information_frame(root, pill_info):
         image=image_image_1
     )
 
-    pill_info_name = wrap_text(pill_info[0], width=50)
-
-    canvas.create_text(
-        110.0,
-        63.0,
-        anchor="nw",
-        text=pill_info_name,
-        fill="#000000",
-        font=("Koulen", 21)
-    )
-
-    text = "Dosage: {}mg\n\nSpecial Instruction: {}\n\nPossible side effects: {}\n\n".format(pill_info[1], pill_info[2], pill_info[3])
-
-    text_widget = Text(root, wrap="word", font=("Koulen", 15), bd=0, width=40, height=7)  
-    text_widget.configure(state='normal')
-    text_widget.insert("1.0", text)
-    text_widget.configure(state='disabled', highlightthickness=0)
-    text_widget.place(x=100, y=140)  # Positioning the text widget at (100, 150)
+    # pill_info_name = wrap_text(pill_info[0], 40, 1)
 
     # canvas.create_text(
-    #     100.0,
-    #     150.0,
+    #     110.0,
+    #     63.0,
     #     anchor="nw",
-    #     # text=pill_info_gui,
-    #     text="Dosage: {}\n\nSpecial Instruction: {}\n\nPossible side effects: {}\n\n".format(pill_info[1], pill_info[2], pill_info[3]),
+    #     text=pill_info_name,
     #     fill="#000000",
-    #     font=("Koulen", 15),
-    #     width=400,
-    #     wrap="word"
+    #     font=("Koulen", 18)
     # )
+    
+    label = tk.Label(root, text=pill_info[0], anchor="nw", justify="center", wraplength=400, font=("Koulen", 18), bg="white", fg="#000000")
+    label.place(x=110, y=63)
+    # label.pack(padx=10, pady=10)
+
+    # Create a widget for classification's pill information 
+    pill_info = "Dosage: {}mg\n\nSpecial Instruction: {}\n\nPossible side effects: {}\n\n".format(pill_info[1], pill_info[2], pill_info[3])
+    pill_info_widget = Text(root, wrap="word", font=("Koulen", 15), width=40, height=6)  
+    pill_info_widget.configure(state='normal')
+    pill_info_widget.insert("1.0", pill_info)
+    pill_info_widget.configure(state='disabled', highlightthickness=0)
+    pill_info_widget.place(x=100, y=155)  # Positioning the text widget at (100, 150)
 
     canvas.create_text(
         29.0,
@@ -281,7 +270,7 @@ def switch_pill_information_frame(root ,delay, pill_info):
 if __name__ == "__main__":
     import db
     
-    pill_info = db.get_pill_info_gui('Sucranorm Metformin HCl 850mg (Packed)')
+    pill_info = db.get_pill_info_gui('Trajenta Duo Linagliptin Metformin HCl 1g (Unpacked Side A)')
     print(pill_info[0])
     root = Tk()
     root.geometry("800x480")
