@@ -1,3 +1,15 @@
 sudo cp /home/pi/capstone/pill-identification/fonts/Inter-Medium.ttf /usr/share/fonts/truetype/
 sudo fc-cache -f -v
 fc-list | grep -i "Inter-Medium"
+
+sudo cp /home/pi/capstone/pill-identification/fonts/Inter-Bold.ttf /usr/share/fonts/truetype/
+sudo fc-cache -f -v
+fc-list | grep -i "Inter-Bold"
+
+sudo cp /home/pi/capstone/pill-identification/fonts/InriaSans-Bold.ttf /usr/share/fonts/truetype/
+sudo fc-cache -f -v
+fc-list | grep -i "InriaSans-Bold"
+
+sudo cp /home/pi/capstone/pill-identification/fonts/Koulen-Regular.ttf /usr/share/fonts/truetype/
+sudo fc-cache -f -v
+fc-list | grep -i "Koulen-Regular"

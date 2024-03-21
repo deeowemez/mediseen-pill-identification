@@ -4,9 +4,9 @@ import time
 import tkinter as tk
 from tkinter.font import Font
 
-def apply_font(widget, font_path, size):
-    custom_font = Font(family="Inter Medium", size=size)
-    widget.configure(font=custom_font)
+# def apply_font(widget, font_path, size):
+#     custom_font = Font(family="Inter Medium", size=size)
+#     widget.configure(font=custom_font)
 
 # Dictionary to store references to the images
 image_references = {}
@@ -48,7 +48,7 @@ def show_logo_frame(root):
         223.0,
         image=image_image_1
     )
-    # root.resizable(False, False)
+    root.resizable(False, False)
 
 
 def show_instructions_frame(root):
@@ -105,6 +105,7 @@ def show_instructions_frame(root):
         fill="#EDF5FA",
         font=("InriaSans Bold", 40)
     )
+    root.resizable(False, False)
 
 def show_pill_information_frame(root, pill_info):
     global image_references
@@ -141,16 +142,16 @@ def show_pill_information_frame(root, pill_info):
         anchor="nw",
         text=pill_info[0],
         fill="#000000",
-        font=("Koulen Regular", 36)
+        font=("Koulen", 36)
     )
 
     canvas.create_text(
         79.0,
         238.0,
         anchor="nw",
-        text="Dosage: \n{}\nSpecial Instruction: \n{}\nPossible side effects: \n{}\n".format(pill_info[1], pill_info[2], pill_info[3]),
+        text="Dosage: {}\nSpecial Instruction: {}\nPossible side effects: {}\n".format(pill_info[1], pill_info[2], pill_info[3]),
         fill="#000000",
-        font=("Koulen Regular", 24)
+        font=("Koulen", 24)
     )
 
     canvas.create_text(
@@ -170,6 +171,7 @@ def show_pill_information_frame(root, pill_info):
         fill="#D9D9D9",
         outline=""
     )
+    root.resizable(False, False)
 
 def show_error_frame(root):
     global image_references
@@ -201,8 +203,8 @@ def show_error_frame(root):
     )
 
     canvas.create_text(
-        272.0,
-        203.0,
+        240.0,
+        150.0,
         anchor="nw",
         text="ERROR!",
         fill="#F30707",
@@ -219,22 +221,23 @@ def show_error_frame(root):
     )
 
     canvas.create_text(
-        125.0,
-        241.0,
+        110.0,
+        240.0,
         anchor="nw",
         text="Pill cannot be identified.",
         fill="#000000",
-        font=("Inter Medium", 48)
+        font=("Inter Medium", 40)
     )
 
     canvas.create_text(
-        211.0,
-        328.0,
+        280.0,
+        370.0,
         anchor="nw",
         text="Please try again",
         fill="#EDF5FA",
-        font=("Inter Medium", 24)
+        font=("Inter Medium", 22)
     )
+    root.resizable(False, False)
 
 # Define switch_frame function after the main block
 def clear_frame(root, new_frame_func):
@@ -253,9 +256,6 @@ def switch_pill_information_frame(root ,delay, pill_info):
         widget.destroy()
 
     show_pill_information_frame(root, pill_info)
-    
-    return True
-    # root.after(delay, lambda: clear_frame(root, show_pill_information_frame, pill_info))
 
 
 if __name__ == "__main__":
@@ -267,14 +267,9 @@ if __name__ == "__main__":
     root.geometry("800x480")
 
     # show_logo_frame(root)
-    show_instructions_frame(root)
-    # show_pill_information_frame(root, pill_info)
+    # show_instructions_frame(root)
+    show_pill_information_frame(root, pill_info)
     # show_error_frame(root)
-    # # Start by showing the error frame
-    # switch_frame(root, show_logo_frame)
-
-    # # Schedule the function to check condition and switch frames
-    # root.after(1000, check_condition_and_switch, root)
-
-    # # Start the main loop
+    
+    # Start the main loop
     root.mainloop()
