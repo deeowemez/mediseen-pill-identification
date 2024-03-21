@@ -110,6 +110,10 @@ def show_instructions_frame(root):
 def wrap_text(text, width):
     return '\n'.join(text[i:i+width] for i in range(0, len(text), width))
 
+def prevent_edit(event):
+    if text_widget.cget("state") == "disabled":
+        return "break"  # Prevent any editing actions
+
 def show_pill_information_frame(root, pill_info):
     global image_references
     ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
@@ -139,7 +143,7 @@ def show_pill_information_frame(root, pill_info):
         image=image_image_1
     )
 
-    pill_info_name = wrap_text(pill_info[0], width=25)
+    pill_info_name = wrap_text(pill_info[0], width=50)
 
     canvas.create_text(
         110.0,
@@ -147,17 +151,16 @@ def show_pill_information_frame(root, pill_info):
         anchor="nw",
         text=pill_info_name,
         fill="#000000",
-        font=("Koulen", 15)
+        font=("Koulen", 21)
     )
 
-    text = "Dosage: {}\n\nSpecial Instruction: {}\n\nPossible side effects: {}\n\n".format(pill_info[1], pill_info[2], pill_info[3])
+    text = "Dosage: {}mg\n\nSpecial Instruction: {}\n\nPossible side effects: {}\n\n".format(pill_info[1], pill_info[2], pill_info[3])
 
-    text_widget = Text(root, wrap="word", font=("Koulen", 22), width=30, )  
+    text_widget = Text(root, wrap="word", font=("Koulen", 15), bd=0, width=40, height=7)  
+    text_widget.configure(state='normal')
     text_widget.insert("1.0", text)
-    text_widget.place(x=100, y=150)  # Positioning the text widget at (100, 150)
-
-
-
+    text_widget.configure(state='disabled', highlightthickness=0)
+    text_widget.place(x=100, y=140)  # Positioning the text widget at (100, 150)
 
     # canvas.create_text(
     #     100.0,
