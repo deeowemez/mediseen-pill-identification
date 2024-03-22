@@ -1,10 +1,7 @@
 import sqlite3
 from gtts import gTTS
 import os
-# import sounddevice as sd
-# import numpy as np
-# import librosa
-# import alsaaudio
+from gtts.tokenizer import tokenizer_cases
 
 # Database connection information
 pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
@@ -38,7 +35,7 @@ def get_pill_list():
     """
     conn = connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("SELECT medication_name_dosage FROM pill_info_table WHERE medicine_id = 18")
+    cursor.execute("SELECT medication_name_dosage FROM pill_info_table")
     medication_names_dosages = [row[0] for row in cursor.fetchall()]
     # print('medication_names_dosage', medication_names_dosages)
     cursor.close()
@@ -55,7 +52,7 @@ def generate_mp3():
         pill_info = cursor.fetchone()
         if pill_info:
             # Construct speech message from pill information
-            message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams. {pill_info[2]}. {pill_info[3]}"  # Replace with actual data access
+            message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams . {pill_info[2]}. {pill_info[3]}"  # Replace with actual data access
 
             # Use gTTS to convert text to speech
             tts = gTTS(text=message, lang='en', tld='us', slow=False)
@@ -69,5 +66,18 @@ def generate_mp3():
     cursor.close()
     conn.close()
 
+def test(medicine):
+    conn = connect_to_database()
+    cursor = conn.cursor()
+    info_columns = ['medication_name', 'dosage', 'special_instructions', 'possible_side_effects']
+    cursor.execute(f"SELECT {','.join(info_columns)} FROM pill_info_table WHERE medication_name_dosage = ?", (medicine,))
+    pill_info = cursor.fetchone()
+    message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams . {pill_info[2]}. {pill_info[3]}"  
+    # preprocessed = tokenizer_cases.period_comma()
+    tts = gTTS(text=message, lang='en', tld='us', slow=False)
+    tts.save('test.mp3')
+    os.system('play test.mp3 tempo 1.1')
+
 if __name__ == "__main__":
     generate_mp3()
+    # test('Diamicron MR Gliclazide 60mg (Packed)')
