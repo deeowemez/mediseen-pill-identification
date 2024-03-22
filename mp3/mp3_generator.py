@@ -7,10 +7,10 @@ import os
 # import alsaaudio
 
 # Database connection information
-# pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
-# mp3_folder = "/home/pi/capstone/pill-identification/mp3"
-pill_database = r"E:\pill-identification\database\pill_info.db"
-mp3_folder = r"E:\pill-identification\mp3"
+pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
+mp3_folder = "/home/pi/capstone/pill-identification/mp3"
+# pill_database = r"E:\pill-identification\database\pill_info.db"
+# mp3_folder = r"E:\pill-identification\mp3"
 
 pill_table = "pill_info_table"
 
@@ -38,7 +38,7 @@ def get_pill_list():
     """
     conn = connect_to_database()
     cursor = conn.cursor()
-    cursor.execute("SELECT medication_name_dosage FROM pill_info_table")
+    cursor.execute("SELECT medication_name_dosage FROM pill_info_table WHERE medicine_id = 18")
     medication_names_dosages = [row[0] for row in cursor.fetchall()]
     # print('medication_names_dosage', medication_names_dosages)
     cursor.close()

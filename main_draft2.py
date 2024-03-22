@@ -81,6 +81,8 @@ if __name__ == "__main__":
 
         # Show the logo frame
         gui.switch_frames(root, gui.show_logo_frame, 0)
+        root.update()
+        tts.speak_introductory_audio()
 
         # After 3 seconds, show the pill information frame
         gui.switch_frames(root, gui.show_instructions_frame, 2000)

@@ -4,13 +4,13 @@ import sqlite3
 import pandas as pd
 
 # Load data file
-df = pd.read_csv('pill_info.csv')
+df = pd.read_csv('/home/pi/capstone/pill-identification/database/pill_info.csv')
 
 # Data clean up
 df.columns = df.columns.str.strip()
 
 # Create/connect to a SQLite database
-conn = sqlite3.connect('pill_info.db')
+conn = sqlite3.connect('/home/pi/capstone/pill-identification/database/pill_info.db')
 
 # Create a cursor object
 cursor = conn.cursor()

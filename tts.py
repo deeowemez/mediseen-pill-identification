@@ -20,6 +20,15 @@ mixer = alsaaudio.Mixer()
 # Initialize buttons values
 volume_factor = 50  # Starting volume (range: 0-100)
 
+def speak_introductory_audio():
+    message = "Mediseen"
+
+    # Use gTTS to convert text to speech
+    tts = gTTS(text=message, lang='en', tld='us', slow=False)
+    
+    tts.save('introductory_audio.mp3')
+    os.system('play {} tempo {}' .format('introductory_audio.mp3', tempo))
+
 def speak_pill_info(classification):
     global tempo
     mp3_classification = classification.replace(' ', '_').replace('(', '').replace(')', '').lower()

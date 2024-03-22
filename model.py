@@ -16,7 +16,7 @@ runner = None
 bbox_dict = {}
 max_label = ''
 image_taken = 0
-number_of_images = 1
+number_of_images = 0
 
 def add_to_bbox_dict(res):
     # add to bounding box dictionary frame classifications
