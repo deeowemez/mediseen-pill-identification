@@ -1,10 +1,11 @@
-from tkinter import Tk, Canvas, PhotoImage, Text, Scrollbar, Frame
+from tkinter import Tk, Canvas, PhotoImage, Text, Scrollbar, Frame, END
+import ttkbootstrap as tb
 from ttkbootstrap.scrolled import ScrolledText
 from PIL import Image, ImageTk
 from pathlib import Path
 import time
 import tkinter as tk
-from tkinter.font import Font
+
 
 # def apply_font(widget, font_path, size):
 #     custom_font = Font(family="Inter Medium", size=size)
@@ -112,8 +113,9 @@ def show_instructions_frame(root):
 # def wrap_text(text, width):
 #     return '\n'.join(text[i:i+width] for i in range(0, len(text), width))
 
-
+pill_info_widget_ctr = 0
 def show_pill_information_frame(root, pill_info):
+    global pill_info_widget_ctr
     global image_references
     ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
     # ASSETS_PATH = Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
@@ -143,26 +145,53 @@ def show_pill_information_frame(root, pill_info):
     )
     
     # Create label for classification's pill name
-    label = tk.Label(root, text=pill_info[0], anchor="nw", justify="center", wraplength=400, font=("Koulen", 18), bg="white", fg="#000000")
-    label.place(x=110, y=63)
+    label = tk.Label(
+        root, 
+        text=pill_info[0], 
+        anchor="nw", 
+        justify="center", 
+        wraplength=400, 
+        font=("Koulen", 18), 
+        bg="white", 
+        fg="#000000"
+    )
+    
+    label.place(
+        x=110, 
+        y=63
+    )
 
     # Create a widget for classification's pill information 
     pill_info = "Dosage: {}mg\nSpecial Instruction: {}\nPossible side effects: {}\n".format(pill_info[1], pill_info[2], pill_info[3])
-    pill_info_widget = Text(root, wrap="word", font=("Koulen", 14), width=45, height=7)  
-    # pill_info_widget = ScrolledText(root, wrap="word", font=("Koulen", 15), width=40, height=6, autohide=True)  
+    pill_info_widget = Text(
+        root, 
+        wrap="word", 
+        font=("Koulen", 14), 
+        width=45, 
+        height=7
+    )  
+    
     pill_info_widget.configure(state='normal')
     pill_info_widget.insert("1.0", pill_info)
     pill_info_widget.configure(state='disabled', highlightthickness=0)
     pill_info_widget.place(x=100, y=155)  # Positioning the text widget at (100, 150)
-    
+
+    # This code assumes root is already defined
     
 
-    # Create a widget for classification's pill information
-    # pill_info = "Dosage: {}mg\nSpecial Instruction: {}\nPossible side effects: {}\n".format(pill_info[1], pill_info[2], pill_info[3])
-    # pill_info_widget = ScrolledText(root, wrap="word", font=("Koulen", 15), width=40, height=6, autohide=True)
-    # pill_info_widget.insert("1.0", pill_info)
-    # # pill_info_widget.config(state='readonly')
-    # pill_info_widget.place(x=100, y=155)
+    # def update_pill_info(pill_info):
+    #     global pill_info_widget_ctr
+    #     if pill_info_widget_ctr > 0:
+    #         pill_info_widget.delete("1.0", END)  # Clear previous content
+    #         pill_info_widget = ScrolledText(root, wrap="word", font=("Koulen", 14), width=40, height=6, autohide=True)
+    #     else:
+    #         pill_info_widget_ctr += 1
+    #         pill_info_widget = ScrolledText(root, wrap="word", font=("Koulen", 14), width=40, height=6, autohide=True)
+    #     updated_pill_info = "Dosage: {}mg\nSpecial Instruction: {}\nPossible side effects: {}\n".format(pill_info[1], pill_info[2], pill_info[3])
+    #     pill_info_widget.insert("1.0", updated_pill_info)
+    #     pill_info_widget.place(x=100, y=155)
+            
+    # update_pill_info(pill_info)
 
 
     canvas.create_text(
@@ -180,14 +209,14 @@ def show_pill_information_frame(root, pill_info):
     # Convert PIL image to Tkinter-compatible format
     image = ImageTk.PhotoImage(pil_image)
 
-    canvas.create_rectangle(
-        573.0,
-        221.0,
-        718.0,
-        404.0,
-        fill="#D9D9D9",
-        outline=""
-    )
+    # canvas.create_rectangle(
+    #     573.0,
+    #     221.0,
+    #     718.0,
+    #     404.0,
+    #     fill="#D9D9D9",
+    #     outline=""
+    # )
 
     pil_image = Image.open("/home/pi/capstone/pill-identification/debug.jpg")
     width, height = pil_image.size
@@ -198,8 +227,8 @@ def show_pill_information_frame(root, pill_info):
     
     canvas.image = image  # Save a reference to prevent garbage collection
     canvas.create_image(
-        (573.0 + 718.0) / 2, 
-        (221.0 + 404.0) / 2, 
+        (573.0 + 728.0) / 2, 
+        (221.0 + 415.0) / 2, 
         image=image
     )
     
@@ -297,6 +326,11 @@ if __name__ == "__main__":
     print(pill_info[0])
     root = Tk()
     root.geometry("800x480")
+    
+    # root = tb.Window(themename='superhero')
+    # root.title('')
+    # # root.iconbitmap('/home/pi/capstone/pill-identification/image.jpg')
+    # root.geometry('800x480')
 
     # show_logo_frame(root)
     # show_instructions_frame(root)
@@ -305,3 +339,4 @@ if __name__ == "__main__":
     
     # Start the main loop
     root.mainloop()
+    

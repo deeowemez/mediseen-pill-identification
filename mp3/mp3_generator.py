@@ -6,6 +6,7 @@ from gtts.tokenizer import tokenizer_cases
 # Database connection information
 pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
 mp3_folder = "/home/pi/capstone/pill-identification/mp3"
+wav_folder = '/home/pi/capstone/pill-identification/wav'
 # pill_database = r"E:\pill-identification\database\pill_info.db"
 # mp3_folder = r"E:\pill-identification\mp3"
 
@@ -59,9 +60,11 @@ def generate_mp3():
             
             # Save the speech as an audio file
             mp3_medicine = medicine.replace(' ', '_').replace('(', '').replace(')', '').lower()
-            file_path = os.path.join(mp3_folder, f"{mp3_medicine}.mp3")
+            # file_path = os.path.join(mp3_folder, f"{mp3_medicine}.mp3")
+            file_path = os.path.join(wav_folder, f"{mp3_medicine}.wav")
             tts.save(file_path)
-            print("{} mp3 file created.".format(medicine))
+            # print("{} mp3 file created.".format(medicine))
+            print("{} wav file created.".format(medicine))
     # Close the cursor and the connection
     cursor.close()
     conn.close()
@@ -78,6 +81,16 @@ def test(medicine):
     tts.save('test.mp3')
     os.system('play test.mp3 tempo 1.1')
 
+
+def generate_introductory_audio():
+    message = "Mediseen"
+
+    # Use gTTS to convert text to speech
+    tts = gTTS(text=message, lang='en', tld='us', slow=False)
+    
+    tts.save('/home/pi/capstone/pill-identification/introductory_audio.wav')
+
 if __name__ == "__main__":
-    generate_mp3()
+    # generate_mp3()
     # test('Diamicron MR Gliclazide 60mg (Packed)')
+    # generate_introductory_audio()
