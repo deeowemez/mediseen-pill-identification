@@ -42,26 +42,13 @@ import webcam
 import sys, os, signal
 import atexit
 
+set_frequency = 25000
+
 # Initialize audio processing library
-pygame.mixer.pre_init(frequency=25000, size=-16, channels=2, buffer=512, devicename=None, allowedchanges=pygame.AUDIO_ALLOW_FREQUENCY_CHANGE | pygame.AUDIO_ALLOW_CHANNELS_CHANGE)
+pygame.mixer.pre_init(frequency=set_frequency, size=-16, channels=2, buffer=512, devicename=None, allowedchanges=pygame.AUDIO_ALLOW_FREQUENCY_CHANGE | pygame.AUDIO_ALLOW_CHANNELS_CHANGE)
 pygame.mixer.init()
 channel = pygame.mixer.Channel(0)
 print('channel: ', channel.get_busy())
-
-audio_process = False
-
-def speak_pill_info(classification):
-    tempo = 1.4
-    wav_classification = classification.replace(' ', '_').replace('(', '').replace(')', '').lower()
-    wav_path = os.path.join(wav_folder, f"{wav_classification}.wav")
-    print('wav_path: ', wav_path)
-    audio_path = pygame.mixer.Sound(wav_path)
-    channel.play(audio_path)
-    print('channel: ', channel.get_busy())
-    # channel.play(sound)
-    # pygame.mixer.music.load(wav_path)
-    # pygame.mixer.music.play()
-
 
 
 # # Function for initialzing GPIO
@@ -83,39 +70,32 @@ def gpio_init():
             tts.decrease_volume()
             
         if channel == 13:
-            # os.kill(os.getpid(), signal.SIGTERM)
             abort_audio_and_run_classify()
     
     for button in buttons:
         GPIO.add_event_detect(button, GPIO.FALLING, callback=button_pressed, bouncetime=200)
 
 def abort_audio_and_run_classify():
-    global audio_process, classify_thread
+    global classify_thread
     # Abort the audio playback process if it's running
-    # wav_audio = classification.replace(' ', '_').replace('(', '').replace(')', '').lower()
     if channel.get_busy():
-        # audio_process = False
         channel.stop()
-
-    # Start the classify thread
-    classify_thread = threading.Thread(target=classify, args=(root,), daemon=True)
-    classify_thread.start()
+        # Start the classify thread
+        classify_thread = threading.Thread(target=classify, args=(root,), daemon=True)
+        classify_thread.start()
 
 classification = ''
 
 def classify(root):
     global classification
-    global audio_process
-    classification = model.classify()
-    if classification != '' and channel.get_busy() == False:
-        pill_info = db.get_pill_info_gui(classification)
-        gui.switch_pill_information_frame(root, 0, pill_info)
-        root.update()
-        audio_process = True
-        print('audio:', audio_process)
-        speak_pill_info(classification)
-        audio_process = False
-        classification = ''
+    if not channel.get_busy():
+        classification = model.classify()
+        if classification: 
+            pill_info = db.get_pill_info_gui(classification)
+            gui.switch_pill_information_frame(root, 0, pill_info)
+            root.update()
+            tts.speak_pill_info(classification, channel)
+            classification = ''
     # Schedule this function to run again after a certain time
     root.after(0, lambda: classify(root))  # Adjust the time interval as needed
 
@@ -127,7 +107,6 @@ if __name__ == "__main__":
         # Create a thread for button detection
         button_thread = threading.Thread(target=gpio_init, daemon=True)
         button_thread.start()
-        
 
         # root = tb.Window(themename='cosmo')
         # root.geometry('800x480')
@@ -142,7 +121,7 @@ if __name__ == "__main__":
         # Show the logo frame
         gui.switch_frames(root, gui.show_logo_frame, 0)
         root.update()
-        # tts.speak_introductory_audio()
+        tts.speak_introductory_audio()
 
         # After 3 seconds, show the pill information frame
         gui.switch_frames(root, gui.show_instructions_frame, 2000)
@@ -150,9 +129,7 @@ if __name__ == "__main__":
         # Create a thread for classifying medicines
         classify_thread = threading.Thread(target=classify, args=(root,), daemon=True)
         classify_thread.start()
-        
-        # root.after(0, lambda: check_classification(root))
-        
+                
         # Start the Tkinter event loop
         root.mainloop()
 
