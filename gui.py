@@ -340,16 +340,16 @@ def show_error_frame(root):
         anchor="nw",
         text="Pill cannot be identified.",
         fill="#000000",
-        font=("Inter Medium", 40)
+        font=("Inter", 40)
     )
 
     canvas.create_text(
-        280.0,
+        230.0,
         370.0,
         anchor="nw",
-        text="Please try again",
+        text="Please flip the medicine \n         and try again.",
         fill="#EDF5FA",
-        font=("Inter Medium", 22)
+        font=("Inter", 22)
     )
     root.resizable(False, False)
 
@@ -387,9 +387,9 @@ if __name__ == "__main__":
 
     # show_logo_frame(root)
     # show_instructions_frame(root)
-    show_image_capture_frame(root)
+    # show_image_capture_frame(root)
     # show_pill_information_frame(root, pill_info)
-    # show_error_frame(root)
+    show_error_frame(root)
     
     # Start the main loop
     root.mainloop()

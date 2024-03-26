@@ -27,6 +27,10 @@ def speak_pill_info(classification, channel):
     channel.play(audio_path)
     print('channel: ', channel.get_busy())
 
+def speak_error_audio():
+    error_path = '/home/pi/capstone/pill-identification/error_audio.mp3'
+    os.system("play {} tempo 1.1" .format(error_path))
+    
 def speak_introductory_audio():
     intro_path = '/home/pi/capstone/pill-identification/introductory_audio.mp3'
     os.system("play {} tempo 1.1" .format(intro_path))
@@ -55,4 +59,5 @@ if __name__ == "__main__":
     channel = pygame.mixer.Channel(0)
     print('channel: ', channel.get_busy())
     # speak_pill_info('Glucophage XR Metformin HCl 750mg (Unpacked)')
-    speak_introductory_audio(channel)
+    # speak_introductory_audio(channel)
+    speak_error_audio()

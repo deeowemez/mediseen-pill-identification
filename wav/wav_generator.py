@@ -69,6 +69,23 @@ def generate_mp3():
     cursor.close()
     conn.close()
 
+def generate_error_audio():
+    message = "Error! Unable to identify currently inserted pill. Please flip the pill and try again."
+
+    # Use gTTS to convert text to speech
+    tts = gTTS(text=message, lang='en', tld='us', slow=False)
+    
+    tts.save('/home/pi/capstone/pill-identification/error_audio.wav')
+
+
+def generate_introductory_audio():
+    message = "Mediseen"
+
+    # Use gTTS to convert text to speech
+    tts = gTTS(text=message, lang='en', tld='us', slow=False)
+    
+    tts.save('/home/pi/capstone/pill-identification/introductory_audio.wav')
+
 def test(medicine):
     conn = connect_to_database()
     cursor = conn.cursor()
@@ -81,16 +98,8 @@ def test(medicine):
     tts.save('test.mp3')
     os.system('play test.mp3 tempo 1.1')
 
-
-def generate_introductory_audio():
-    message = "Mediseen"
-
-    # Use gTTS to convert text to speech
-    tts = gTTS(text=message, lang='en', tld='us', slow=False)
-    
-    tts.save('/home/pi/capstone/pill-identification/introductory_audio.wav')
-
 if __name__ == "__main__":
     # generate_mp3()
     # test('Diamicron MR Gliclazide 60mg (Packed)')
     # generate_introductory_audio()
+    generate_error_audio()

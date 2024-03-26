@@ -41,6 +41,7 @@ import webcam
 # Import libraries for taking config
 import sys, os, signal
 import atexit
+import datetime
 
 set_frequency = 25000
 
@@ -50,8 +51,10 @@ pygame.mixer.init()
 channel = pygame.mixer.Channel(0)
 print('channel: ', channel.get_busy())
 
+def now():
+    return datetime.datetime.now()
 
-# # Function for initialzing GPIO
+# initialzing GPIO
 def gpio_init():
     GPIO.setmode(GPIO.BCM)
 
@@ -94,8 +97,8 @@ def classify(root):
     global classification, identification_number, pill_sensor
     if not channel.get_busy():
         print('identification number: ', identification_number)
-        if not pill_sensor:
-            # show instructions frame after the last word of the previous audio if push button is not triggered during the previous audio output
+        if identification_number > 0 and not pill_sensor:
+            # show instructions frame after the last word of the previous audio if push button is not triggered during the previous classification audio output
             gui.show_instructions_frame(root)
             root.update()
         if identification_number > 0 and pill_sensor:
@@ -103,7 +106,13 @@ def classify(root):
             gui.show_image_capture_frame(root)
             root.update()
         classification = model.classify()
-        if classification:
+        print('classification: ', classification)
+        if classification == 'waiting for pill':
+            gui.show_error_frame(root)
+            root.update()
+            tts.speak_error_audio()
+            classify(root)
+        elif classification:
             identification_number += 1
             pill_info = db.get_pill_info_gui(classification)
             gui.switch_pill_information_frame(root, 0, pill_info)
@@ -139,7 +148,7 @@ if __name__ == "__main__":
         tts.speak_introductory_audio()
 
         # After 3 seconds, show the pill information frame
-        # gui.switch_frames(root, gui.show_instructions_frame, 2000)
+        gui.switch_frames(root, gui.show_instructions_frame, 2000)
         
         # Create a thread for classifying medicines
         classify_thread = threading.Thread(target=classify, args=(root,), daemon=True)
