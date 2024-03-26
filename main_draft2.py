@@ -10,8 +10,8 @@ import sounddevice as sd
 import numpy as np
 import librosa
 import alsaaudio
-from pydub import AudioSegment
-from pydub.playback import _play_with_simpleaudio
+# from pydub import AudioSegment
+# from pydub.playback import _play_with_simpleaudio
 import pygame.mixer
 
 # # Database connection information
@@ -76,25 +76,40 @@ def gpio_init():
         GPIO.add_event_detect(button, GPIO.FALLING, callback=button_pressed, bouncetime=200)
 
 def abort_audio_and_run_classify():
-    global classify_thread
+    global classify_thread, pill_sensor
     # Abort the audio playback process if it's running
     if channel.get_busy():
         channel.stop()
+        pill_sensor = True
         # Start the classify thread
-        classify_thread = threading.Thread(target=classify, args=(root,), daemon=True)
-        classify_thread.start()
+        classify(root)
+        # classify_thread = threading.Thread(target=classify, args=(root,), daemon=True)
+        # classify_thread.start()
 
 classification = ''
+identification_number = 0
+pill_sensor = False
 
 def classify(root):
-    global classification
+    global classification, identification_number, pill_sensor
     if not channel.get_busy():
+        print('identification number: ', identification_number)
+        if not pill_sensor:
+            # show instructions frame after the last word of the previous audio if push button is not triggered during the previous audio output
+            gui.show_instructions_frame(root)
+            root.update()
+        if identification_number > 0 and pill_sensor:
+            # show image capture frame if push button is triggered during the audio output of a current classification
+            gui.show_image_capture_frame(root)
+            root.update()
         classification = model.classify()
-        if classification: 
+        if classification:
+            identification_number += 1
             pill_info = db.get_pill_info_gui(classification)
             gui.switch_pill_information_frame(root, 0, pill_info)
             root.update()
             tts.speak_pill_info(classification, channel)
+            pill_sensor = False
             classification = ''
     # Schedule this function to run again after a certain time
     root.after(0, lambda: classify(root))  # Adjust the time interval as needed
@@ -124,7 +139,7 @@ if __name__ == "__main__":
         tts.speak_introductory_audio()
 
         # After 3 seconds, show the pill information frame
-        gui.switch_frames(root, gui.show_instructions_frame, 2000)
+        # gui.switch_frames(root, gui.show_instructions_frame, 2000)
         
         # Create a thread for classifying medicines
         classify_thread = threading.Thread(target=classify, args=(root,), daemon=True)

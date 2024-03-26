@@ -101,17 +101,70 @@ def show_instructions_frame(root):
     )
     
     canvas.create_text(
-        46.0,
-        24.0,
+        60.0,
+        20.0,
         anchor="nw",
         text="23:01",
         fill="#EDF5FA",
-        font=("InriaSans Bold", 40)
+        font=("InriaSans", 30)
     )
     root.resizable(False, False)
 
-# def wrap_text(text, width):
-#     return '\n'.join(text[i:i+width] for i in range(0, len(text), width))
+def show_image_capture_frame(root):
+    global image_references
+    ASSETS_PATH = "/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0"
+    # ASSETS_PATH = r"E:\pill-identification\output\frame2\build\assets\frame0"
+
+    def relative_to_assets(path: str) -> str:
+        return ASSETS_PATH + "/" + path
+
+    root.configure(bg="#EDF5FA")
+
+    canvas = Canvas(
+        root,
+        bg="#EDF5FA",
+        height=480,
+        width=800,
+        bd=0,
+        highlightthickness=0,
+        relief="ridge"
+    )
+    canvas.place(x=0, y=0)
+
+    image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
+    image_references["image_1"] = image_image_1
+    image_1 = canvas.create_image(
+        415.0,
+        240.0,
+        image=image_image_1
+    )
+
+    image_image_2 = PhotoImage(file=relative_to_assets("image_2.png"))
+    image_references["image_2"] = image_image_2
+    image_2 = canvas.create_image(
+        714.0,
+        381.0,
+        image=image_image_2
+    )
+    
+    canvas.create_text(
+        160.0,
+        160.0,
+        anchor="nw",
+        text="Image capture and \n  pill identification \n      in progress",
+        fill="#000000",
+        font=("Inter Medium", 40)
+    )
+
+    canvas.create_text(
+        60.0,
+        20.0,
+        anchor="nw",
+        text="23:01",
+        fill="#EDF5FA",
+        font=("InriaSans", 30)
+    )
+    root.resizable(False, False)
 
 pill_info_widget_ctr = 0
 def show_pill_information_frame(root, pill_info):
@@ -196,11 +249,11 @@ def show_pill_information_frame(root, pill_info):
 
     canvas.create_text(
         60.0,
-        13.0,
+        20.0,
         anchor="nw",
         text="23:01",
-        fill="#DADADA",
-        font=("InriaSans", 24)
+        fill="#EDF5FA",
+        font=("InriaSans", 30)
     )
     
     # Load the image using PIL
@@ -273,12 +326,12 @@ def show_error_frame(root):
     )
 
     canvas.create_text(
-        58.0,
-        16.0,
+        60.0,
+        20.0,
         anchor="nw",
         text="23:01",
-        fill="#DADADA",
-        font=("InriaSans Bold", 40)
+        fill="#EDF5FA",
+        font=("InriaSans", 30)
     )
 
     canvas.create_text(
@@ -334,7 +387,8 @@ if __name__ == "__main__":
 
     # show_logo_frame(root)
     # show_instructions_frame(root)
-    show_pill_information_frame(root, pill_info)
+    show_image_capture_frame(root)
+    # show_pill_information_frame(root, pill_info)
     # show_error_frame(root)
     
     # Start the main loop
