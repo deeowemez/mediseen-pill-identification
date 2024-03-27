@@ -1,4 +1,4 @@
-from tkinter import Tk, Canvas, PhotoImage, Text, Scrollbar, Frame, END
+from tkinter import Tk, Canvas, PhotoImage, Text, Scrollbar, Frame, END, Button
 import ttkbootstrap as tb
 from ttkbootstrap.scrolled import ScrolledText
 from PIL import Image, ImageTk
@@ -16,8 +16,8 @@ image_references = {}
 
 def show_logo_frame(root):
     global image_references
-    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
-    # ASSETS_PATH =  Path(r"E:\pill-identification\output\frame1\build\assets\frame0")
+    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
+    ASSETS_PATH =  Path(r"E:\pill-identification\output\frame1\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -122,8 +122,8 @@ def show_instructions_frame(root):
 
 def show_image_capture_frame(root):
     global image_references
-    ASSETS_PATH = "/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0"
-    # ASSETS_PATH = r"E:\pill-identification\output\frame2\build\assets\frame0"
+    # ASSETS_PATH = "/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0"
+    ASSETS_PATH = r"E:\pill-identification\output\frame2\build\assets\frame0"
 
     def relative_to_assets(path: str) -> str:
         return ASSETS_PATH + "/" + path
@@ -185,8 +185,8 @@ pill_info_widget_ctr = 0
 def show_pill_information_frame(root, pill_info):
     global pill_info_widget_ctr
     global image_references
-    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
-    # ASSETS_PATH = Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
+    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
+    ASSETS_PATH = Path(r"E:\pill-identification\output\frame5\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -202,16 +202,48 @@ def show_pill_information_frame(root, pill_info):
         highlightthickness=0,
         relief="ridge"
     )
-    canvas.place(x=0, y=0)
-
+    
+    canvas.place(x = 0, y = 0)
     image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
     image_references["image_1"] = image_image_1
-    canvas.create_image(
-        406.0,
-        238.0,
+    image_1 = canvas.create_image(
+        400.0,
+        228.0,
         image=image_image_1
     )
-    
+
+    button_image_1 = PhotoImage(
+        file=relative_to_assets("button_1.png"))
+    button_1 = Button(
+        image=button_image_1,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_1 clicked"),
+        relief="flat"
+    )
+    button_1.place(
+        x=564.0,
+        y=384.0,
+        width=54.51066970825195,
+        height=53.0
+    )
+
+    button_image_2 = PhotoImage(
+        file=relative_to_assets("button_2.png"))
+    button_2 = Button(
+        image=button_image_2,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("button_2 clicked"),
+        relief="flat"
+    )
+    button_2.place(
+        x=678.0,
+        y=388.0,
+        width=49.0,
+        height=49.0
+    )
+
     # Create label for classification's pill name
     label = tk.Label(
         root, 
@@ -272,8 +304,8 @@ def show_pill_information_frame(root, pill_info):
     )
     
     # Load the image using PIL
-    pil_image = Image.open("/home/pi/capstone/pill-identification/image.jpg")  # Replace "your_image_file.jpg" with the path to your image file
-
+    # pil_image = Image.open("/home/pi/capstone/pill-identification/image.jpg")  # Replace "your_image_file.jpg" with the path to your image file
+    pil_image = Image.open(r"E:\pill-identification\image.jpg")  # Replace "your_image_file.jpg" with the path to your image file
     # Convert PIL image to Tkinter-compatible format
     image = ImageTk.PhotoImage(pil_image)
 
@@ -286,11 +318,12 @@ def show_pill_information_frame(root, pill_info):
     #     outline=""
     # )
 
-    pil_image = Image.open("/home/pi/capstone/pill-identification/debug.jpg")
-    width, height = pil_image.size
-    new_width = width // 2
-    new_height = height // 2
-    resized_image = pil_image.resize((new_width, new_height), Image.ANTIALIAS)
+    # pil_image = Image.open("/home/pi/capstone/pill-identification/debug.jpg")
+    pil_image = Image.open(r"E:\pill-identification\debug.jpg")
+    # Resize the image
+    new_width = 100
+    new_height = 100
+    resized_image = pil_image.resize((new_width, new_height))
     image = ImageTk.PhotoImage(resized_image)
     
     canvas.image = image  # Save a reference to prevent garbage collection
@@ -310,8 +343,8 @@ def show_pill_information_frame(root, pill_info):
 
 def show_error_frame(root):
     global image_references
-    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
-    # ASSETS_PATH = Path(r"E:\pill-identification\output\frame4\build\assets\frame0")
+    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
+    ASSETS_PATH = Path(r"E:\pill-identification\output\frame4\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -414,8 +447,8 @@ if __name__ == "__main__":
     # show_logo_frame(root)
     # show_instructions_frame(root)
     # show_image_capture_frame(root)
-    # show_pill_information_frame(root, pill_info)
-    show_error_frame(root)
+    show_pill_information_frame(root, pill_info)
+    # show_error_frame(root)
     
     # Start the main loop
     root.mainloop()
