@@ -3,8 +3,8 @@ import os
 
 
 # Database connection information
-# pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
-pill_database = "E:\\pill-identification\\database\\pill_info.db"
+pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
+# pill_database = "E:\\pill-identification\\database\\pill_info.db"
 pill_table = "pill_info_table"
 
 

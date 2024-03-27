@@ -16,8 +16,8 @@ image_references = {}
 
 def show_logo_frame(root):
     global image_references
-    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
-    ASSETS_PATH =  Path(r"E:\pill-identification\output\frame1\build\assets\frame0")
+    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
+    # ASSETS_PATH =  Path(r"E:\pill-identification\output\frame1\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -122,8 +122,8 @@ def show_instructions_frame(root):
 
 def show_image_capture_frame(root):
     global image_references
-    # ASSETS_PATH = "/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0"
-    ASSETS_PATH = r"E:\pill-identification\output\frame2\build\assets\frame0"
+    ASSETS_PATH = "/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0"
+    # ASSETS_PATH = r"E:\pill-identification\output\frame2\build\assets\frame0"
 
     def relative_to_assets(path: str) -> str:
         return ASSETS_PATH + "/" + path
@@ -185,8 +185,8 @@ pill_info_widget_ctr = 0
 def show_pill_information_frame(root, pill_info):
     global pill_info_widget_ctr
     global image_references
-    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
-    ASSETS_PATH = Path(r"E:\pill-identification\output\frame5\build\assets\frame0")
+    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame5/build/assets/frame0")
+    # ASSETS_PATH = Path(r"E:\pill-identification\output\frame5\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -214,6 +214,7 @@ def show_pill_information_frame(root, pill_info):
 
     button_image_1 = PhotoImage(
         file=relative_to_assets("button_1.png"))
+    image_references["button_1"] = button_image_1
     button_1 = Button(
         image=button_image_1,
         borderwidth=0,
@@ -222,7 +223,7 @@ def show_pill_information_frame(root, pill_info):
         relief="flat"
     )
     button_1.place(
-        x=564.0,
+        x=180.0,
         y=384.0,
         width=54.51066970825195,
         height=53.0
@@ -230,6 +231,7 @@ def show_pill_information_frame(root, pill_info):
 
     button_image_2 = PhotoImage(
         file=relative_to_assets("button_2.png"))
+    image_references["image_2"] = button_image_2
     button_2 = Button(
         image=button_image_2,
         borderwidth=0,
@@ -237,11 +239,12 @@ def show_pill_information_frame(root, pill_info):
         command=lambda: print("button_2 clicked"),
         relief="flat"
     )
+    
     button_2.place(
-        x=678.0,
+        x=378.0,
         y=388.0,
         width=49.0,
-        height=49.0
+        height=49.0,
     )
 
     # Create label for classification's pill name
@@ -258,7 +261,7 @@ def show_pill_information_frame(root, pill_info):
     
     label.place(
         x=110, 
-        y=63
+        y=10,
     )
 
     # Create a widget for classification's pill information 
@@ -268,13 +271,13 @@ def show_pill_information_frame(root, pill_info):
         wrap="word", 
         font=("Koulen", 14), 
         width=45, 
-        height=7
+        height=8
     )  
     
     pill_info_widget.configure(state='normal')
     pill_info_widget.insert("1.0", pill_info)
     pill_info_widget.configure(state='disabled', highlightthickness=0)
-    pill_info_widget.place(x=100, y=155)  # Positioning the text widget at (100, 150)
+    pill_info_widget.place(x=100, y=105)  # Positioning the text widget at (100, 150)
 
     # This code assumes root is already defined
     
@@ -294,18 +297,18 @@ def show_pill_information_frame(root, pill_info):
     # update_pill_info(pill_info)
 
 
-    canvas.create_text(
-        60.0,
-        20.0,
-        anchor="nw",
-        text="23:01",
-        fill="#EDF5FA",
-        font=("InriaSans", 30)
-    )
+    # canvas.create_text(
+    #     60.0,
+    #     20.0,
+    #     anchor="nw",
+    #     text="23:01",
+    #     fill="#EDF5FA",
+    #     font=("InriaSans", 30)
+    # )
     
     # Load the image using PIL
-    # pil_image = Image.open("/home/pi/capstone/pill-identification/image.jpg")  # Replace "your_image_file.jpg" with the path to your image file
-    pil_image = Image.open(r"E:\pill-identification\image.jpg")  # Replace "your_image_file.jpg" with the path to your image file
+    pil_image = Image.open("/home/pi/capstone/pill-identification/image.jpg")  # Replace "your_image_file.jpg" with the path to your image file
+    # pil_image = Image.open(r"E:\pill-identification\image.jpg")  # Replace "your_image_file.jpg" with the path to your image file
     # Convert PIL image to Tkinter-compatible format
     image = ImageTk.PhotoImage(pil_image)
 
@@ -318,18 +321,18 @@ def show_pill_information_frame(root, pill_info):
     #     outline=""
     # )
 
-    # pil_image = Image.open("/home/pi/capstone/pill-identification/debug.jpg")
-    pil_image = Image.open(r"E:\pill-identification\debug.jpg")
+    pil_image = Image.open("/home/pi/capstone/pill-identification/debug.jpg")
+    # pil_image = Image.open(r"E:\pill-identification\debug.jpg")
     # Resize the image
-    new_width = 100
-    new_height = 100
+    new_width = 160
+    new_height = 160
     resized_image = pil_image.resize((new_width, new_height))
     image = ImageTk.PhotoImage(resized_image)
     
     canvas.image = image  # Save a reference to prevent garbage collection
     canvas.create_image(
-        (573.0 + 728.0) / 2, 
-        (221.0 + 415.0) / 2, 
+        650,
+        262,
         image=image
     )
     
@@ -343,8 +346,8 @@ def show_pill_information_frame(root, pill_info):
 
 def show_error_frame(root):
     global image_references
-    # ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
-    ASSETS_PATH = Path(r"E:\pill-identification\output\frame4\build\assets\frame0")
+    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
+    # ASSETS_PATH = Path(r"E:\pill-identification\output\frame4\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
