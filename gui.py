@@ -1,7 +1,7 @@
 from tkinter import Tk, Canvas, PhotoImage, Text, Scrollbar, Frame, END, Button
 import ttkbootstrap as tb
 from ttkbootstrap.scrolled import ScrolledText
-from PIL import Image, ImageTk
+from PIL import Image, ImageDraw, ImageTk
 from pathlib import Path
 import time
 import tkinter as tk
@@ -284,49 +284,32 @@ def show_pill_information_frame(root, pill_info):
     pill_info_widget.configure(state='disabled', highlightthickness=0, padx=4, pady=3)
     pill_info_widget.place(x=90, y=widget_y)  
     
-
-    # def update_pill_info(pill_info):
-    #     global pill_info_widget_ctr
-    #     if pill_info_widget_ctr > 0:
-    #         pill_info_widget.delete("1.0", END)  # Clear previous content
-    #         pill_info_widget = ScrolledText(root, wrap="word", font=("Koulen", 14), width=40, height=6, autohide=True)
-    #     else:
-    #         pill_info_widget_ctr += 1
-    #         pill_info_widget = ScrolledText(root, wrap="word", font=("Koulen", 14), width=40, height=6, autohide=True)
-    #     updated_pill_info = "Dosage: {}mg\nSpecial Instruction: {}\nPossible side effects: {}\n".format(pill_info[1], pill_info[2], pill_info[3])
-    #     pill_info_widget.insert("1.0", updated_pill_info)
-    #     pill_info_widget.place(x=100, y=155)
-            
-    # update_pill_info(pill_info)
-    
-    # Load the image using PIL
-    pil_image = Image.open("/home/pi/capstone/pill-identification/image.jpg")  # Replace "your_image_file.jpg" with the path to your image file
-    # pil_image = Image.open(r"E:\pill-identification\image.jpg")  # Replace "your_image_file.jpg" with the path to your image file
-    # Convert PIL image to Tkinter-compatible format
-    image = ImageTk.PhotoImage(pil_image)
-
-    # canvas.create_rectangle(
-    #     573.0,
-    #     221.0,
-    #     718.0,
-    #     404.0,
-    #     fill="#D9D9D9",
-    #     outline=""
-    # )
-
+    # Open the image
     pil_image = Image.open("/home/pi/capstone/pill-identification/debug.jpg")
-    # pil_image = Image.open(r"E:\pill-identification\debug.jpg")
+
     # Resize the image
-    new_width = 160
-    new_height = 160
+    new_width = 170
+    new_height = 170
     resized_image = pil_image.resize((new_width, new_height))
-    image = ImageTk.PhotoImage(resized_image)
-    
-    canvas.image = image  # Save a reference to prevent garbage collection
+
+    # Create a mask for rounded corners
+    mask = Image.new("L", (new_width, new_height), 0)
+    draw = ImageDraw.Draw(mask)
+    draw.rounded_rectangle((0, 0, new_width, new_height), fill=255, radius=15)
+
+    # Apply the mask to the image
+    rounded_image = Image.new("RGBA", (new_width, new_height), 0)
+    rounded_image.paste(resized_image, (0, 0), mask)
+
+    # Convert the rounded image to PhotoImage
+    rounded_photo = ImageTk.PhotoImage(rounded_image)
+
+    # Display the rounded image on canvas
+    canvas.image = rounded_photo  # Save a reference to prevent garbage collection
     canvas.create_image(
         650,
-        262,
-        image=image
+        257,
+        image=rounded_photo
     )
     
     root.resizable(False, False)
