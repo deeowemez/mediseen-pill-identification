@@ -38,7 +38,7 @@ import threading
 # # Import libraries for taking pictures
 import webcam
 
-# Import libraries for taking config
+# Import libraries for config
 import sys, os, signal
 import atexit
 import datetime
@@ -122,10 +122,8 @@ def classify(root):
     global classification, identification_number, pill_sensor
     if not channel.get_busy():
         # print('identification number: ', identification_number)
-        # time.sleep(1)
         if identification_number > 0:
             print('pill sensor: ', pill_sensor)
-            # print('repeat:', repeat_button)
             if not pill_sensor:
                 # show instructions frame after the last word of the previous audio if push button is not triggered during the previous classification audio output
                 gui.show_instructions_frame(root)
@@ -134,7 +132,6 @@ def classify(root):
                 # show image capture frame if push button is triggered during the audio output of a current classification
                 gui.show_image_capture_frame(root)
                 root.update()
-                # repeat_button = False
         classification = model.classify()
         print('classification: ', classification)
         if classification == 'waiting for pill':
@@ -148,10 +145,9 @@ def classify(root):
             gui.switch_pill_information_frame(root, 0, pill_info)
             root.update()
             pill_sensor = tts.speak_pill_info(classification, channel)
-            # pill_sensor = False
             classification = ''
     # Schedule this function to run again after a certain time
-    root.after(300, lambda: classify(root))  # Adjust the time interval as needed
+    root.after(0, lambda: classify(root))  # Adjust the time interval as needed
 
 # Keep the program running indefinitely
 

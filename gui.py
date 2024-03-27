@@ -79,7 +79,7 @@ def show_instructions_frame(root):
     image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
     image_references["image_1"] = image_image_1
     image_1 = canvas.create_image(
-        415.0,
+        399.0,
         240.0,
         image=image_image_1
     )
@@ -97,7 +97,7 @@ def show_instructions_frame(root):
         160.0,
         anchor="nw",
         text="Insert the pill into the \n designated pill slot, \n   ensuring proper \n         alignment.",
-        fill="#000000",
+        fill="#212121",
         font=("Inter Medium", 40)
     )
     
@@ -154,7 +154,7 @@ def show_image_capture_frame(root):
         160.0,
         anchor="nw",
         text="Image capture and \n  pill identification \n      in progress",
-        fill="#000000",
+        fill="#212121",
         font=("Inter Medium", 40)
     )
 
@@ -168,6 +168,7 @@ def show_image_capture_frame(root):
     # )
     root.resizable(False, False)
     root.overrideredirect(True)
+    
 
 def show_pill_information_frame(root, pill_info):
     global pill_info_widget_ctr
@@ -177,6 +178,19 @@ def show_pill_information_frame(root, pill_info):
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
+    
+    def set_widget_location(pill_info):
+        print('pill name length: ', len(pill_info[0]))
+        if len(pill_info[0]) >= 45:
+            widget_y = 105
+            widget_height = 10
+        else: 
+            widget_y = 60
+            widget_height = 11
+        return widget_y, widget_height
+    
+    widget_y, widget_height = set_widget_location(pill_info)
+    
     
     root.configure(bg="#EDF5FA")
 
@@ -190,24 +204,6 @@ def show_pill_information_frame(root, pill_info):
         relief="ridge"
     )
     
-    button_image_2 = PhotoImage(
-        file=relative_to_assets("reclassify.png"))
-    image_references["image_2"] = button_image_2
-    button_2 = Button(
-        image=button_image_2,
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: main.simulate_button_press(),
-        relief="flat"
-    )
-    
-    button_2.place(
-    x=378.0,
-    y=388.0,
-    width=49.0,
-    height=49.0,
-    )
-    
     
     canvas.place(x = 0, y = 0)
     image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
@@ -219,39 +215,56 @@ def show_pill_information_frame(root, pill_info):
     )
     
     button_image_1 = PhotoImage(
-        file=relative_to_assets("repeat.png"))
+        file=relative_to_assets("reclassify.png"))
     image_references["button_1"] = button_image_1
     button_1 = Button(
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: main.repeat_pill_info_audio(),
+        command=lambda: main.simulate_button_press(),
         relief="flat"
     )
+    
     button_1.place(
-        x=180.0,
-        y=384.0,
-        width=54.51066970825195,
-        height=53.0
+        x=655.0,
+        y=378.0,
+        width=70.0,
+        height=65.0
     )
-
-
-
+    
+    button_image_2 = PhotoImage(
+        file=relative_to_assets("repeat.png"))
+    image_references["image_2"] = button_image_2
+    button_2 = Button(
+        image=button_image_2,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print('repeat png clicked'),
+        relief="flat"
+    )
+    
+    button_2.place(
+        x=565.0,
+        y=378.0,
+        width=70.0,
+        height=65.0
+    )
 
     # Create label for classification's pill name
     label = tk.Label(
         root, 
         text=pill_info[0], 
         anchor="nw", 
-        justify="center", 
+        justify="left", 
         wraplength=400, 
         font=("Koulen", 18), 
         bg="white", 
+        # fg="#71b9cb"
         fg="#000000"
     )
     
     label.place(
-        x=110, 
+        x=93, 
         y=10,
     )
 
@@ -261,16 +274,15 @@ def show_pill_information_frame(root, pill_info):
         root, 
         wrap="word", 
         font=("Koulen", 14), 
-        width=45, 
-        height=8
+        width=43, 
+        height=widget_height,
+        fg="#212121"
     )  
     
     pill_info_widget.configure(state='normal')
     pill_info_widget.insert("1.0", pill_info)
-    pill_info_widget.configure(state='disabled', highlightthickness=0)
-    pill_info_widget.place(x=100, y=105)  # Positioning the text widget at (100, 150)
-
-    # This code assumes root is already defined
+    pill_info_widget.configure(state='disabled', highlightthickness=0, padx=4, pady=3)
+    pill_info_widget.place(x=90, y=widget_y)  
     
 
     # def update_pill_info(pill_info):
@@ -286,16 +298,6 @@ def show_pill_information_frame(root, pill_info):
     #     pill_info_widget.place(x=100, y=155)
             
     # update_pill_info(pill_info)
-
-
-    # canvas.create_text(
-    #     60.0,
-    #     20.0,
-    #     anchor="nw",
-    #     text="23:01",
-    #     fill="#EDF5FA",
-    #     font=("InriaSans", 30)
-    # )
     
     # Load the image using PIL
     pil_image = Image.open("/home/pi/capstone/pill-identification/image.jpg")  # Replace "your_image_file.jpg" with the path to your image file
@@ -387,7 +389,7 @@ def show_error_frame(root):
         240.0,
         anchor="nw",
         text="Pill cannot be identified.",
-        fill="#000000",
+        fill="#212121",
         font=("Inter", 40)
     )
 
@@ -424,7 +426,7 @@ def switch_pill_information_frame(root ,delay, pill_info):
 if __name__ == "__main__":
     import db
     
-    pill_info = db.get_pill_info_gui('Trajenta Duo Linagliptin Metformin HCl 1g (Unpacked Side A)')
+    pill_info = db.get_pill_info_gui('RiteMed Glimepiride 2mg (Packed)')
     print(pill_info[0])
     root = Tk()
     root.geometry("800x480")
