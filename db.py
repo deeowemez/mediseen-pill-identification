@@ -8,7 +8,6 @@ pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
 pill_table = "pill_info_table"
 
 
-
 def connect_to_database():
     """
     Establishes a connection to the SQLite database.

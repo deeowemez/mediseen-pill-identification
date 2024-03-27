@@ -52,6 +52,11 @@ def show_logo_frame(root):
         image=image_image_1
     )
     root.resizable(False, False)
+    root.overrideredirect(True)
+    
+    # exit_image = tk.PhotoImage(file='/home/pi/capstone/pill-identification/image.jpg')
+    exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
+    exit_button.place(rely=0.01, relx=0.95)
 
 
 def show_instructions_frame(root):
@@ -109,6 +114,11 @@ def show_instructions_frame(root):
         font=("InriaSans", 30)
     )
     root.resizable(False, False)
+    root.overrideredirect(True)
+    
+    # exit_image = tk.PhotoImage(file='/home/pi/capstone/pill-identification/image.jpg')
+    exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
+    exit_button.place(rely=0.01, relx=0.95)
 
 def show_image_capture_frame(root):
     global image_references
@@ -165,6 +175,11 @@ def show_image_capture_frame(root):
         font=("InriaSans", 30)
     )
     root.resizable(False, False)
+    root.overrideredirect(True)
+    
+    # exit_image = tk.PhotoImage(file='/home/pi/capstone/pill-identification/image.jpg')
+    exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
+    exit_button.place(rely=0.01, relx=0.95)
 
 pill_info_widget_ctr = 0
 def show_pill_information_frame(root, pill_info):
@@ -286,6 +301,12 @@ def show_pill_information_frame(root, pill_info):
     )
     
     root.resizable(False, False)
+    root.overrideredirect(True)
+    
+    # exit_image = tk.PhotoImage(file='/home/pi/capstone/pill-identification/image.jpg')
+    exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
+    exit_button.place(rely=0.01, relx=0.95)
+    
 
 def show_error_frame(root):
     global image_references
@@ -352,6 +373,11 @@ def show_error_frame(root):
         font=("Inter", 22)
     )
     root.resizable(False, False)
+    root.overrideredirect(True)
+    
+    # exit_image = tk.PhotoImage(file='/home/pi/capstone/pill-identification/image.jpg')
+    exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
+    exit_button.place(rely=0.01, relx=0.95)
 
 # Define switch_frame function after the main block
 def clear_frame(root, new_frame_func):
