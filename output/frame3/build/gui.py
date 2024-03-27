@@ -53,10 +53,10 @@ button_1 = Button(
     relief="flat"
 )
 button_1.place(
-    x=660.9827880859375,
-    y=380.0,
-    width=59.01717758178711,
-    height=59.01717758178711
+    x=655.0,
+    y=378.0,
+    width=70.0,
+    height=65.0
 )
 
 button_image_2 = PhotoImage(
@@ -69,10 +69,10 @@ button_2 = Button(
     relief="flat"
 )
 button_2.place(
-    x=570.0,
-    y=380.0,
-    width=59.01717758178711,
-    height=59.01717758178711
+    x=565.0,
+    y=378.0,
+    width=70.0,
+    height=65.0
 )
 window.resizable(False, False)
 window.mainloop()
