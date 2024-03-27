@@ -25,7 +25,8 @@ def speak_pill_info(classification, channel):
     print('wav_path', wav_path)
     audio_path = pygame.mixer.Sound(wav_path)
     channel.play(audio_path)
-    print('channel: ', channel.get_busy())
+    return False
+    # print('channel: ', channel.get_busy())
 
 def speak_error_audio():
     error_path = '/home/pi/capstone/pill-identification/error_audio.mp3'

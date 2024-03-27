@@ -5,6 +5,7 @@ from PIL import Image, ImageTk
 from pathlib import Path
 import time
 import tkinter as tk
+import main
 
 
 # def apply_font(widget, font_path, size):
@@ -53,11 +54,6 @@ def show_logo_frame(root):
     )
     root.resizable(False, False)
     root.overrideredirect(True)
-    
-    # exit_image = tk.PhotoImage(file='/home/pi/capstone/pill-identification/image.jpg')
-    exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
-    exit_button.place(rely=0.01, relx=0.95)
-
 
 def show_instructions_frame(root):
     global image_references
@@ -105,21 +101,17 @@ def show_instructions_frame(root):
         font=("Inter Medium", 40)
     )
     
-    canvas.create_text(
-        60.0,
-        20.0,
-        anchor="nw",
-        text="23:01",
-        fill="#EDF5FA",
-        font=("InriaSans", 30)
-    )
+    # canvas.create_text(
+    #     60.0,
+    #     20.0,
+    #     anchor="nw",
+    #     text="23:01",
+    #     fill="#EDF5FA",
+    #     font=("InriaSans", 30)
+    # )
     root.resizable(False, False)
     root.overrideredirect(True)
     
-    # exit_image = tk.PhotoImage(file='/home/pi/capstone/pill-identification/image.jpg')
-    exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
-    exit_button.place(rely=0.01, relx=0.95)
-
 def show_image_capture_frame(root):
     global image_references
     ASSETS_PATH = "/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0"
@@ -166,27 +158,22 @@ def show_image_capture_frame(root):
         font=("Inter Medium", 40)
     )
 
-    canvas.create_text(
-        60.0,
-        20.0,
-        anchor="nw",
-        text="23:01",
-        fill="#EDF5FA",
-        font=("InriaSans", 30)
-    )
+    # canvas.create_text(
+    #     60.0,
+    #     20.0,
+    #     anchor="nw",
+    #     text="23:01",
+    #     fill="#EDF5FA",
+    #     font=("InriaSans", 30)
+    # )
     root.resizable(False, False)
     root.overrideredirect(True)
-    
-    # exit_image = tk.PhotoImage(file='/home/pi/capstone/pill-identification/image.jpg')
-    exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
-    exit_button.place(rely=0.01, relx=0.95)
 
-pill_info_widget_ctr = 0
 def show_pill_information_frame(root, pill_info):
     global pill_info_widget_ctr
     global image_references
-    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame5/build/assets/frame0")
-    # ASSETS_PATH = Path(r"E:\pill-identification\output\frame5\build\assets\frame0")
+    ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
+    # ASSETS_PATH = Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -203,6 +190,25 @@ def show_pill_information_frame(root, pill_info):
         relief="ridge"
     )
     
+    button_image_2 = PhotoImage(
+        file=relative_to_assets("reclassify.png"))
+    image_references["image_2"] = button_image_2
+    button_2 = Button(
+        image=button_image_2,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: main.simulate_button_press(),
+        relief="flat"
+    )
+    
+    button_2.place(
+    x=378.0,
+    y=388.0,
+    width=49.0,
+    height=49.0,
+    )
+    
+    
     canvas.place(x = 0, y = 0)
     image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
     image_references["image_1"] = image_image_1
@@ -211,15 +217,15 @@ def show_pill_information_frame(root, pill_info):
         228.0,
         image=image_image_1
     )
-
+    
     button_image_1 = PhotoImage(
-        file=relative_to_assets("button_1.png"))
+        file=relative_to_assets("repeat.png"))
     image_references["button_1"] = button_image_1
     button_1 = Button(
         image=button_image_1,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("button_1 clicked"),
+        command=lambda: main.repeat_pill_info_audio(),
         relief="flat"
     )
     button_1.place(
@@ -229,23 +235,8 @@ def show_pill_information_frame(root, pill_info):
         height=53.0
     )
 
-    button_image_2 = PhotoImage(
-        file=relative_to_assets("button_2.png"))
-    image_references["image_2"] = button_image_2
-    button_2 = Button(
-        image=button_image_2,
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: print("button_2 clicked"),
-        relief="flat"
-    )
-    
-    button_2.place(
-        x=378.0,
-        y=388.0,
-        width=49.0,
-        height=49.0,
-    )
+
+
 
     # Create label for classification's pill name
     label = tk.Label(
@@ -382,14 +373,14 @@ def show_error_frame(root):
         font=("Inter Bold", 64)
     )
 
-    canvas.create_text(
-        60.0,
-        20.0,
-        anchor="nw",
-        text="23:01",
-        fill="#EDF5FA",
-        font=("InriaSans", 30)
-    )
+    # canvas.create_text(
+    #     60.0,
+    #     20.0,
+    #     anchor="nw",
+    #     text="23:01",
+    #     fill="#EDF5FA",
+    #     font=("InriaSans", 30)
+    # )
 
     canvas.create_text(
         110.0,
@@ -411,10 +402,6 @@ def show_error_frame(root):
     root.resizable(False, False)
     root.overrideredirect(True)
     
-    # exit_image = tk.PhotoImage(file='/home/pi/capstone/pill-identification/image.jpg')
-    exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
-    exit_button.place(rely=0.01, relx=0.95)
-
 # Define switch_frame function after the main block
 def clear_frame(root, new_frame_func):
     # Clear the current frame
