@@ -40,6 +40,7 @@ import webcam
 
 # Import libraries for config
 import datetime
+import subprocess
 
 set_frequency = 25000
 
@@ -112,9 +113,16 @@ def gpio_init():
             
         if channel == 13:
             abort_audio()
+            
+        if channel == 6:
+            print("Button pressed, shutting down...")
+            # Close all open windows
+            subprocess.run(["wmctrl", "-c", ":ALL:"])
+            # Shutdown Raspberry Pi
+            subprocess.run(["sudo", "shutdown", "-h", "now"])
         
     for button in buttons:
-        GPIO.add_event_detect(button, GPIO.RISING, callback=button_pressed, bouncetime=200)
+        GPIO.add_event_detect(button, GPIO.FALLING, callback=button_pressed, bouncetime=200)
     
 
 # Define a function to set the color of the RGB LED
@@ -123,6 +131,7 @@ def simulate_button_press():
     GPIO.output(21, GPIO.HIGH)
     time.sleep(0.1)  # Adjust the duration as needed
     GPIO.output(21, GPIO.LOW)
+    time.sleep(0.1)
 
 def set_pill_run_classify():
     global pill_sensor
@@ -143,6 +152,7 @@ def abort_audio():
 classification = ''
 identification_number = 0
 pill_sensor = False
+global pill_info
 
 def repeat_pill_info_audio(current_pill):
     repeat_event.set()
@@ -157,7 +167,7 @@ def repeat_pill_info_audio(current_pill):
     repeat_event.clear()
 
 def classify(root):
-    global classification, identification_number, pill_sensor, current_pill
+    global classification, identification_number, pill_sensor, pill_info
     if repeat_event.is_set():
         print('repeat_event.is_set in classify')
     if not channel.get_busy() and not repeat_event.is_set():
