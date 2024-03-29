@@ -176,11 +176,11 @@ def classify(root):
                 # show image capture frame if push button is triggered during the audio output of a current classification
                 gui.show_image_capture_frame(root)
                 root.update()
-        set_color(60, 60, 93) # Set rgb led to cyan
+        set_color(60, 60, 95) # Set rgb led to cyan
         classification = model.classify()
         print('classification: ', classification)
         if classification == 'waiting for pill':
-            set_color(90, 5, 8) # Set rgb led to red
+            set_color(95, 5, 5) # Set rgb led to red
             gui.show_error_frame(root)
             root.update()
             tts.speak_error_audio()
@@ -189,7 +189,7 @@ def classify(root):
         elif classification:
             print('classification: ', classification)
             identification_number += 1
-            set_color(45, 100, 20)  # Set rgb led to green
+            set_color(50, 100, 20)  # Set rgb led to green
             pill_info = db.get_pill_info_gui(classification)
             gui.switch_pill_information_frame(root, 0, pill_info)
             root.update()
