@@ -32,10 +32,17 @@ def set_color(red, green, blue):
 if __name__ == "__main__":
     try:
         while True:
-            # set_color(30, 100, 35)  # option 1
+            # set_color(45, 100, 20)  # option 1
             # set_color(60, 100, 35)  # 2
-            set_color(70, 100, 40)  # 3
+            # set_color(50, 100, 35)  # 3
             # time.sleep(1)
+            
+            set_color(100, 60, 10)
+            
+            # set_color(90, 5, 8)
+            
+            # set_color(60, 60, 95)
+            
             # set_color(0, 100, 0)  # Green
             # time.sleep(1)
             # set_color(0, 0, 100)  # Blue

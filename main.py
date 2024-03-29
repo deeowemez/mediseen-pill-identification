@@ -89,9 +89,6 @@ def rgb_init():
     init_event.set()
 
 def set_color(red, green, blue):
-    # global red_pwm
-    # global green_pwm
-    # global blue_pwm
     red_pwm.ChangeDutyCycle(red)
     green_pwm.ChangeDutyCycle(green)
     blue_pwm.ChangeDutyCycle(blue)
@@ -170,18 +167,19 @@ def classify(root):
                 # show image capture frame if push button is triggered during the audio output of a current classification
                 gui.show_image_capture_frame(root)
                 root.update()
-        set_color(0, 100, 100) # Set rgb led to cyan
+        set_color(60, 60, 93) # Set rgb led to cyan
         classification = model.classify()
         print('classification: ', classification)
         if classification == 'waiting for pill':
-            set_color(100, 0, 0) # Set rgb led to red
+            set_color(90, 5, 8) # Set rgb led to red
             gui.show_error_frame(root)
             root.update()
             tts.speak_error_audio()
+            pill_sensor = False
             classify(root)
         elif classification:
             identification_number += 1
-            set_color(70, 100, 40) # Set rgb led to green
+            set_color(45, 100, 20)  # Set rgb led to green
             pill_info = db.get_pill_info_gui(classification)
             gui.switch_pill_information_frame(root, 0, pill_info)
             root.update()
@@ -217,7 +215,7 @@ if __name__ == "__main__":
         # Wait for the initialization to complete
         init_event.wait()
         
-        set_color(100, 100, 0) # Set rgb led to yellow
+        set_color(100, 60, 10) # Set rgb led to yellow
 
         # Show the logo frame
         gui.switch_frames(root, gui.show_logo_frame, 0)
