@@ -39,8 +39,6 @@ import threading
 import webcam
 
 # Import libraries for config
-import sys, os, signal
-import atexit
 import datetime
 
 set_frequency = 25000
@@ -114,13 +112,12 @@ def gpio_init():
             
         if channel == 13:
             abort_audio()
-            
-    
+        
     for button in buttons:
         GPIO.add_event_detect(button, GPIO.RISING, callback=button_pressed, bouncetime=200)
+    
 
 # Define a function to set the color of the RGB LED
-
 def simulate_button_press():
     print('Simulating button press')
     GPIO.output(21, GPIO.HIGH)
@@ -154,7 +151,6 @@ def repeat_pill_info_audio(current_pill):
         print('repeat_event.is_set')
     global channel 
     if channel.get_busy():
-        # print(channel.get_sound())
         channel.stop()
     print('current: ', current_pill)
     tts.speak_pill_info(current_pill, channel)
@@ -185,7 +181,6 @@ def classify(root):
             root.update()
             tts.speak_error_audio()
             pill_sensor = False
-            # classify(root)
         elif classification:
             print('classification: ', classification)
             identification_number += 1
@@ -202,13 +197,7 @@ def classify(root):
 
 if __name__ == "__main__":
     # Keep the program running indefinitely
-    try:
-        # GPIO.cleanup()
-        # root = tb.Window(themename='cosmo')
-        # root.geometry('800x480')
-        # root.title('')
-        # root.iconbitmap('/home/pi/capstone/pill-identification/image.jpg')
-        
+    try:        
         # Initialize the Tkinter root window
         root = tk.Tk()
         root.title('MediSeen')
@@ -245,9 +234,6 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print('Exiting...')
         GPIO.cleanup()
-        red_pwm.ChangeDutyCycle(0)
-        green_pwm.ChangeDutyCycle(0)
-        blue_pwm.ChangeDutyCycle(0)
         red_pwm.stop()
         green_pwm.stop()
         blue_pwm.stop()
@@ -255,9 +241,6 @@ if __name__ == "__main__":
     except Exception as e:
         GPIO.cleanup()
         print('An error occurred:', e)
-        red_pwm.ChangeDutyCycle(0)
-        green_pwm.ChangeDutyCycle(0)
-        blue_pwm.ChangeDutyCycle(0)
         red_pwm.stop()
         green_pwm.stop()
         blue_pwm.stop()
