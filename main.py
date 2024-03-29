@@ -54,16 +54,56 @@ print('channel: ', channel.get_busy())
 def now():
     return datetime.datetime.now()
 
+init_event = threading.Event()
+
+global red_pwm
+global green_pwm
+global blue_pwm
+
+def rgb_init():
+    global red_pwm
+    global green_pwm
+    global blue_pwm
+
+    GPIO.setmode(GPIO.BCM)
+    
+    # Define the pins for RGB LED
+    red_pin = 22
+    green_pin = 27
+    blue_pin = 17
+    
+    # Set up PWM channels
+    GPIO.setup(red_pin, GPIO.OUT)
+    GPIO.setup(green_pin, GPIO.OUT)
+    GPIO.setup(blue_pin, GPIO.OUT)
+    
+    red_pwm = GPIO.PWM(red_pin, 100)  # PWM frequency for red LED
+    green_pwm = GPIO.PWM(green_pin, 100)  # PWM frequency for green LED
+    blue_pwm = GPIO.PWM(blue_pin, 100)  # PWM frequency for blue LED
+
+    red_pwm.start(0)  # Start PWM with 0% duty cycle
+    green_pwm.start(0)
+    blue_pwm.start(0) 
+    
+    # Set the event to indicate that initialization is complete
+    init_event.set()
+
+def set_color(red, green, blue):
+    # global red_pwm
+    # global green_pwm
+    # global blue_pwm
+    red_pwm.ChangeDutyCycle(red)
+    green_pwm.ChangeDutyCycle(green)
+    blue_pwm.ChangeDutyCycle(blue)
+
 # initialzing GPIO
 def gpio_init():
     GPIO.setmode(GPIO.BCM)
 
+    # Define the pins for push buttons
     buttons = [26,19,13] 
-    # Set up GPIO pins as inputs
     GPIO.setup(buttons, GPIO.IN)
-    
-    GPIO.setup(22, GPIO.OUT)
-
+    GPIO.setup(21, GPIO.OUT)
     
     def button_pressed(channel):
         print(f"Button is pressed on channel {channel}")
@@ -80,13 +120,14 @@ def gpio_init():
     
     for button in buttons:
         GPIO.add_event_detect(button, GPIO.RISING, callback=button_pressed, bouncetime=200)
-    
+
+# Define a function to set the color of the RGB LED
 
 def simulate_button_press():
     print('Simulating button press')
-    GPIO.output(22, GPIO.HIGH)
+    GPIO.output(21, GPIO.HIGH)
     time.sleep(0.1)  # Adjust the duration as needed
-    GPIO.output(22, GPIO.LOW)
+    GPIO.output(21, GPIO.LOW)
 
 def set_pill_run_classify():
     global pill_sensor
@@ -102,10 +143,7 @@ def abort_audio():
     # Abort the audio playback process if it's running
     if channel.get_busy():
         channel.stop()
-        # Start the classify thread
-        # classify(root)
-        # classify_thread = threading.Thread(target=classify, args=(root,), daemon=True)
-        # classify_thread.start()
+
 
 classification = ''
 identification_number = 0
@@ -132,15 +170,18 @@ def classify(root):
                 # show image capture frame if push button is triggered during the audio output of a current classification
                 gui.show_image_capture_frame(root)
                 root.update()
+        set_color(0, 100, 100) # Set rgb led to cyan
         classification = model.classify()
         print('classification: ', classification)
         if classification == 'waiting for pill':
+            set_color(100, 0, 0) # Set rgb led to red
             gui.show_error_frame(root)
             root.update()
             tts.speak_error_audio()
             classify(root)
         elif classification:
             identification_number += 1
+            set_color(70, 100, 40) # Set rgb led to green
             pill_info = db.get_pill_info_gui(classification)
             gui.switch_pill_information_frame(root, 0, pill_info)
             root.update()
@@ -154,6 +195,7 @@ def classify(root):
 if __name__ == "__main__":
     # Keep the program running indefinitely
     try:
+        # GPIO.cleanup()
         # root = tb.Window(themename='cosmo')
         # root.geometry('800x480')
         # root.title('')
@@ -167,6 +209,15 @@ if __name__ == "__main__":
         # Create a thread for button detection
         button_thread = threading.Thread(target=gpio_init, daemon=True)
         button_thread.start()
+        
+        # Create a thread for controlling the RGB LED
+        led_thread = threading.Thread(target=rgb_init, daemon=True) 
+        led_thread.start()
+
+        # Wait for the initialization to complete
+        init_event.wait()
+        
+        set_color(100, 100, 0) # Set rgb led to yellow
 
         # Show the logo frame
         gui.switch_frames(root, gui.show_logo_frame, 0)
@@ -186,6 +237,20 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print('Exiting...')
         GPIO.cleanup()
+        red_pwm.ChangeDutyCycle(0)
+        green_pwm.ChangeDutyCycle(0)
+        blue_pwm.ChangeDutyCycle(0)
+        red_pwm.stop()
+        green_pwm.stop()
+        blue_pwm.stop()
+        GPIO.cleanup()
     except Exception as e:
+        GPIO.cleanup()
         print('An error occurred:', e)
+        red_pwm.ChangeDutyCycle(0)
+        green_pwm.ChangeDutyCycle(0)
+        blue_pwm.ChangeDutyCycle(0)
+        red_pwm.stop()
+        green_pwm.stop()
+        blue_pwm.stop()
         GPIO.cleanup()

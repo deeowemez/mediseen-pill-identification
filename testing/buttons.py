@@ -1,40 +1,36 @@
 import RPi.GPIO as GPIO
 import time
 
-def classify():
-    print('Classify button pressed')
-    return True
+GPIO.setmode(GPIO.BCM)
 
-def gpio_init():
-    try:
-        GPIO.setmode(GPIO.BCM)
+output_pin = 17
+input_pin = 21
 
-        buttons = [26,19,13,6]
-
-        # Set up GPIO pins as inputs
-        GPIO.setup(buttons, GPIO.IN)
+# Set up GPIO pins as inputs
+GPIO.setup(output_pin, GPIO.OUT)
+# GPIO.setup(input_pin, GPIO.IN)
+    
+try:
+    while True:
+        GPIO.output(output_pin, GPIO.HIGH)
+        # Read input value
+        # input_value = GPIO.input(input_pin)
+        # print("Input value:", input_value)
         
-        def button_pressed(channel):
-            print(f"Button is pressed on channel {channel}")
-            
-            if channel == 6:
-                classify()
+        time.sleep(.5)
+        GPIO.output(output_pin, GPIO.LOW)
+        time.sleep(.5)
+        # GPIO.output(output_pin, GPIO.LOW)
+        # input_value = GPIO.input(input_pin)
+        # print("Input value:", input_value)
+        # time.sleep(1)
+        # Add a delay to avoid flooding the terminal
+        
 
-        for button in buttons:
-            GPIO.add_event_detect(button, GPIO.FALLING, callback=button_pressed, bouncetime=200)
 
-    except Exception as e:
-        print(f"An error occurred during GPIO initialization: {e}")
-
-if __name__ == "__main__":
-    try:
-        gpio_init()
-        while True:
-            time.sleep(1)
-
-    except KeyboardInterrupt:
-        GPIO.cleanup()
-        print('Exiting button thread...')
-    except Exception as e:
-        print('An error occurred in the button thread:', e)
-        GPIO.cleanup()
+except KeyboardInterrupt:
+    GPIO.cleanup()
+    print('Exiting button thread...')
+except Exception as e:
+    print('An error occurred in the button thread:', e)
+    GPIO.cleanup()

@@ -2,6 +2,7 @@
 
 # import device_patches       # Device specific patches for Jetson Nano (needs to be before importing cv2)
 
+import main
 import cv2
 import os
 import sys, getopt
@@ -57,16 +58,16 @@ def classify():
     modelfile = os.path.join(dir_path, model)
     
     print('MODEL: ' + modelfile)
-
+    
     with ImageImpulseRunner(modelfile) as runner:
-        try:
+        try:        
             while True:
                 global bbox_dict
                 global max_label
                 global image_taken
                 # initialize runner
                 runner.init()
-            
+
                 if pill_detection.detect_pill():
                     webcam.capture_and_crop_image()
                     img = cv2.imread('/home/pi/capstone/pill-identification/image.jpg')
