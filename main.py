@@ -54,7 +54,8 @@ print('channel: ', channel.get_busy())
 def now():
     return datetime.datetime.now()
 
-init_event = threading.Event()
+rgb_init_event = threading.Event()
+repeat_event = threading.Event()
 
 global red_pwm
 global green_pwm
@@ -86,7 +87,7 @@ def rgb_init():
     blue_pwm.start(0) 
     
     # Set the event to indicate that initialization is complete
-    init_event.set()
+    rgb_init_event.set()
 
 def set_color(red, green, blue):
     red_pwm.ChangeDutyCycle(red)
@@ -146,16 +147,24 @@ classification = ''
 identification_number = 0
 pill_sensor = False
 
-def repeat_pill_info_audio():
-    global classification, channel
+def repeat_pill_info_audio(current_pill):
+    repeat_event.set()
+    print('print: ', current_pill)
+    if repeat_event.is_set():
+        print('repeat_event.is_set')
+    global channel 
     if channel.get_busy():
+        # print(channel.get_sound())
         channel.stop()
-        print('current: ', classification)
-    tts.speak_pill_info(classification, channel)
+    print('current: ', current_pill)
+    tts.speak_pill_info(current_pill, channel)
+    repeat_event.clear()
 
 def classify(root):
-    global classification, identification_number, pill_sensor
-    if not channel.get_busy():
+    global classification, identification_number, pill_sensor, current_pill
+    if repeat_event.is_set():
+        print('repeat_event.is_set in classify')
+    if not channel.get_busy() and not repeat_event.is_set():
         # print('identification number: ', identification_number)
         if identification_number > 0:
             print('pill sensor: ', pill_sensor)
@@ -176,15 +185,16 @@ def classify(root):
             root.update()
             tts.speak_error_audio()
             pill_sensor = False
-            classify(root)
+            # classify(root)
         elif classification:
+            print('classification: ', classification)
             identification_number += 1
             set_color(45, 100, 20)  # Set rgb led to green
             pill_info = db.get_pill_info_gui(classification)
             gui.switch_pill_information_frame(root, 0, pill_info)
             root.update()
             pill_sensor = tts.speak_pill_info(classification, channel)
-            classification = ''
+            # classification = ''
     # Schedule this function to run again after a certain time
     root.after(0, lambda: classify(root))  # Adjust the time interval as needed
 
@@ -213,7 +223,7 @@ if __name__ == "__main__":
         led_thread.start()
 
         # Wait for the initialization to complete
-        init_event.wait()
+        rgb_init_event.wait()
         
         set_color(100, 60, 10) # Set rgb led to yellow
 

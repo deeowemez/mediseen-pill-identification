@@ -171,10 +171,14 @@ def show_image_capture_frame(root):
     
 
 def show_pill_information_frame(root, pill_info):
-    global pill_info_widget_ctr
     global image_references
     ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
     # ASSETS_PATH = Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
+
+    
+    classification = pill_info[4]
+    
+    print('in gui show: ', classification)
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
@@ -239,7 +243,7 @@ def show_pill_information_frame(root, pill_info):
         image=button_image_2,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print('repeat png clicked'),
+        command= lambda: main.repeat_pill_info_audio(classification),
         relief="flat"
     )
     

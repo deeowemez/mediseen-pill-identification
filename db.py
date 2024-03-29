@@ -22,7 +22,7 @@ def get_pill_info_gui(classification):
     conn = connect_to_database()
     cursor = conn.cursor()
     # medication_names_dosages = get_pill_list()
-    info_columns = ['medication_name', 'dosage', 'special_instructions_gui', 'possible_side_effects_gui']
+    info_columns = ['medication_name', 'dosage', 'special_instructions_gui', 'possible_side_effects_gui', 'medication_name_dosage']
     cursor.execute(f"SELECT {','.join(info_columns)} FROM pill_info_table WHERE medication_name_dosage = ?", (classification,))
     pill_info = cursor.fetchone()
     # print(pill_info)
