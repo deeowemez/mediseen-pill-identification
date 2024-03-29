@@ -98,7 +98,7 @@ def gpio_init():
     GPIO.setmode(GPIO.BCM)
 
     # Define the pins for push buttons
-    buttons = [26,19,13] 
+    buttons = [26,19,13,6] 
     GPIO.setup(buttons, GPIO.IN)
     GPIO.setup(21, GPIO.OUT)
     
@@ -115,15 +115,10 @@ def gpio_init():
             abort_audio()
             
         if channel == 6:
-            print("Button pressed, shutting down...")
-            # Close all open windows
-            subprocess.run(["wmctrl", "-c", ":ALL:"])
-            # Shutdown Raspberry Pi
-            subprocess.run(["sudo", "shutdown", "-h", "now"])
+            shutdown()
         
     for button in buttons:
         GPIO.add_event_detect(button, GPIO.FALLING, callback=button_pressed, bouncetime=200)
-    
 
 # Define a function to set the color of the RGB LED
 def simulate_button_press():
@@ -148,11 +143,16 @@ def abort_audio():
     if channel.get_busy():
         channel.stop()
 
+def shutdown():
+    print("Button pressed, shutting down...")
+    # Close all open windows
+    subprocess.run(["wmctrl", "-c", ":ALL:"])
+    # Shutdown Raspberry Pi
+    subprocess.run(["sudo", "shutdown", "-h", "now"])
 
 classification = ''
 identification_number = 0
 pill_sensor = False
-global pill_info
 
 def repeat_pill_info_audio(current_pill):
     repeat_event.set()
