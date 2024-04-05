@@ -128,13 +128,13 @@ def simulate_button_press():
     GPIO.output(21, GPIO.LOW)
     time.sleep(0.1)
 
-def set_pill_run_classify():
-    global pill_sensor
-    print('set_pill_run_classify called')
-    pill_sensor = True
-    print('pill sensor: ', pill_sensor)
-    if channel.get_busy():
-        channel.stop()
+# def set_pill_run_classify():
+#     global pill_sensor
+#     print('set_pill_run_classify called')
+#     pill_sensor = True
+#     print('pill sensor: ', pill_sensor)
+#     if channel.get_busy():
+#         channel.stop()
 
 def abort_audio():
     global classify_thread, pill_sensor
@@ -155,11 +155,11 @@ identification_number = 0
 pill_sensor = False
 
 def repeat_pill_info_audio(current_pill):
+    global channel 
     repeat_event.set()
     print('print: ', current_pill)
     if repeat_event.is_set():
         print('repeat_event.is_set')
-    global channel 
     if channel.get_busy():
         channel.stop()
     print('current: ', current_pill)
@@ -199,7 +199,7 @@ def classify(root):
             gui.switch_pill_information_frame(root, 0, pill_info)
             root.update()
             pill_sensor = tts.speak_pill_info(classification, channel)
-            # classification = ''
+
     # Schedule this function to run again after a certain time
     root.after(0, lambda: classify(root))  # Adjust the time interval as needed
 
@@ -210,12 +210,8 @@ if __name__ == "__main__":
     try:        
         # Initialize the Tkinter root window
         root = tk.Tk()
-        root.title('MediSeen')
         root.geometry("800x480")
-
-        # Create a thread for button detection
-        button_thread = threading.Thread(target=gpio_init, daemon=True)
-        button_thread.start()
+        # root.title('MediSeen')
         
         # Create a thread for controlling the RGB LED
         led_thread = threading.Thread(target=rgb_init, daemon=True) 
@@ -233,6 +229,10 @@ if __name__ == "__main__":
 
         # After 3 seconds, show the pill information frame
         gui.switch_frames(root, gui.show_instructions_frame, 200)
+        
+        # Create a thread for button detection
+        button_thread = threading.Thread(target=gpio_init, daemon=True)
+        button_thread.start()
         
         # Create a thread for classifying medicines
         classify_thread = threading.Thread(target=classify, args=(root,), daemon=True)

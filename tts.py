@@ -33,8 +33,8 @@ def speak_error_audio():
     os.system("play {} tempo 1.1" .format(error_path))
     
 def speak_introductory_audio():
-    intro_path = '/home/pi/capstone/pill-identification/introductory_audio.mp3'
-    os.system("play {} tempo 1.1" .format(intro_path))
+    intro_audio_path = '/home/pi/capstone/pill-identification/introductory_audio.mp3'
+    os.system("play {} tempo 1.1" .format(intro_audio_path))
     # intro_path = pygame.mixer.Sound('/home/pi/capstone/pill-identification/introductory_audio.wav')
     # channel.play(intro_path)
 
