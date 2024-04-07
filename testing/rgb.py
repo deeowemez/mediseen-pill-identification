@@ -41,14 +41,14 @@ if __name__ == "__main__":
                     
             # set_color(60, 60, 95) # cyan/classification
             
-            set_color(50, 100, 20) # green/successful classification
+            set_color(60, 60, 95) # green/successful classification
             
             # set_color(0, 100, 0)  # Green
-            # time.sleep(1)
-            # set_color(0, 0, 100)  # Blue
-            # time.sleep(1)
-            # set_color(100, 100, 0)  # Yellow
-            # time.sleep(1)
+            time.sleep(1)
+            set_color(95, 5, 5)  # Blue
+            time.sleep(1)
+            set_color(50, 100, 20)  # Yellow
+            time.sleep(1)
             # set_color(100, 0, 100)  # Magenta
             # time.sleep(1)
             # set_color(0, 100, 100)  # Cyan

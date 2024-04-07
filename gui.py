@@ -7,11 +7,6 @@ import time
 import tkinter as tk
 import main
 
-
-# def apply_font(widget, font_path, size):
-#     custom_font = Font(family="Inter Medium", size=size)
-#     widget.configure(font=custom_font)
-
 # Dictionary to store references to the images
 image_references = {}
 
@@ -35,15 +30,6 @@ def show_logo_frame(root):
         relief="ridge"
     )
     canvas.place(x=0, y=0)
-
-    # canvas.create_text(
-    #     276.0,
-    #     389.0,
-    #     anchor="nw",
-    #     text="press the screen to start",
-    #     fill="#9C9C9C",
-    #     font=("InriaSans BoldItalic", 24)
-    # )
 
     image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
     image_references["image_1"] = image_image_1

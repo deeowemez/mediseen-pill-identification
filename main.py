@@ -55,10 +55,15 @@ def now():
 
 rgb_init_event = threading.Event()
 repeat_event = threading.Event()
+reclassify_event = threading.Event()
 
 global red_pwm
 global green_pwm
 global blue_pwm
+
+classification = ''
+identification_number = 0
+pill_sensor = False
 
 def rgb_init():
     global red_pwm
@@ -128,31 +133,20 @@ def simulate_button_press():
     GPIO.output(21, GPIO.LOW)
     time.sleep(0.1)
 
-# def set_pill_run_classify():
-#     global pill_sensor
-#     print('set_pill_run_classify called')
-#     pill_sensor = True
-#     print('pill sensor: ', pill_sensor)
-#     if channel.get_busy():
-#         channel.stop()
-
 def abort_audio():
     global classify_thread, pill_sensor
     pill_sensor = True
+    print('pill sensor: ', pill_sensor)
     # Abort the audio playback process if it's running
     if channel.get_busy():
         channel.stop()
-
+    
 def shutdown():
     print("Button pressed, shutting down...")
     # Close all open windows
     subprocess.run(["wmctrl", "-c", ":ALL:"])
     # Shutdown Raspberry Pi
     subprocess.run(["sudo", "shutdown", "-h", "now"])
-
-classification = ''
-identification_number = 0
-pill_sensor = False
 
 def repeat_pill_info_audio(current_pill):
     global channel 
@@ -168,9 +162,7 @@ def repeat_pill_info_audio(current_pill):
 
 def classify(root):
     global classification, identification_number, pill_sensor, pill_info
-    if repeat_event.is_set():
-        print('repeat_event.is_set in classify')
-    if not channel.get_busy() and not repeat_event.is_set():
+    if not channel.get_busy() and not repeat_event.is_set() and not reclassify_event.is_set():
         # print('identification number: ', identification_number)
         if identification_number > 0:
             print('pill sensor: ', pill_sensor)
@@ -204,14 +196,12 @@ def classify(root):
     root.after(0, lambda: classify(root))  # Adjust the time interval as needed
 
 # Keep the program running indefinitely
-
 if __name__ == "__main__":
     # Keep the program running indefinitely
     try:        
         # Initialize the Tkinter root window
         root = tk.Tk()
         root.geometry("800x480")
-        # root.title('MediSeen')
         
         # Create a thread for controlling the RGB LED
         led_thread = threading.Thread(target=rgb_init, daemon=True) 
@@ -223,7 +213,8 @@ if __name__ == "__main__":
         set_color(100, 60, 10) # Set rgb led to yellow
 
         # Show the logo frame
-        gui.switch_frames(root, gui.show_logo_frame, 0)
+        # gui.switch_frames(root, gui.show_logo_frame, 0)
+        gui.show_logo_frame(root)
         root.update()
         tts.speak_introductory_audio()
 

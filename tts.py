@@ -26,7 +26,6 @@ def speak_pill_info(classification, channel):
     audio_path = pygame.mixer.Sound(wav_path)
     channel.play(audio_path)
     return False
-    # print('channel: ', channel.get_busy())
 
 def speak_error_audio():
     error_path = '/home/pi/capstone/pill-identification/error_audio.mp3'
@@ -35,8 +34,6 @@ def speak_error_audio():
 def speak_introductory_audio():
     intro_audio_path = '/home/pi/capstone/pill-identification/introductory_audio.mp3'
     os.system("play {} tempo 1.1" .format(intro_audio_path))
-    # intro_path = pygame.mixer.Sound('/home/pi/capstone/pill-identification/introductory_audio.wav')
-    # channel.play(intro_path)
 
 # Function to increase volume using ALSA
 def increase_volume():
