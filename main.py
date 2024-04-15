@@ -73,9 +73,9 @@ def rgb_init():
     GPIO.setmode(GPIO.BCM)
     
     # Define the pins for RGB LED
-    red_pin = 22
-    green_pin = 27
-    blue_pin = 17
+    red_pin = 20
+    green_pin = 16
+    blue_pin = 21
     
     # Set up PWM channels
     GPIO.setup(red_pin, GPIO.OUT)
@@ -128,9 +128,9 @@ def gpio_init():
 # Define a function to set the color of the RGB LED
 def simulate_button_press():
     print('Simulating button press')
-    GPIO.output(21, GPIO.HIGH)
+    GPIO.output(12, GPIO.HIGH)
     time.sleep(0.1)  # Adjust the duration as needed
-    GPIO.output(21, GPIO.LOW)
+    GPIO.output(12, GPIO.LOW)
     time.sleep(0.1)
 
 def abort_audio():
