@@ -1,36 +1,37 @@
 import RPi.GPIO as GPIO
-import time
+import threading
 
-GPIO.setmode(GPIO.BCM)
+def gpio_init():
+    GPIO.setmode(GPIO.BCM)
 
-output_pin = 17
-input_pin = 21
-
-# Set up GPIO pins as inputs
-GPIO.setup(output_pin, GPIO.OUT)
-# GPIO.setup(input_pin, GPIO.IN)
+    # Define the pins for push buttons
+    buttons = [26,19,13,6] 
+    GPIO.setup(buttons, GPIO.IN)
+    # GPIO.setup(21, GPIO.OUT)
     
-try:
-    while True:
-        GPIO.output(output_pin, GPIO.HIGH)
-        # Read input value
-        # input_value = GPIO.input(input_pin)
-        # print("Input value:", input_value)
+    def button_pressed(channel):
+        print(f"Button is pressed on channel {channel}")
         
-        time.sleep(.5)
-        GPIO.output(output_pin, GPIO.LOW)
-        time.sleep(.5)
-        # GPIO.output(output_pin, GPIO.LOW)
-        # input_value = GPIO.input(input_pin)
-        # print("Input value:", input_value)
-        # time.sleep(1)
-        # Add a delay to avoid flooding the terminal
+        # if channel == 26:
+        #     tts.increase_volume()
+
+        # if channel == 19:
+        #     tts.decrease_volume()
+            
+        # if channel == 13:
+        #     abort_audio()
+            
+        # if channel == 6:
+        #     shutdown()
         
+    for button in buttons:
+        GPIO.add_event_detect(button, GPIO.FALLING, callback=button_pressed, bouncetime=200)
 
-
-except KeyboardInterrupt:
-    GPIO.cleanup()
-    print('Exiting button thread...')
-except Exception as e:
-    print('An error occurred in the button thread:', e)
-    GPIO.cleanup()
+if __name__ == "__main__":
+    try:
+        button_thread = threading.Thread(target=gpio_init, daemon=True)
+        button_thread.start()
+    
+    except Exception as e:
+        GPIO.cleanup()
+        

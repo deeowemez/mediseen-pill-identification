@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 
-button = 21
+button = 19
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)

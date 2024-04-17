@@ -55,7 +55,7 @@ def now():
 
 rgb_init_event = threading.Event()
 repeat_event = threading.Event()
-reclassify_event = threading.Event()
+# reclassify_event = threading.Event()
 
 global red_pwm
 global green_pwm
@@ -64,6 +64,7 @@ global blue_pwm
 classification = ''
 identification_number = 0
 pill_sensor = False
+reclassify_button = 23
 
 def rgb_init():
     global red_pwm
@@ -73,9 +74,9 @@ def rgb_init():
     GPIO.setmode(GPIO.BCM)
     
     # Define the pins for RGB LED
-    red_pin = 20
-    green_pin = 16
-    blue_pin = 21
+    red_pin = 27
+    green_pin = 18
+    blue_pin = 22
     
     # Set up PWM channels
     GPIO.setup(red_pin, GPIO.OUT)
@@ -101,36 +102,38 @@ def set_color(red, green, blue):
 # initialzing GPIO
 def gpio_init():
     GPIO.setmode(GPIO.BCM)
-
+    
     # Define the pins for push buttons
-    buttons = [26,19,13,6] 
+    buttons = [21,26,16,13,24] 
     GPIO.setup(buttons, GPIO.IN)
-    GPIO.setup(21, GPIO.OUT)
+    global reclassify_button
+    GPIO.setup(reclassify_button, GPIO.OUT)
     
     def button_pressed(channel):
         print(f"Button is pressed on channel {channel}")
         
-        if channel == 26:
+        if channel == 21:
             tts.increase_volume()
 
-        if channel == 19:
+        if channel == 26:
             tts.decrease_volume()
             
-        if channel == 13:
+        if channel == 16 or channel == 24:
             abort_audio()
             
-        if channel == 6:
+        if channel == 13:
             shutdown()
         
     for button in buttons:
-        GPIO.add_event_detect(button, GPIO.FALLING, callback=button_pressed, bouncetime=200)
+        GPIO.add_event_detect(button, GPIO.RISING, callback=button_pressed, bouncetime=200)
 
 # Define a function to set the color of the RGB LED
 def simulate_button_press():
+    global reclassify_button
     print('Simulating button press')
-    GPIO.output(12, GPIO.HIGH)
+    GPIO.output(reclassify_button, GPIO.HIGH)
     time.sleep(0.1)  # Adjust the duration as needed
-    GPIO.output(12, GPIO.LOW)
+    GPIO.output(reclassify_button, GPIO.LOW)
     time.sleep(0.1)
 
 def abort_audio():
@@ -162,7 +165,7 @@ def repeat_pill_info_audio(current_pill):
 
 def classify(root):
     global classification, identification_number, pill_sensor, pill_info
-    if not channel.get_busy() and not repeat_event.is_set() and not reclassify_event.is_set():
+    if not channel.get_busy() and not repeat_event.is_set():
         # print('identification number: ', identification_number)
         if identification_number > 0:
             print('pill sensor: ', pill_sensor)
