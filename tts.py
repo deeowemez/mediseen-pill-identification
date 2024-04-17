@@ -1,9 +1,9 @@
-import sqlite3
+import datetime
 from gtts import gTTS
 import os
 import sounddevice as sd
 import numpy as np
-import librosa
+import pyttsx3
 import alsaaudio
 import pygame.mixer
 
@@ -49,13 +49,25 @@ def decrease_volume():
     mixer.setvolume(volume_factor)
     print('Volume: ', volume_factor)
 
+# def pyttsx3():
+#     engine = pyttsx3.init()
+#     engine.setProperty('rate', 150)
+    
+#     text = f'Current time: {datetime.datetime.now().time().strftime("%H:%M:%S")}'
+#     engine.say(text)
+    
+#     engine.runAndWait()
+
 if __name__ == "__main__":
-    set_frequency = 25000
-    # Initialize audio processing library
-    pygame.mixer.pre_init(frequency=set_frequency, size=-16, channels=2, buffer=512, devicename=None, allowedchanges=pygame.AUDIO_ALLOW_FREQUENCY_CHANGE | pygame.AUDIO_ALLOW_CHANNELS_CHANGE)
-    pygame.mixer.init()
-    channel = pygame.mixer.Channel(0)
-    print('channel: ', channel.get_busy())
-    # speak_pill_info('Glucophage XR Metformin HCl 750mg (Unpacked)')
-    # speak_introductory_audio(channel)
-    speak_error_audio()
+    # set_frequency = 25000
+    # # Initialize audio processing library
+    # pygame.mixer.pre_init(frequency=set_frequency, size=-16, channels=2, buffer=512, devicename=None, allowedchanges=pygame.AUDIO_ALLOW_FREQUENCY_CHANGE | pygame.AUDIO_ALLOW_CHANNELS_CHANGE)
+    # pygame.mixer.init()
+    # channel = pygame.mixer.Channel(0)
+    # print('channel: ', channel.get_busy())
+    # # speak_pill_info('Glucophage XR Metformin HCl 750mg (Unpacked)')
+    # # speak_introductory_audio(channel)
+    # speak_error_audio()
+
+    
+    # os.system(f'Current time: {datetime.datetime.now().time().strftime("%H:%M:%S")}')

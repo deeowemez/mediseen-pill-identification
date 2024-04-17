@@ -4,14 +4,9 @@
 import model
 import time
 
-# # # Import libraries for tts
+# Import libraries for tts
 import tts
-import sounddevice as sd
-import numpy as np
-import librosa
 import alsaaudio
-# from pydub import AudioSegment
-# from pydub.playback import _play_with_simpleaudio
 import pygame.mixer
 
 # # Database connection information
@@ -24,22 +19,15 @@ wav_folder = '/home/pi/capstone/pill-identification/wav'
 mixer = alsaaudio.Mixer()
 
 # # Import libraries for gui
-from tkinter import Tk
 import tkinter as tk
 import gui
 import db
-import ttkbootstrap as tb
-from functools import partial
 
 # Import libraries for accessing GPIO pins
 import RPi.GPIO as GPIO
 import threading
 
-# # Import libraries for taking pictures
-import webcam
-
 # Import libraries for config
-import datetime
 import subprocess
 
 set_frequency = 25000
@@ -50,12 +38,8 @@ pygame.mixer.init()
 channel = pygame.mixer.Channel(0)
 print('channel: ', channel.get_busy())
 
-def now():
-    return datetime.datetime.now()
-
 rgb_init_event = threading.Event()
 repeat_event = threading.Event()
-# reclassify_event = threading.Event()
 
 global red_pwm
 global green_pwm

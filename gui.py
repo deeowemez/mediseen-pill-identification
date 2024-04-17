@@ -6,6 +6,7 @@ from pathlib import Path
 import time
 import tkinter as tk
 import main
+import datetime
 
 # Dictionary to store references to the images
 image_references = {}
@@ -253,6 +254,15 @@ def show_pill_information_frame(root, pill_info):
         fg="#000000"
     )
     
+    canvas.create_text(
+        620.0,
+        6.0,
+        anchor="nw",
+        text=datetime.datetime.now().time().strftime("%H:%M:%S"),
+        fill="#EDF5FA",
+        font=("InriaSans", 15)
+    )
+    
     label.place(
         x=93, 
         y=10,
@@ -308,7 +318,7 @@ def show_pill_information_frame(root, pill_info):
     # exit_image = tk.PhotoImage(file='/home/pi/capstone/pill-identification/image.jpg')
     exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
     exit_button.place(rely=0.01, relx=0.95)
-    
+
 
 def show_error_frame(root):
     global image_references
