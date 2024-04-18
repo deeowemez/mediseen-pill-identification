@@ -53,7 +53,7 @@ def generate_mp3():
         pill_info = cursor.fetchone()
         if pill_info:
             # Construct speech message from pill information
-            message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams . {pill_info[2]}. {pill_info[3]}"  # Replace with actual data access
+            message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams . {pill_info[2]}. {pill_info[3]}"  
 
             # Use gTTS to convert text to speech
             tts = gTTS(text=message, lang='en', tld='us', slow=False)
@@ -85,7 +85,20 @@ def generate_introductory_audio():
     tts = gTTS(text=message, lang='en', tld='us', slow=False)
     
     tts.save('/home/pi/capstone/pill-identification/introductory_audio.wav')
-
+    
+def generate_rtc_numbers():
+    for dig in range(1,9):
+        num = gTTS(text=f'oh {dig}', lang='en', tld='us', slow=False)
+        num.save(f'/home/pi/capstone/pill-identification/wav/rtc/oh_{dig}.wav')
+        print("{} wav file created.".format('oh_dig'))
+        
+def generate_audio_file():
+    message = 'Current Time'
+    audio_name = 'current_time'
+    num = gTTS(text=message, lang='en', tld='us', slow=False)
+    num.save(f"/home/pi/capstone/pill-identification/wav/rtc/{audio_name}.wav")
+    print("{} wav file created.".format(audio_name))
+    
 def test(medicine):
     conn = connect_to_database()
     cursor = conn.cursor()
@@ -102,4 +115,6 @@ if __name__ == "__main__":
     # generate_mp3()
     # test('Diamicron MR Gliclazide 60mg (Packed)')
     # generate_introductory_audio()
-    generate_error_audio()
+    # generate_error_audio()
+    generate_rtc_numbers()
+    # generate_audio_file()

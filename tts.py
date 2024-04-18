@@ -6,12 +6,14 @@ import numpy as np
 import pyttsx3
 import alsaaudio
 import pygame.mixer
+import datetime
 
 # Database connection information
 pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
 pill_table = "pill_info_table"
 mp3_folder = "/home/pi/capstone/pill-identification/mp3"
-wav_folder = '/home/pi/capstone/pill-identification/wav'
+pill_info_wav_folder = "/home/pi/capstone/pill-identification/wav/pill_info"
+rtc_wav_folder = "/home/pi/capstone/pill-identification/wav/rtc"
 
 # Initialize buttons values
 volume_factor = 50  # Starting volume (range: 0-100)
@@ -21,12 +23,19 @@ mixer = alsaaudio.Mixer()
 
 def speak_pill_info(classification, channel):
     wav_classification = classification.replace(' ', '_').replace('(', '').replace(')', '').lower()
-    wav_path = os.path.join(wav_folder, f"{wav_classification}.wav")
+    wav_path = os.path.join(pill_info_wav_folder, f"{wav_classification}.wav")
     print('wav_path', wav_path)
     audio_path = pygame.mixer.Sound(wav_path)
     channel.play(audio_path)
     return False
 
+def speak_rtc():
+    hour = datetime.datetime.now().time().strftime("%H")
+    minute = datetime.datetime.now().time().strftime("%M")
+    print(hour)
+    print(minute)
+
+    
 def speak_error_audio():
     error_path = '/home/pi/capstone/pill-identification/error_audio.mp3'
     os.system("play {} tempo 1.1" .format(error_path))
@@ -34,6 +43,8 @@ def speak_error_audio():
 def speak_introductory_audio():
     intro_audio_path = '/home/pi/capstone/pill-identification/introductory_audio.mp3'
     os.system("play {} tempo 1.1" .format(intro_audio_path))
+
+
 
 # Function to increase volume using ALSA
 def increase_volume():
@@ -49,14 +60,7 @@ def decrease_volume():
     mixer.setvolume(volume_factor)
     print('Volume: ', volume_factor)
 
-# def pyttsx3():
-#     engine = pyttsx3.init()
-#     engine.setProperty('rate', 150)
-    
-#     text = f'Current time: {datetime.datetime.now().time().strftime("%H:%M:%S")}'
-#     engine.say(text)
-    
-#     engine.runAndWait()
+
 
 if __name__ == "__main__":
     # set_frequency = 25000
@@ -68,6 +72,5 @@ if __name__ == "__main__":
     # # speak_pill_info('Glucophage XR Metformin HCl 750mg (Unpacked)')
     # # speak_introductory_audio(channel)
     # speak_error_audio()
-
-    
     # os.system(f'Current time: {datetime.datetime.now().time().strftime("%H:%M:%S")}')
+    speak_rtc()
