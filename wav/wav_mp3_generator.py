@@ -80,24 +80,23 @@ def generate_error_audio():
 
 def generate_introductory_audio():
     message = "Mediseen"
-
     # Use gTTS to convert text to speech
     tts = gTTS(text=message, lang='en', tld='us', slow=False)
     
     tts.save('/home/pi/capstone/pill-identification/introductory_audio.wav')
     
 def generate_rtc_numbers():
-    for dig in range(1,9):
+    for dig in range(1,10):
         num = gTTS(text=f'oh {dig}', lang='en', tld='us', slow=False)
-        num.save(f'/home/pi/capstone/pill-identification/wav/rtc/oh_{dig}.wav')
-        print("{} wav file created.".format('oh_dig'))
+        num.save(f'/home/pi/capstone/pill-identification/wav/rtc/oh_{dig}.mp3')
+        print("oh {} mp3 file created.".format(dig))
         
 def generate_audio_file():
-    message = 'Current Time'
+    message = "The current time is"
     audio_name = 'current_time'
     num = gTTS(text=message, lang='en', tld='us', slow=False)
-    num.save(f"/home/pi/capstone/pill-identification/wav/rtc/{audio_name}.wav")
-    print("{} wav file created.".format(audio_name))
+    num.save(f"/home/pi/capstone/pill-identification/wav/rtc/{audio_name}.mp3")
+    print("{} mp3 file created.".format(audio_name))
     
 def test(medicine):
     conn = connect_to_database()
@@ -116,5 +115,5 @@ if __name__ == "__main__":
     # test('Diamicron MR Gliclazide 60mg (Packed)')
     # generate_introductory_audio()
     # generate_error_audio()
-    generate_rtc_numbers()
-    # generate_audio_file()
+    # generate_rtc_numbers()
+    generate_audio_file()

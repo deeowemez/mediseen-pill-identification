@@ -29,11 +29,35 @@ def speak_pill_info(classification, channel):
     channel.play(audio_path)
     return False
 
-def speak_rtc():
+def speak_rtc(channel):
     hour = datetime.datetime.now().time().strftime("%H")
     minute = datetime.datetime.now().time().strftime("%M")
-    print(hour)
-    print(minute)
+    print('h:', hour)
+    print('m:', minute)
+    if int(hour) == 12:
+        am_pm_path = os.path.join(rtc_wav_folder, 'PM.mp3')
+    elif int(hour) > 12:
+        hour = int(hour) - 12
+        am_pm_path = os.path.join(rtc_wav_folder, 'PM.mp3')
+    else: am_pm_path = os.path.join(rtc_wav_folder, 'AM.mp3')
+    rtc_hour_path = os.path.join(rtc_wav_folder, f"{hour}.mp3")
+    print('hour:', rtc_hour_path)
+    
+    if int(minute) == 0: 
+        rtc_min_path = os.path.join(rtc_wav_folder, f"oclock.mp3")
+    elif int(minute) < 10:
+        rtc_min_path = os.path.join(rtc_wav_folder, f"oh_{minute}.mp3")
+    else: 
+        rtc_min_path = os.path.join(rtc_wav_folder, f"{minute}.mp3")
+    print(rtc_min_path)
+    
+    current_time_path = os.path.join(rtc_wav_folder, "current_time.mp3")
+    print(current_time_path)
+
+    os.system("play {} tempo 1.1" .format(current_time_path))
+    os.system("play {} tempo 1.1" .format(rtc_hour_path))
+    os.system("play {} tempo 1.1" .format(rtc_min_path))
+    os.system("play {} tempo 1.1" .format(am_pm_path))
 
     
 def speak_error_audio():
@@ -60,17 +84,15 @@ def decrease_volume():
     mixer.setvolume(volume_factor)
     print('Volume: ', volume_factor)
 
-
-
 if __name__ == "__main__":
-    # set_frequency = 25000
-    # # Initialize audio processing library
-    # pygame.mixer.pre_init(frequency=set_frequency, size=-16, channels=2, buffer=512, devicename=None, allowedchanges=pygame.AUDIO_ALLOW_FREQUENCY_CHANGE | pygame.AUDIO_ALLOW_CHANNELS_CHANGE)
-    # pygame.mixer.init()
-    # channel = pygame.mixer.Channel(0)
-    # print('channel: ', channel.get_busy())
-    # # speak_pill_info('Glucophage XR Metformin HCl 750mg (Unpacked)')
+    set_frequency = 25000
+    # Initialize audio processing library
+    pygame.mixer.pre_init(frequency=set_frequency, size=-16, channels=2, buffer=512, devicename=None, allowedchanges=pygame.AUDIO_ALLOW_FREQUENCY_CHANGE | pygame.AUDIO_ALLOW_CHANNELS_CHANGE)
+    pygame.mixer.init()
+    channel = pygame.mixer.Channel(0)
+    print('channel: ', channel.get_busy())
+    # speak_pill_info('Glucophage XR Metformin HCl 750mg (Unpacked)', channel)
     # # speak_introductory_audio(channel)
     # speak_error_audio()
     # os.system(f'Current time: {datetime.datetime.now().time().strftime("%H:%M:%S")}')
-    speak_rtc()
+    speak_rtc(channel)

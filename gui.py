@@ -258,7 +258,7 @@ def show_pill_information_frame(root, pill_info):
         620.0,
         6.0,
         anchor="nw",
-        text=datetime.datetime.now().time().strftime("%H:%M:%S"),
+        text=datetime.datetime.now().time().strftime("%H:%M"),
         fill="#EDF5FA",
         font=("InriaSans", 15)
     )

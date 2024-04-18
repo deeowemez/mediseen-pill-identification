@@ -177,6 +177,7 @@ def classify(root):
             pill_info = db.get_pill_info_gui(classification)
             gui.switch_pill_information_frame(root, 0, pill_info)
             root.update()
+            tts.speak_rtc(channel)
             pill_sensor = tts.speak_pill_info(classification, channel)
 
     # Schedule this function to run again after a certain time
