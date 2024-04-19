@@ -40,6 +40,7 @@ print('channel: ', channel.get_busy())
 
 rgb_init_event = threading.Event()
 repeat_event = threading.Event()
+pill_info_finished_event = threading.Event()
 
 global red_pwm
 global green_pwm
@@ -149,6 +150,7 @@ def repeat_pill_info_audio(current_pill):
 
 def classify(root):
     global classification, identification_number, pill_sensor, pill_info
+    # pill_info_finished_event.set()
     if not channel.get_busy() and not repeat_event.is_set():
         # print('identification number: ', identification_number)
         if identification_number > 0:
@@ -177,8 +179,10 @@ def classify(root):
             pill_info = db.get_pill_info_gui(classification)
             gui.switch_pill_information_frame(root, 0, pill_info)
             root.update()
-            tts.speak_rtc(channel)
             pill_sensor = tts.speak_pill_info(classification, channel)
+            # pill_info_finished_event.wait()
+            # tts.speak_rtc(channel)
+            
 
     # Schedule this function to run again after a certain time
     root.after(0, lambda: classify(root))  # Adjust the time interval as needed

@@ -86,17 +86,17 @@ def generate_introductory_audio():
     tts.save('/home/pi/capstone/pill-identification/introductory_audio.wav')
     
 def generate_rtc_numbers():
-    for dig in range(1,10):
-        num = gTTS(text=f'oh {dig}', lang='en', tld='us', slow=False)
-        num.save(f'/home/pi/capstone/pill-identification/wav/rtc/oh_{dig}.mp3')
-        print("oh {} mp3 file created.".format(dig))
+    for dig in range(1,60):
+        num = gTTS(text=f'{dig}', lang='en', tld='us', slow=False)
+        num.save(f'/home/pi/capstone/pill-identification/wav/rtc/{dig}.wav')
+        print("oh {} wav file created.".format(dig))
         
 def generate_audio_file():
-    message = "The current time is"
-    audio_name = 'current_time'
+    message = "PM"
+    audio_name = 'PM'
     num = gTTS(text=message, lang='en', tld='us', slow=False)
-    num.save(f"/home/pi/capstone/pill-identification/wav/rtc/{audio_name}.mp3")
-    print("{} mp3 file created.".format(audio_name))
+    num.save(f"/home/pi/capstone/pill-identification/wav/rtc/{audio_name}.wav")
+    print("{} wav file created.".format(audio_name))
     
 def test(medicine):
     conn = connect_to_database()
