@@ -216,15 +216,15 @@ def classify(root):
             wait_for_channel(channel, (pill_info_duration))
             pill_sensor = False
             
-            # Start the sequence of audio playback for rtc
-            current_duration = tts.speak_rtc(channel)
-            print('current duration: ', math.ceil(current_duration))
-            wait_for_channel(channel, current_duration)
-            hour_duration = tts.speak_hour(channel)
-            wait_for_channel(channel, hour_duration)
-            min_duration = tts.speak_min(channel)
-            wait_for_channel(channel, min_duration)
-            tts.speak_am_pm(channel)
+            # # Start the sequence of audio playback for rtc
+            # current_duration = tts.speak_rtc(channel)
+            # print('current duration: ', math.ceil(current_duration))
+            # wait_for_channel(channel, current_duration)
+            # hour_duration = tts.speak_hour(channel)
+            # wait_for_channel(channel, hour_duration)
+            # min_duration = tts.speak_min(channel)
+            # wait_for_channel(channel, min_duration)
+            # tts.speak_am_pm(channel)
             
 
     # Schedule this function to run again after a certain time

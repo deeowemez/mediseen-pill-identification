@@ -9,7 +9,7 @@ def capture_and_crop_image():
     '''
     camera_index=0
     image_path="image.jpg" 
-    crop_size=(400, 400)
+    crop_size=(360, 360)
     # Open the webcam
     cap = cv2.VideoCapture(camera_index)
 
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     save_path = "image.jpg"
 
     # Specify the desired crop size
-    crop_size = (400, 400)
+    crop_size = (410, 410)
 
     # Capture the image and center-crop it
     capture_and_crop_image()

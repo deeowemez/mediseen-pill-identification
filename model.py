@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-# import device_patches       # Device specific patches for Jetson Nano (needs to be before importing cv2)
-
+# import device_patches       
 import main
 import cv2
 import os
@@ -18,12 +17,19 @@ bbox_dict = {}
 max_label = ''
 image_taken = 0
 number_of_images = 0
+add_to_dict = {}
 
 def add_to_bbox_dict(res):
     # add to bounding box dictionary frame classifications
-    global bbox_dict
+    global bbox_dict, add_to_dict
     # print('len_dict before ', len(bbox_dict))
-    add_to_dict = {bb['label']: float(bb['value']) for bb in res['result']['bounding_boxes']}  
+    for bb in res['result']['bounding_boxes']:
+        print('bb label: {} | bb value: {}' .format(bb['label'], bb['value']))
+        if bb['value'] > 0.5:
+            add_to_dict[bb['label']] = float(bb['value'])
+    
+    # add_to_dict = {bb['label']: float(bb['value']) for bb in res['result']['bounding_boxes']}  
+    
     for label, value in add_to_dict.items():
         if label in bbox_dict and value > bbox_dict[label]:
             # Update the value only if it's higher than the existing value
@@ -35,7 +41,7 @@ def add_to_bbox_dict(res):
     # print('len_dict after: ', len(bbox_dict))
     # print('bbox_dict: ', bbox_dict)
 
-def max():
+def max_bb():
     # isolate classification with highest confidence
     global bbox_dict
     global max_label
@@ -85,7 +91,7 @@ def classify():
                     # use runner object classify function to classify image features
                     res = runner.classify(features)
                     
-                    # print('res', res)
+                    print('res', res)
                     
                     # add classification to bounding box dictionary
                     add_to_bbox_dict(res)
@@ -97,7 +103,7 @@ def classify():
                         number_of_images = 0
                         cv2.imwrite('debug.jpg', cv2.cvtColor(cropped, cv2.COLOR_RGB2BGR))
                         print(bbox_dict)
-                        max()
+                        max_bb()
                         bbox_dict = {}
                         return max_label
                 

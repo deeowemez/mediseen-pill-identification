@@ -7,7 +7,7 @@ import time
 from edge_impulse_linux.image import ImageImpulseRunner
 
 bbox_counter = 0
-bbox_cycles = 3
+bbox_cycles = 2
 
 # Initialize runner variable for ImageImpulseRunner class
 runner = None

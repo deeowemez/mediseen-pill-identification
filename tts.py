@@ -73,12 +73,12 @@ def speak_am_pm(channel):
     
 def speak_error_audio():
     # Plays error classification audio 
-    error_path = '/home/pi/capstone/pill-identification/error_audio.mp3'
+    error_path = '/home/pi/capstone/pill-identification/wav/error_audio.mp3'
     os.system("play {} tempo 1.1" .format(error_path))
     
 def speak_introductory_audio():
     # Plays introductory audio
-    intro_audio_path = '/home/pi/capstone/pill-identification/introductory_audio.mp3'
+    intro_audio_path = '/home/pi/capstone/pill-identification/wav/introductory_audio.mp3'
     os.system("play {} tempo 1.1" .format(intro_audio_path))
 
 
