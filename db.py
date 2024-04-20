@@ -19,14 +19,14 @@ def connect_to_database():
     return conn
 
 def get_pill_info_gui(classification):
+    '''
+        Retrieves pill information from the database based on the provided classification
+    '''
     conn = connect_to_database()
     cursor = conn.cursor()
-    # medication_names_dosages = get_pill_list()
     info_columns = ['medication_name', 'dosage', 'special_instructions_gui', 'possible_side_effects_gui', 'medication_name_dosage']
     cursor.execute(f"SELECT {','.join(info_columns)} FROM pill_info_table WHERE medication_name_dosage = ?", (classification,))
     pill_info = cursor.fetchone()
-    # print(pill_info)
-    # Close the cursor and the connection
     cursor.close()
     conn.close()
     return pill_info

@@ -99,20 +99,20 @@ def generate_audio_file():
     num.save(f"/home/pi/capstone/pill-identification/wav/rtc/{audio_name}.wav")
     print("{} wav file created.".format(audio_name))
     
-# def test(medicine):
-#     conn = connect_to_database()
-#     cursor = conn.cursor()
-#     info_columns = ['medication_name', 'dosage', 'special_instructions', 'possible_side_effects']
-#     cursor.execute(f"SELECT {','.join(info_columns)} FROM pill_info_table WHERE medication_name_dosage = ?", (medicine,))
-#     pill_info = cursor.fetchone()
-#     message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams . {pill_info[2]}. {pill_info[3]}"  
-#     tts = gTTS(text=message, lang='en', tld='us', slow=False)
-#     tts.save('test.mp3')
-#     os.system('play test.mp3 tempo 1.1')
+def test(medicine):
+    conn = connect_to_database()
+    cursor = conn.cursor()
+    info_columns = ['medication_name', 'dosage', 'special_instructions', 'possible_side_effects']
+    cursor.execute(f"SELECT {','.join(info_columns)} FROM pill_info_table WHERE medication_name_dosage = ?", (medicine,))
+    pill_info = cursor.fetchone()
+    message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams . {pill_info[2]}. {pill_info[3]}"  
+    tts = gTTS(text=message, lang='en', tld='us', slow=False)
+    tts.save('test.mp3')
+    os.system('play test.mp3 tempo 1.1')
 
 if __name__ == "__main__":
     # generate_mp3()
-    # test('Diamicron MR Gliclazide 60mg (Packed)')
+    test('Diamicron MR Gliclazide 60mg (Packed)')
     # generate_introductory_audio()
     # generate_error_audio()
     # generate_rtc_numbers()
