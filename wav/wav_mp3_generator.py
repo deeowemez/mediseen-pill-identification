@@ -89,7 +89,7 @@ def generate_rtc_numbers():
     for dig in range(1,60):
         num = gTTS(text=f'{dig}', lang='en', tld='us', slow=False)
         num.save(f'/home/pi/capstone/pill-identification/wav/rtc/{dig}.wav')
-        print("oh {} wav file created.".format(dig))
+        print("{} wav file created.".format(dig))
         
 def generate_audio_file():
     message = "PM"
@@ -115,5 +115,5 @@ if __name__ == "__main__":
     # test('Diamicron MR Gliclazide 60mg (Packed)')
     # generate_introductory_audio()
     # generate_error_audio()
-    # generate_rtc_numbers()
-    generate_audio_file()
+    generate_rtc_numbers()
+    # generate_audio_file()

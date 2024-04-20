@@ -14,6 +14,7 @@ pill_table = "pill_info_table"
 mp3_folder = "/home/pi/capstone/pill-identification/mp3"
 pill_info_wav_folder = "/home/pi/capstone/pill-identification/wav/pill_info"
 rtc_wav_folder = "/home/pi/capstone/pill-identification/wav/rtc"
+am_pm = ''
 
 # Initialize buttons values
 volume_factor = 50  # Starting volume (range: 0-100)
@@ -21,8 +22,9 @@ volume_factor = 50  # Starting volume (range: 0-100)
 # # Initialize ALSA mixer
 mixer = alsaaudio.Mixer()
 
-def play_rtc_callback(channel):
-    speak_rtc(channel)
+# def play_rtc_callback(channel):
+#     speak_rtc(channel)
+
 
 def speak_pill_info(classification, channel):
     wav_classification = classification.replace(' ', '_').replace('(', '').replace(')', '').lower()
@@ -30,49 +32,48 @@ def speak_pill_info(classification, channel):
     print('wav_path', wav_path)
     audio_path = pygame.mixer.Sound(wav_path)
     channel.play(audio_path)
-    # # Schedule the callback function to be called after audio playback finishes
-    # pygame.mixer.music.set_endevent(pygame.USEREVENT)
-    # pygame.mixer.music.queue(play_rtc_callback, channel)
-    return False
+    return audio_path.get_length()
 
 def speak_rtc(channel):
+    current_time_path = os.path.join(rtc_wav_folder, "classif_time.wav")
+    # Add a slight delay between playing each audio file
+    current_time = pygame.mixer.Sound(current_time_path)
+    channel.play(current_time)
+    return current_time.get_length()
+
+def speak_hour(channel):
+    # global am_pm
     hour = datetime.datetime.now().time().strftime("%H")
-    minute = datetime.datetime.now().time().strftime("%M")
     print('h:', hour)
-    print('m:', minute)
     if int(hour) == 12:
-        am_pm_path = os.path.join(rtc_wav_folder, 'PM.wav')
+        am_pm = 'PM'
     elif int(hour) > 12:
         hour = int(hour) - 12
-        am_pm_path = os.path.join(rtc_wav_folder, 'PM.wav')
-    else: 
-        am_pm_path = os.path.join(rtc_wav_folder, 'AM.wav')
-    
+        am_pm = 'AM'
     rtc_hour_path = os.path.join(rtc_wav_folder, f"{hour}.wav")
-    
+    hour_audio = pygame.mixer.Sound(rtc_hour_path)
+    channel.play(hour_audio)
+    return hour_audio.get_length()
+
+def speak_min(channel):
+    minute = datetime.datetime.now().time().strftime("%M")
+    print('m:', minute)
     if int(minute) == 0: 
         rtc_min_path = os.path.join(rtc_wav_folder, f"oclock.wav")
     elif int(minute) < 10:
         rtc_min_path = os.path.join(rtc_wav_folder, f"oh_{minute}.wav")
     else: 
         rtc_min_path = os.path.join(rtc_wav_folder, f"{minute}.wav")
-    
-    current_time_path = os.path.join(rtc_wav_folder, "classif_time.wav")
-    
-    # Add a slight delay between playing each audio file
-    channel.play(pygame.mixer.Sound(current_time_path))
-    pygame.time.wait(3000)  # Wait for 1 second
-    channel.play(pygame.mixer.Sound(rtc_hour_path))
-    pygame.time.wait(1000)  # Wait for 1 second
-    channel.play(pygame.mixer.Sound(rtc_min_path))
-    pygame.time.wait(1000)  # Wait for 1 second
-    channel.play(pygame.mixer.Sound(am_pm_path))
-    # os.system("play {} tempo 1.1" .format(current_time_path))
-    # os.system("play {} tempo 1.1" .format(rtc_hour_path))
-    # os.system("play {} tempo 1.1" .format(rtc_min_path))
-    # os.system("play {} tempo 1.1" .format(am_pm_path))
-    
+    min_audio = pygame.mixer.Sound(rtc_min_path)
+    channel.play(min_audio)
+    return min_audio.get_length()
 
+def speak_am_pm(channel):
+    global am_pm
+    if am_pm == 'PM':
+        am_pm_path = os.path.join(rtc_wav_folder, 'PM.wav')
+    else: am_pm_path = os.path.join(rtc_wav_folder, 'AM.wav')
+    channel.play(pygame.mixer.Sound(am_pm_path))
     
 def speak_error_audio():
     error_path = '/home/pi/capstone/pill-identification/error_audio.mp3'

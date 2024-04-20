@@ -3,6 +3,7 @@
 # Import libraries for running model
 import model
 import time
+import math
 
 # Import libraries for tts
 import tts
@@ -112,12 +113,11 @@ def gpio_init():
     for button in buttons:
         GPIO.add_event_detect(button, GPIO.RISING, callback=button_pressed, bouncetime=200)
 
-# Define a function to set the color of the RGB LED
 def simulate_button_press():
     global reclassify_button
     print('Simulating button press')
     GPIO.output(reclassify_button, GPIO.HIGH)
-    time.sleep(0.1)  # Adjust the duration as needed
+    time.sleep(0.1) 
     GPIO.output(reclassify_button, GPIO.LOW)
     time.sleep(0.1)
 
@@ -148,10 +148,14 @@ def repeat_pill_info_audio(current_pill):
     tts.speak_pill_info(current_pill, channel)
     repeat_event.clear()
 
+def wait_for_channel(channel, duration):
+    while channel.get_busy():
+        pygame.time.wait(math.ceil(duration))
+
 def classify(root):
     global classification, identification_number, pill_sensor, pill_info
     # pill_info_finished_event.set()
-    if not channel.get_busy() and not repeat_event.is_set():
+    if not channel.get_busy() and not repeat_event.is_set():                                                                                                                                                                                                                                                                              
         # print('identification number: ', identification_number)
         if identification_number > 0:
             print('pill sensor: ', pill_sensor)
@@ -163,29 +167,49 @@ def classify(root):
                 # show image capture frame if push button is triggered during the audio output of a current classification
                 gui.show_image_capture_frame(root)
                 root.update()
+        
         set_color(60, 60, 95) # Set rgb led to cyan
+        # Perform inference for pill classification
         classification = model.classify()
         print('classification: ', classification)
+        
         if classification == 'waiting for pill':
+            # Perform display and audio output for pill classification error
             set_color(95, 5, 5) # Set rgb led to red
             gui.show_error_frame(root)
             root.update()
             tts.speak_error_audio()
             pill_sensor = False
+            
         elif classification:
+            # Perform display and audio output for corresponding pill classification
             print('classification: ', classification)
             identification_number += 1
             set_color(50, 100, 20)  # Set rgb led to green
+            
+            # Show display output pill information frame 
             pill_info = db.get_pill_info_gui(classification)
             gui.switch_pill_information_frame(root, 0, pill_info)
             root.update()
-            pill_sensor = tts.speak_pill_info(classification, channel)
-            # pill_info_finished_event.wait()
-            # tts.speak_rtc(channel)
+
+            # Play pill information audio playback 
+            pill_info_duration = tts.speak_pill_info(classification, channel)
+            wait_for_channel(channel, (pill_info_duration))
+            pill_sensor = False
+            
+            # Start the sequence of audio playback for rtc
+            current_duration = tts.speak_rtc(channel)
+            print('current duration: ', math.ceil(current_duration))
+            wait_for_channel(channel, current_duration)
+            hour_duration = tts.speak_hour(channel)
+            wait_for_channel(channel, hour_duration)
+            min_duration = tts.speak_min(channel)
+            wait_for_channel(channel, min_duration)
+            tts.speak_am_pm(channel)
             
 
     # Schedule this function to run again after a certain time
-    root.after(0, lambda: classify(root))  # Adjust the time interval as needed
+    root.after(0, lambda: classify(root))  
 
 # Keep the program running indefinitely
 if __name__ == "__main__":
