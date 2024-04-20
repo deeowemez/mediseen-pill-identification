@@ -25,7 +25,7 @@ def add_to_bbox_dict(res):
     # print('len_dict before ', len(bbox_dict))
     for bb in res['result']['bounding_boxes']:
         print('bb label: {} | bb value: {}' .format(bb['label'], bb['value']))
-        if bb['value'] > 0.5:
+        if bb['value'] > 0.65:
             add_to_dict[bb['label']] = float(bb['value'])
     
     # add_to_dict = {bb['label']: float(bb['value']) for bb in res['result']['bounding_boxes']}  
@@ -37,9 +37,7 @@ def add_to_bbox_dict(res):
         elif label not in bbox_dict:
             # If label doesn't exist, add it to the dictionary
             bbox_dict[label] = value
-    
-    # print('len_dict after: ', len(bbox_dict))
-    # print('bbox_dict: ', bbox_dict)
+    add_to_dict = ''
 
 def max_bb():
     # isolate classification with highest confidence

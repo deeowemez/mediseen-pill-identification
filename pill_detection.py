@@ -15,24 +15,6 @@ runner = None
 def now():
     #displays current time milliseconds
     return round(time.time() * 1000)
-
-# def get_webcams():
-#     '''
-#         Establish connection to webcam associated with port 0
-#     '''
-#     port_ids = []
-#     port = 0
-#     camera = cv2.VideoCapture(port)
-#     if camera.isOpened():
-#         ret = camera.read()[0]
-#         if ret:
-#             backendName =camera.getBackendName()
-#             w = camera.get(3)
-#             h = camera.get(4)
-#             print("Camera %s (%s x %s) found in port %s " %(backendName,h,w, port))
-#             port_ids.append(port)
-#         camera.release()
-#     return port_ids
     
 def get_bbox(res):
     ''' 

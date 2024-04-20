@@ -187,7 +187,7 @@ def classify(root):
                 gui.show_image_capture_frame(root)
                 root.update()
         set_color(60, 60, 95) # Set rgb led to cyan
-        
+        start_time = time.time()
         # Perform inference for pill classification
         classification = model.classify()
         print('classification: ', classification)
@@ -210,12 +210,14 @@ def classify(root):
             pill_info = db.get_pill_info_gui(classification)
             gui.switch_pill_information_frame(root, 0, pill_info)
             root.update()
-
+            end_time = time.time()
+            print('classification duration: {} seconds' .format(end_time - start_time)) # Measure classification duration
+            
             # Play pill information audio playback 
             pill_info_duration = tts.speak_pill_info(classification, channel)
             wait_for_channel(channel, (pill_info_duration))
             pill_sensor = False
-            
+        
             # # Start the sequence of audio playback for rtc
             # current_duration = tts.speak_rtc(channel)
             # print('current duration: ', math.ceil(current_duration))

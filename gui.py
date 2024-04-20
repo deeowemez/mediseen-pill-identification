@@ -44,6 +44,9 @@ def show_logo_frame(root):
     )
     root.resizable(False, False)
     root.overrideredirect(True)
+    
+    exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
+    exit_button.place(rely=0.01, relx=0.95)
 
 def show_instructions_frame(root):
     '''
@@ -97,6 +100,9 @@ def show_instructions_frame(root):
     root.resizable(False, False)
     root.overrideredirect(True)
     
+    exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
+    exit_button.place(rely=0.01, relx=0.95)
+    
 def show_image_capture_frame(root):
     '''
         Generates and presents the GUI elements for image capture frame
@@ -148,6 +154,9 @@ def show_image_capture_frame(root):
 
     root.resizable(False, False)
     root.overrideredirect(True)
+    
+    exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
+    exit_button.place(rely=0.01, relx=0.95)
     
 
 def show_pill_information_frame(root, pill_info):
@@ -376,6 +385,9 @@ def show_error_frame(root):
     )
     root.resizable(False, False)
     root.overrideredirect(True)
+    
+    exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
+    exit_button.place(rely=0.01, relx=0.95)
     
 # Define switch_frame function after the main block
 def clear_frame(root, new_frame_func):
