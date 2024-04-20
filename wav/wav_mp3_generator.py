@@ -71,6 +71,7 @@ def generate_mp3():
     conn.close()
 
 def generate_error_audio():
+    # Use gTTS to generate error classification audio
     message = "Error! Unable to identify currently inserted pill. Please flip the pill and try again."
     # Use gTTS to convert text to speech
     tts = gTTS(text=message, lang='en', tld='us', slow=False)
@@ -78,34 +79,36 @@ def generate_error_audio():
 
 
 def generate_introductory_audio():
+    # Use gTTS to generate intro audio
     message = "Mediseen"
-    # Use gTTS to convert text to speech
     tts = gTTS(text=message, lang='en', tld='us', slow=False)
     tts.save('/home/pi/capstone/pill-identification/introductory_audio.wav')
     
 def generate_rtc_numbers():
+    # Use gTTS to generate rtc numbers audio
     for dig in range(1,60):
         num = gTTS(text=f'{dig}', lang='en', tld='us', slow=False)
         num.save(f'/home/pi/capstone/pill-identification/wav/rtc/{dig}.wav')
         print("{} wav file created.".format(dig))
         
 def generate_audio_file():
+    # Use gTTS to generate an audio file based on message variable
     message = "PM"
     audio_name = 'PM'
     num = gTTS(text=message, lang='en', tld='us', slow=False)
     num.save(f"/home/pi/capstone/pill-identification/wav/rtc/{audio_name}.wav")
     print("{} wav file created.".format(audio_name))
     
-def test(medicine):
-    conn = connect_to_database()
-    cursor = conn.cursor()
-    info_columns = ['medication_name', 'dosage', 'special_instructions', 'possible_side_effects']
-    cursor.execute(f"SELECT {','.join(info_columns)} FROM pill_info_table WHERE medication_name_dosage = ?", (medicine,))
-    pill_info = cursor.fetchone()
-    message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams . {pill_info[2]}. {pill_info[3]}"  
-    tts = gTTS(text=message, lang='en', tld='us', slow=False)
-    tts.save('test.mp3')
-    os.system('play test.mp3 tempo 1.1')
+# def test(medicine):
+#     conn = connect_to_database()
+#     cursor = conn.cursor()
+#     info_columns = ['medication_name', 'dosage', 'special_instructions', 'possible_side_effects']
+#     cursor.execute(f"SELECT {','.join(info_columns)} FROM pill_info_table WHERE medication_name_dosage = ?", (medicine,))
+#     pill_info = cursor.fetchone()
+#     message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams . {pill_info[2]}. {pill_info[3]}"  
+#     tts = gTTS(text=message, lang='en', tld='us', slow=False)
+#     tts.save('test.mp3')
+#     os.system('play test.mp3 tempo 1.1')
 
 if __name__ == "__main__":
     # generate_mp3()
