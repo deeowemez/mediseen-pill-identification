@@ -10,15 +10,6 @@ import tts
 import alsaaudio
 import pygame.mixer
 
-# # Database connection information
-pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
-pill_table = "pill_info_table"
-# mp3_folder = "/home/pi/capstone/pill-identification/mp3"
-wav_folder = '/home/pi/capstone/pill-identification/wav'
-
-# # Initialize ALSA mixer
-mixer = alsaaudio.Mixer()
-
 # # Import libraries for gui
 import tkinter as tk
 import gui
@@ -31,28 +22,38 @@ import threading
 # Import libraries for config
 import subprocess
 
-set_frequency = 25000
+# Folder path
+pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
+pill_table = "pill_info_table"
+wav_folder = '/home/pi/capstone/pill-identification/wav'
 
 # Initialize audio processing library
+set_frequency = 25000
 pygame.mixer.pre_init(frequency=set_frequency, size=-16, channels=2, buffer=512, devicename=None, allowedchanges=pygame.AUDIO_ALLOW_FREQUENCY_CHANGE | pygame.AUDIO_ALLOW_CHANNELS_CHANGE)
 pygame.mixer.init()
 channel = pygame.mixer.Channel(0)
-print('channel: ', channel.get_busy())
 
+# Initialize ALSA mixer
+mixer = alsaaudio.Mixer()
+
+# Initialize threading events
 rgb_init_event = threading.Event()
 repeat_event = threading.Event()
 pill_info_finished_event = threading.Event()
 
+# Initialize global variables
 global red_pwm
 global green_pwm
 global blue_pwm
-
 classification = ''
 identification_number = 0
 pill_sensor = False
 reclassify_button = 23
 
 def rgb_init():
+    '''
+        Initializes GPIO pins and PWM for RGB LED. Defines function for changing RGB color
+    '''
     global red_pwm
     global green_pwm
     global blue_pwm
@@ -85,8 +86,11 @@ def set_color(red, green, blue):
     green_pwm.ChangeDutyCycle(green)
     blue_pwm.ChangeDutyCycle(blue)
 
-# initialzing GPIO
+
 def gpio_init():
+    '''
+        Initialzes GPIO and defines callback functions for detection of a falling edge event for each push button
+    '''
     GPIO.setmode(GPIO.BCM)
     
     # Define the pins for push buttons
@@ -114,6 +118,9 @@ def gpio_init():
         GPIO.add_event_detect(button, GPIO.RISING, callback=button_pressed, bouncetime=200)
 
 def simulate_button_press():
+    '''
+        Callback function for reclassify GUI button for simulating a button press at output pin 23 and input pin 24
+    '''
     global reclassify_button
     print('Simulating button press')
     GPIO.output(reclassify_button, GPIO.HIGH)
@@ -122,6 +129,9 @@ def simulate_button_press():
     time.sleep(0.1)
 
 def abort_audio():
+    '''
+        Stops audio playing in audio channel whenever reclassify push button or reclassify GUI button is triggered
+    '''
     global classify_thread, pill_sensor
     pill_sensor = True
     print('pill sensor: ', pill_sensor)
@@ -130,6 +140,9 @@ def abort_audio():
         channel.stop()
     
 def shutdown():
+    '''
+        Callback function for shtudown push button
+    '''
     print("Button pressed, shutting down...")
     # Close all open windows
     subprocess.run(["wmctrl", "-c", ":ALL:"])
@@ -137,11 +150,15 @@ def shutdown():
     subprocess.run(["sudo", "shutdown", "-h", "now"])
 
 def repeat_pill_info_audio(current_pill):
+    '''
+        Callback function for repeat pill info GUI button
+    '''
     global channel 
     repeat_event.set()
     print('print: ', current_pill)
     if repeat_event.is_set():
         print('repeat_event.is_set')
+    # Stop and repeat audio playback in audio channel
     if channel.get_busy():
         channel.stop()
     print('current: ', current_pill)
@@ -149,16 +166,18 @@ def repeat_pill_info_audio(current_pill):
     repeat_event.clear()
 
 def wait_for_channel(channel, duration):
+    # Force pygame to wait for a duration of time when channel is busy
     while channel.get_busy():
         pygame.time.wait(math.ceil(duration))
 
 def classify(root):
+    '''
+        Main classify function that runs in loop
+    '''
     global classification, identification_number, pill_sensor, pill_info
-    # pill_info_finished_event.set()
+    # Skips block when channel is currently playing an audio file or when repeat event flag is set
     if not channel.get_busy() and not repeat_event.is_set():                                                                                                                                                                                                                                                                              
-        # print('identification number: ', identification_number)
         if identification_number > 0:
-            print('pill sensor: ', pill_sensor)
             if not pill_sensor:
                 # show instructions frame after the last word of the previous audio if push button is not triggered during the previous classification audio output
                 gui.show_instructions_frame(root)
@@ -167,22 +186,22 @@ def classify(root):
                 # show image capture frame if push button is triggered during the audio output of a current classification
                 gui.show_image_capture_frame(root)
                 root.update()
-        
         set_color(60, 60, 95) # Set rgb led to cyan
+        
         # Perform inference for pill classification
         classification = model.classify()
         print('classification: ', classification)
         
+        # Perform display and audio output for pill classification error
         if classification == 'waiting for pill':
-            # Perform display and audio output for pill classification error
             set_color(95, 5, 5) # Set rgb led to red
             gui.show_error_frame(root)
             root.update()
             tts.speak_error_audio()
             pill_sensor = False
-            
+        
+        # Perform display and audio output for corresponding pill classification
         elif classification:
-            # Perform display and audio output for corresponding pill classification
             print('classification: ', classification)
             identification_number += 1
             set_color(50, 100, 20)  # Set rgb led to green
@@ -211,9 +230,8 @@ def classify(root):
     # Schedule this function to run again after a certain time
     root.after(0, lambda: classify(root))  
 
-# Keep the program running indefinitely
+
 if __name__ == "__main__":
-    # Keep the program running indefinitely
     try:        
         # Initialize the Tkinter root window
         root = tk.Tk()
