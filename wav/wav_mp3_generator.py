@@ -1,7 +1,6 @@
 import sqlite3
 from gtts import gTTS
 import os
-from gtts.tokenizer import tokenizer_cases
 
 # Database connection information
 pill_database = "/home/pi/capstone/pill-identification/database/pill_info.db"
@@ -9,7 +8,6 @@ mp3_folder = "/home/pi/capstone/pill-identification/mp3"
 wav_folder = '/home/pi/capstone/pill-identification/wav'
 # pill_database = r"E:\pill-identification\database\pill_info.db"
 # mp3_folder = r"E:\pill-identification\mp3"
-
 pill_table = "pill_info_table"
 
 
@@ -60,21 +58,22 @@ def generate_mp3():
             
             # Save the speech as an audio file
             mp3_medicine = medicine.replace(' ', '_').replace('(', '').replace(')', '').lower()
+            
             # file_path = os.path.join(mp3_folder, f"{mp3_medicine}.mp3")
             file_path = os.path.join(wav_folder, f"{mp3_medicine}.wav")
             tts.save(file_path)
+            
             # print("{} mp3 file created.".format(medicine))
             print("{} wav file created.".format(medicine))
+            
     # Close the cursor and the connection
     cursor.close()
     conn.close()
 
 def generate_error_audio():
     message = "Error! Unable to identify currently inserted pill. Please flip the pill and try again."
-
     # Use gTTS to convert text to speech
     tts = gTTS(text=message, lang='en', tld='us', slow=False)
-    
     tts.save('/home/pi/capstone/pill-identification/error_audio.wav')
 
 
@@ -82,7 +81,6 @@ def generate_introductory_audio():
     message = "Mediseen"
     # Use gTTS to convert text to speech
     tts = gTTS(text=message, lang='en', tld='us', slow=False)
-    
     tts.save('/home/pi/capstone/pill-identification/introductory_audio.wav')
     
 def generate_rtc_numbers():
@@ -105,7 +103,6 @@ def test(medicine):
     cursor.execute(f"SELECT {','.join(info_columns)} FROM pill_info_table WHERE medication_name_dosage = ?", (medicine,))
     pill_info = cursor.fetchone()
     message = f"The pill is identified as {pill_info[0]} with a dosage of {pill_info[1]} milligrams . {pill_info[2]}. {pill_info[3]}"  
-    # preprocessed = tokenizer_cases.period_comma()
     tts = gTTS(text=message, lang='en', tld='us', slow=False)
     tts.save('test.mp3')
     os.system('play test.mp3 tempo 1.1')
@@ -115,5 +112,5 @@ if __name__ == "__main__":
     # test('Diamicron MR Gliclazide 60mg (Packed)')
     # generate_introductory_audio()
     # generate_error_audio()
-    generate_rtc_numbers()
+    # generate_rtc_numbers()
     # generate_audio_file()
