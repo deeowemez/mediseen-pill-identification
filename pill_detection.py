@@ -16,21 +16,23 @@ def now():
     #displays current time milliseconds
     return round(time.time() * 1000)
 
-def get_webcams():
-    # establish connection to webcam associated with port 0
-    port_ids = []
-    port = 0
-    camera = cv2.VideoCapture(port)
-    if camera.isOpened():
-        ret = camera.read()[0]
-        if ret:
-            backendName =camera.getBackendName()
-            w = camera.get(3)
-            h = camera.get(4)
-            print("Camera %s (%s x %s) found in port %s " %(backendName,h,w, port))
-            port_ids.append(port)
-        camera.release()
-    return port_ids
+# def get_webcams():
+#     '''
+#         Establish connection to webcam associated with port 0
+#     '''
+#     port_ids = []
+#     port = 0
+#     camera = cv2.VideoCapture(port)
+#     if camera.isOpened():
+#         ret = camera.read()[0]
+#         if ret:
+#             backendName =camera.getBackendName()
+#             w = camera.get(3)
+#             h = camera.get(4)
+#             print("Camera %s (%s x %s) found in port %s " %(backendName,h,w, port))
+#             port_ids.append(port)
+#         camera.release()
+#     return port_ids
     
 def get_bbox(res):
     ''' 
@@ -54,6 +56,9 @@ def get_bbox(res):
         else: return False
 
 def detect_pill():
+    '''
+        Function for detecting the number of bounding boxes inside a frame taken by connected camera
+    '''
     global bbox_counter
     
     # Path to model file
@@ -70,13 +75,15 @@ def detect_pill():
             # Initializes the model 
             model_info = runner.init()
             print('Loaded runner for "' + model_info['project']['owner'] + ' / ' + model_info['project']['name'] + '"')
-            # Extracts labels used for prediction
-            videoCaptureDeviceId = 0
-
+           
             # Opens a camera stream using the chosen port ID
+            videoCaptureDeviceId = 0
             camera = cv2.VideoCapture(videoCaptureDeviceId)
+            
             # Read a frame from the camera
             ret = camera.read()[0]
+            
+            # Establish connection to webcam associated with port 0
             if ret:
                 backendName = camera.getBackendName()
                 w = camera.get(3)
