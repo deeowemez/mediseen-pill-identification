@@ -12,6 +12,9 @@ import datetime
 image_references = {}
 
 def show_logo_frame(root):
+    '''
+        Generates and presents the GUI elements for Logo frame
+    '''
     global image_references
     ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame1/build/assets/frame0")
     # ASSETS_PATH =  Path(r"E:\pill-identification\output\frame1\build\assets\frame0")
@@ -43,6 +46,9 @@ def show_logo_frame(root):
     root.overrideredirect(True)
 
 def show_instructions_frame(root):
+    '''
+        Generates and presents the GUI elements for instructions frame
+    '''
     global image_references
     ASSETS_PATH = "/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0"
     # ASSETS_PATH = r"E:\pill-identification\output\frame2\build\assets\frame0"
@@ -88,18 +94,13 @@ def show_instructions_frame(root):
         font=("Inter Medium", 40)
     )
     
-    # canvas.create_text(
-    #     60.0,
-    #     20.0,
-    #     anchor="nw",
-    #     text="23:01",
-    #     fill="#EDF5FA",
-    #     font=("InriaSans", 30)
-    # )
     root.resizable(False, False)
     root.overrideredirect(True)
     
 def show_image_capture_frame(root):
+    '''
+        Generates and presents the GUI elements for image capture frame
+    '''
     global image_references
     ASSETS_PATH = "/home/pi/capstone/pill-identification/output/frame2/build/assets/frame0"
     # ASSETS_PATH = r"E:\pill-identification\output\frame2\build\assets\frame0"
@@ -145,19 +146,14 @@ def show_image_capture_frame(root):
         font=("Inter Medium", 40)
     )
 
-    # canvas.create_text(
-    #     60.0,
-    #     20.0,
-    #     anchor="nw",
-    #     text="23:01",
-    #     fill="#EDF5FA",
-    #     font=("InriaSans", 30)
-    # )
     root.resizable(False, False)
     root.overrideredirect(True)
     
 
 def show_pill_information_frame(root, pill_info):
+    '''
+        Generates and presents the GUI elements for pill information frame
+    '''
     global image_references
     ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
     # ASSETS_PATH = Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
@@ -321,6 +317,9 @@ def show_pill_information_frame(root, pill_info):
 
 
 def show_error_frame(root):
+    '''
+        Generates and presents the GUI elements for error frame
+    '''
     global image_references
     ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame4/build/assets/frame0")
     # ASSETS_PATH = Path(r"E:\pill-identification\output\frame4\build\assets\frame0")
@@ -357,15 +356,6 @@ def show_error_frame(root):
         fill="#F30707",
         font=("Inter Bold", 64)
     )
-
-    # canvas.create_text(
-    #     60.0,
-    #     20.0,
-    #     anchor="nw",
-    #     text="23:01",
-    #     fill="#EDF5FA",
-    #     font=("InriaSans", 30)
-    # )
 
     canvas.create_text(
         110.0,
