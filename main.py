@@ -61,8 +61,8 @@ def rgb_init():
     GPIO.setmode(GPIO.BCM)
     
     # Define the pins for RGB LED
-    red_pin = 27
     green_pin = 18
+    red_pin = 27
     blue_pin = 22
     
     # Set up PWM channels
@@ -94,25 +94,30 @@ def gpio_init():
     GPIO.setmode(GPIO.BCM)
     
     # Define the pins for push buttons
-    buttons = [21,26,16,13,24] 
+    buttons = [19,12,21,25,24] 
     GPIO.setup(buttons, GPIO.IN)
+    GPIO.setup(buttons, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     global reclassify_button
     GPIO.setup(reclassify_button, GPIO.OUT)
     
     def button_pressed(channel):
         print(f"Button is pressed on channel {channel}")
         
-        if channel == 21:
+        if channel == 19:
+            print('increase volume button')
             tts.increase_volume()
 
-        if channel == 26:
+        if channel == 12:
+            print('decrease volume button')
             tts.decrease_volume()
             
-        if channel == 16 or channel == 24:
+        if channel == 21 or channel == 24:
+            print('reclassify button')
             abort_audio()
             
-        if channel == 13:
-            shutdown()
+        if channel == 25:
+            print('shutdown button')
+            # shutdown()
         
     for button in buttons:
         GPIO.add_event_detect(button, GPIO.RISING, callback=button_pressed, bouncetime=200)
@@ -237,7 +242,7 @@ if __name__ == "__main__":
     try:        
         # Initialize the Tkinter root window
         root = tk.Tk()
-        root.geometry("800x480")
+        root.geometry("800x80")
         
         # Create a thread for controlling the RGB LED
         led_thread = threading.Thread(target=rgb_init, daemon=True) 

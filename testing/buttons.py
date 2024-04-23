@@ -5,7 +5,7 @@ def gpio_init():
     GPIO.setmode(GPIO.BCM)
 
     # Define the pins for push buttons
-    buttons = [26,19,13,6] 
+    buttons = [21,20,16,12] 
     GPIO.setup(buttons, GPIO.IN)
     # GPIO.setup(21, GPIO.OUT)
     
