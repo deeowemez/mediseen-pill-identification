@@ -61,9 +61,9 @@ def rgb_init():
     GPIO.setmode(GPIO.BCM)
     
     # Define the pins for RGB LED
-    green_pin = 18
-    red_pin = 27
-    blue_pin = 22
+    green_pin = 16
+    red_pin = 20
+    blue_pin = 21
     
     # Set up PWM channels
     GPIO.setup(red_pin, GPIO.OUT)
@@ -94,7 +94,7 @@ def gpio_init():
     GPIO.setmode(GPIO.BCM)
     
     # Define the pins for push buttons
-    buttons = [19,12,21,25,24] 
+    buttons = [26,19,13,6,24] 
     GPIO.setup(buttons, GPIO.IN)
     GPIO.setup(buttons, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     global reclassify_button
@@ -107,17 +107,17 @@ def gpio_init():
             print('increase volume button')
             tts.increase_volume()
 
-        if channel == 12:
+        if channel == 13:
             print('decrease volume button')
             tts.decrease_volume()
             
-        if channel == 21 or channel == 24:
+        if channel == 26 or channel == 24:
             print('reclassify button')
             abort_audio()
             
-        if channel == 25:
+        if channel == 6:
             print('shutdown button')
-            # shutdown()
+            shutdown()
         
     for button in buttons:
         GPIO.add_event_detect(button, GPIO.RISING, callback=button_pressed, bouncetime=200)
@@ -129,9 +129,9 @@ def simulate_button_press():
     global reclassify_button
     print('Simulating button press')
     GPIO.output(reclassify_button, GPIO.HIGH)
-    time.sleep(0.1) 
+    time.sleep(0.2) 
     GPIO.output(reclassify_button, GPIO.LOW)
-    time.sleep(0.1)
+    time.sleep(0.2)
 
 def abort_audio():
     '''
@@ -220,7 +220,7 @@ def classify(root):
             
             # Play pill information audio playback 
             pill_info_duration = tts.speak_pill_info(classification, channel)
-            wait_for_channel(channel, (pill_info_duration))
+            # wait_for_channel(channel, (pill_info_duration))
             pill_sensor = False
         
             # # Start the sequence of audio playback for rtc
@@ -242,7 +242,7 @@ if __name__ == "__main__":
     try:        
         # Initialize the Tkinter root window
         root = tk.Tk()
-        root.geometry("800x80")
+        root.geometry("800x280")
         
         # Create a thread for controlling the RGB LED
         led_thread = threading.Thread(target=rgb_init, daemon=True) 

@@ -1,6 +1,7 @@
 import cv2
 
-size = 384
+sizew = 460
+sizeh = 460
 
 def main():
     # Open the default camera (usually the first one)
@@ -24,11 +25,11 @@ def main():
         height, width, _ = frame.shape
 
         # Calculate the starting point for the middle 400 pixels
-        start_x = (width - size) // 2
-        start_y = (height - size) // 2
+        start_x = (width - sizew) // 2
+        start_y = (height - sizeh) // 2
 
         # Extract the middle 400x400 pixels
-        cropped_frame = frame[start_y:start_y + size, start_x:start_x + size]
+        cropped_frame = frame[start_y:start_y + sizeh, start_x:start_x + sizew]
 
         # Display the cropped frame
         cv2.imshow("Live Feed", cropped_frame)

@@ -23,12 +23,12 @@ def add_to_bbox_dict(res):
     # add to bounding box dictionary frame classifications
     global bbox_dict, add_to_dict
     # print('len_dict before ', len(bbox_dict))
-    for bb in res['result']['bounding_boxes']:
-        print('bb label: {} | bb value: {}' .format(bb['label'], bb['value']))
-        if bb['value'] > 0.65:
-            add_to_dict[bb['label']] = float(bb['value'])
+    # for bb in res['result']['bounding_boxes']:
+    #     print('bb label: {} | bb value: {}' .format(bb['label'], bb['value']))
+    #     if bb['value'] > 0.50:
+    #         add_to_dict[bb['label']] = float(bb['value'])
     
-    # add_to_dict = {bb['label']: float(bb['value']) for bb in res['result']['bounding_boxes']}  
+    add_to_dict = {bb['label']: float(bb['value']) for bb in res['result']['bounding_boxes']}  
     
     for label, value in add_to_dict.items():
         if label in bbox_dict and value > bbox_dict[label]:
