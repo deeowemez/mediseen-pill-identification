@@ -39,19 +39,25 @@ def add_to_bbox_dict(res):
             bbox_dict[label] = value
     add_to_dict = {}
 
-def max_bb():
+def max_bb(pill_detected):
     # isolate classification with highest confidence
     global bbox_dict
     global max_label
     bbox_list = list(bbox_dict.values())
     for value in bbox_list: 
         max_value = 0
-        if max_value is None or value > max_value: max_value = value
+        if max_value is None or  value > max_value: max_value = value
     if len(bbox_dict) > 0:
         max_label = [label for label, value in bbox_dict.items()][0]
-    else: max_label = 'waiting for pill'
+        # if pill_detected[1] > max_value:
+        if max_value < 0.5:
+            max_label = pill_detected[0]
+        if float(pill_detected[1]) > 0.90 and max_value < 0.60:
+            print('above 85 perc for pill detec')
+            max_label = pill_detected[0]
+    else: max_label = pill_detected[0]
     return max_label
-
+    
 def classify():
     global number_of_images
     # Path to model file
@@ -72,7 +78,9 @@ def classify():
                 # initialize runner
                 runner.init()
 
-                if pill_detection.detect_pill():
+                pill_detected = pill_detection.detect_pill()
+                if pill_detected:
+                    # print('....', pill_detected)
                     webcam.capture_and_crop_image()
                     img = cv2.imread('/home/pi/capstone/pill-identification/image.jpg')
                     image_taken += 1
@@ -101,7 +109,7 @@ def classify():
                         number_of_images = 0
                         cv2.imwrite('debug.jpg', cv2.cvtColor(cropped, cv2.COLOR_RGB2BGR))
                         print(bbox_dict)
-                        max_bb()
+                        max_bb(pill_detected)
                         bbox_dict = {}
                         return max_label
                 

@@ -8,6 +8,11 @@ from edge_impulse_linux.image import ImageImpulseRunner
 
 bbox_counter = 0
 bbox_cycles = 0
+bb_max_value = 0
+pill_list = []
+bb_dict = {}
+bb_list = []
+results_list = []
 
 # Initialize runner variable for ImageImpulseRunner class
 runner = None
@@ -15,7 +20,43 @@ runner = None
 def now():
     #displays current time milliseconds
     return round(time.time() * 1000)
+
+def add_to_first_dict(res):
+    # add to bounding box dictionary frame classifications
+    global bb_dict, add_to_dict
     
+    add_to_dict = {bb['label']: float(bb['value']) for bb in res['result']['bounding_boxes']}  
+    
+    for label, value in add_to_dict.items():
+        if label in bb_dict and value > bb_dict[label]:
+            # Update the value only if it's higher than the existing value
+            bb_dict[label] = value
+        elif label not in bb_dict:
+            # If label doesn't exist, add it to the dictionary
+            bb_dict[label] = value
+    add_to_dict = {}
+
+def max_in_dict():
+    global bb_dict, bb_list, bb_max_value, results_list
+    bb_list = list(bb_dict.values())
+    for value in bb_list: 
+        if value > bb_max_value: bb_max_value = value
+    if len(bb_dict) > 0:
+        # bb_max_label = bb_dict[]
+        # bb_max_label = [label for label, value in bb_dict.items()][0]
+        for label, value in bb_dict.items():
+            if value == bb_max_value: 
+                bb_max_label = label
+                bb_final_max_value = value
+        #     if value < 0: 
+        #         bb_max_value_prediction = value
+        bb_list.insert(0, bb_max_label)
+        bb_list.insert(1, bb_final_max_value)
+            
+    # else: max_label = pill_detected[0]
+    print('bb_list: ', bb_list)
+    return bb_list
+
 def get_bbox(res):
     ''' 
     Get the number of currently detected bounding boxes
@@ -24,27 +65,37 @@ def get_bbox(res):
     '''
     global bbox_counter
     global bbox_cycles
+    global pill_list
+    global bb_list
     if "bounding_boxes" in res["result"].keys():
         if len(res["result"]["bounding_boxes"]) > 0:
             print('bbox before', bbox_counter)
             bbox_counter += 1
+            add_to_first_dict(res)
+            print('bb_dict: ', bb_dict)
         if bbox_counter > 0 and len(res["result"]["bounding_boxes"]) == 0:
             bbox_counter = 0
             print('bbox reset', bbox_counter)
         if bbox_counter > bbox_cycles:
             bbox_counter = 0
             print('bbox reset', bbox_counter)
-            return True
+            pill_list = max_in_dict()
+            # for bb in res['result']['bounding_boxes']:
+            #     pill_list.append(bb['label'])
+            #     pill_list.append(bb['value'])
+            #     print('in pill_detection: ', pill_list)
+                # print('bb label: {} | bb value: {}' .format(bb['label'], bb['value']))
+            return pill_list
         else: return False
 
 def detect_pill():
     '''
         Function for detecting the number of bounding boxes inside a frame taken by connected camera
     '''
-    global bbox_counter
+    global bbox_counter, bb_list
     
     # Path to model file
-    model = "/home/pi/capstone/pill-identification/modelfile.eim"
+    model = "/home/pi/capstone/pill-identification/old_modelfile.eim"
 
     # Combines the directory path and model name 
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -85,7 +136,7 @@ def detect_pill():
                 # Detects if pill is present in pill slot
                 pill_detected = get_bbox(res)
                 if pill_detected:
-                    return True
+                    return pill_detected
                         
                 # Updates next frame
                 next_frame = now() + 100

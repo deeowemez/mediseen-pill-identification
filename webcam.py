@@ -9,7 +9,7 @@ def capture_and_crop_image():
     '''
     camera_index=0
     image_path="image.jpg" 
-    crop_size=(400,400)
+    crop_size=(376,376)
     # Open the webcam
     cap = cv2.VideoCapture(camera_index)
 

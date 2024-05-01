@@ -1,7 +1,7 @@
 import cv2
 
-sizew = 460
-sizeh = 460
+sizew = 376
+sizeh = 376
 
 def main():
     # Open the default camera (usually the first one)

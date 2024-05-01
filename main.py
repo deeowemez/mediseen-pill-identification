@@ -104,20 +104,20 @@ def gpio_init():
         print(f"Button is pressed on channel {channel}")
         
         if channel == 19:
-            print('increase volume button')
-            tts.increase_volume()
+            print('Increase volume button pressed')
+            # tts.increase_volume()
 
         if channel == 13:
-            print('decrease volume button')
-            tts.decrease_volume()
+            print('Decrease volume button pressed')
+            # tts.decrease_volume()
             
         if channel == 26 or channel == 24:
-            print('reclassify button')
-            abort_audio()
+            print('Reclassify button pressed')
+            # abort_audio()
             
         if channel == 6:
-            print('shutdown button')
-            shutdown()
+            print('Shutdown button pressed')
+            # shutdown()
         
     for button in buttons:
         GPIO.add_event_detect(button, GPIO.RISING, callback=button_pressed, bouncetime=200)
@@ -227,7 +227,7 @@ def classify(root):
             # current_duration = tts.speak_rtc(channel)
             # print('current duration: ', math.ceil(current_duration))
             # wait_for_channel(channel, current_duration)
-            # hour_duration = tts.speak_hour(channel)
+            # hour_duration     = tts.speak_hour(channel)
             # wait_for_channel(channel, hour_duration)
             # min_duration = tts.speak_min(channel)
             # wait_for_channel(channel, min_duration)
