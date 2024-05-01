@@ -170,13 +170,13 @@ def show_pill_information_frame(root, pill_info):
     
     classification = pill_info[4]
     
-    print('in gui show: ', classification)
+    # print('in gui show: ', classification)
 
     def relative_to_assets(path: str) -> Path:
         return ASSETS_PATH / Path(path)
     
     def set_widget_location(pill_info):
-        print('pill name length: ', len(pill_info[0]))
+        # print('pill name length: ', len(pill_info[0]))
         if len(pill_info[0]) >= 45:
             widget_y = 105
             widget_height = 10

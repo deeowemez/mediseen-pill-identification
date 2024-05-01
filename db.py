@@ -32,4 +32,6 @@ def get_pill_info_gui(classification):
     return pill_info
 
 if __name__ == "__main__":
-    get_pill_info_gui("Sucranorm Metformin HCl 850mg (Packed)")
+    pill = "Sucranorm Metformin HCl 850mg (Packed)"
+    print('Pill Test: ', pill )
+    print(get_pill_info_gui(pill))

@@ -140,6 +140,7 @@ def abort_audio():
     global classify_thread, pill_sensor
     pill_sensor = True
     print('pill sensor: ', pill_sensor)
+    print('Reclassify GUI Button is pressed')
     # Abort the audio playback process if it's running
     if channel.get_busy():
         channel.stop()
@@ -160,9 +161,10 @@ def repeat_pill_info_audio(current_pill):
     '''
     global channel 
     repeat_event.set()
-    print('print: ', current_pill)
+    # print('print: ', current_pill)
     if repeat_event.is_set():
-        print('repeat_event.is_set')
+        print('Repeat GUI Button is pressed')
+        print('Reclassify GUI Button is pressed')
     # Stop and repeat audio playback in audio channel
     if channel.get_busy():
         channel.stop()
