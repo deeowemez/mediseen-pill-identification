@@ -48,13 +48,17 @@ def max_bb(pill_detected):
         max_value = 0
         if max_value is None or  value > max_value: max_value = value
     if len(bbox_dict) > 0:
-        max_label = [label for label, value in bbox_dict.items()][0]
+        for label, value in bbox_dict.items():
+            if value == max_value: max_label = label
+        
         # if pill_detected[1] > max_value:
         if max_value < 0.5:
             max_label = pill_detected[0]
         if float(pill_detected[1]) > 0.90 and max_value < 0.60:
             print('above 85 perc for pill detec')
             max_label = pill_detected[0]
+        # else: #float(pill_detected[1]) < 0.90:
+        #     max_label = 'waiting for pill'
     else: max_label = pill_detected[0]
     return max_label
     

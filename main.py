@@ -105,19 +105,19 @@ def gpio_init():
         
         if channel == 19:
             print('Increase volume button pressed')
-            # tts.increase_volume()
+            tts.increase_volume()
 
         if channel == 13:
             print('Decrease volume button pressed')
-            # tts.decrease_volume()
+            tts.decrease_volume()
             
         if channel == 26 or channel == 24:
             print('Reclassify button pressed')
-            # abort_audio()
+            abort_audio()
             
         if channel == 6:
             print('Shutdown button pressed')
-            # shutdown()
+            shutdown()
         
     for button in buttons:
         GPIO.add_event_detect(button, GPIO.RISING, callback=button_pressed, bouncetime=200)
@@ -162,9 +162,7 @@ def repeat_pill_info_audio(current_pill):
     global channel 
     repeat_event.set()
     # print('print: ', current_pill)
-    if repeat_event.is_set():
-        print('Repeat GUI Button is pressed')
-        print('Reclassify GUI Button is pressed')
+    # if repeat_event.is_set():
     # Stop and repeat audio playback in audio channel
     if channel.get_busy():
         channel.stop()
@@ -244,7 +242,7 @@ if __name__ == "__main__":
     try:        
         # Initialize the Tkinter root window
         root = tk.Tk()
-        root.geometry("800x280")
+        root.geometry("800x480")
         
         # Create a thread for controlling the RGB LED
         led_thread = threading.Thread(target=rgb_init, daemon=True) 

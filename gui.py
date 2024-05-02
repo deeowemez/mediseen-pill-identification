@@ -167,8 +167,9 @@ def show_pill_information_frame(root, pill_info):
     ASSETS_PATH = Path(r"/home/pi/capstone/pill-identification/output/frame3/build/assets/frame0")
     # ASSETS_PATH = Path(r"E:\pill-identification\output\frame3\build\assets\frame0")
 
-    
+    print('pllinfo', pill_info)
     classification = pill_info[4]
+    
     
     # print('in gui show: ', classification)
 
