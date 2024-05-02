@@ -388,7 +388,7 @@ def show_error_frame(root):
     root.overrideredirect(True)
     
     exit_button = tk.Button(root, borderwidth=0, command=root.destroy)
-    exit_button.place(rely=0.01, relx=0.95)
+    # exit_button.place(rely=0.01, relx=0.95)
     
 # Define switch_frame function after the main block
 def clear_frame(root, new_frame_func):
@@ -425,8 +425,8 @@ if __name__ == "__main__":
     # show_logo_frame(root)
     # show_instructions_frame(root)
     # show_image_capture_frame(root)
-    show_pill_information_frame(root, pill_info)
-    # show_error_frame(root)
+    # show_pill_information_frame(root, pill_info)
+    show_error_frame(root)
     
     # Start the main loop
     root.mainloop()
