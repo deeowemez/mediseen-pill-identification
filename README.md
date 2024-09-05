@@ -74,4 +74,4 @@ To set up the Pill Identification System, follow these steps:
 
 ## Acknowledgments
 - Project Contributors: Ire Ann De Guzman, Marianne Domilies, Kirsty Viviene Ducusin, Ernestine Gail Dulce, Russell Nixon Rivera, Alexie Sobrepena, Jericho Agonoy, Charles Fontanilla
-(https://github.com/deeowemez/pill-identification/assets/53809101/ba492d17-93c6-4de8-a480-cdf835196fae)
+
