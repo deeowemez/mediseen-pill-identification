@@ -1,4 +1,4 @@
-# MediSeen: Pill Identification System Readme
+# MediSeen: Pill Identification System
 
 ## Overview
 The Pill Identification System is a Raspberry Pi 4B-based solution designed to streamline the process of identifying medications. It captures an image of a pill placed within a 3d printed enclosure, processes the images, runs an inference and outputs detailed information about the pill on both display and audio channels. The system also features push buttons for volume control and reclassification, a battery level indicator for portable power supply, and an RGB LED indicator for status feedback.
